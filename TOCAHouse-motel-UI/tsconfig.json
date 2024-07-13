@@ -7,5 +7,15 @@
     {
       "path": "./tsconfig.node.json"
     }
-  ]
+  ],
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@redux/*": ["redux/*"],
+      "@configs/*": ["configs/*"],
+      "@env/*": ["environments/*"],
+      "@components/*": ["components/*"],
+      "@utils/*": ["utils/*"]
+    }
+  }
 }

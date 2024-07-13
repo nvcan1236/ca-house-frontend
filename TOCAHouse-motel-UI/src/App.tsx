@@ -1,11 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 function App() {
-
   return (
     <>
-      <h3 className="mt-10 text-3xl font-semibold text-center text-blue-500">Hello world</h3>
+      <div>Hello world</div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
