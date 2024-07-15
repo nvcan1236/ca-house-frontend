@@ -9,13 +9,9 @@
     }
   ],
   "compilerOptions": {
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
-      "@redux/*": ["redux/*"],
-      "@configs/*": ["configs/*"],
-      "@env/*": ["environments/*"],
-      "@components/*": ["components/*"],
-      "@utils/*": ["utils/*"]
+      "@/*": ["./src/@/*"]
     }
   }
 }
