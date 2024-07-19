@@ -2,10 +2,10 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
@@ -19,7 +19,10 @@ module.exports = {
     extend: {
       colors: {
         "main-blue": "#3767a7",
+        "main-blue-s3": "#274875",
+        "main-blue-t8": "#d7e1ed",
         "main-yellow": "#f5a742",
+        "main-yellow-t9": "#fef6ec",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -53,7 +56,6 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -75,9 +77,9 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       fontFamily: {
-        body: ["Inter", 'sans-serif'],
+        body: ["Inter", "sans-serif"],
       },
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};

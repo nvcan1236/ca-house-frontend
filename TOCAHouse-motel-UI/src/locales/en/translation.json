@@ -4,7 +4,9 @@
       "search": "Search",
       "cancel": "Cancel",
       "delete": "Delete",
-      "save": "Save"
+      "save": "Save",
+      "language": "Language"
     }
+
   }
 }
