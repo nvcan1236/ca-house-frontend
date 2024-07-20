@@ -16,13 +16,10 @@ import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { useEffect, useState } from "react";
 import { DrawerDialogFilter } from "../search/DrawerDialogFilter";
 import { useNavigate } from "react-router-dom";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import BarIcon from "../icon/BarIcon";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Separator } from "../ui/separator";
+import { openAuthModal } from "@/stores/slices/authSlice";
 
 const Header = () => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const role = useAppSelector((state) => state.common.role);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -118,9 +115,16 @@ const Header = () => {
           </Select>
         </div>
         <div>
-          {/* <Button>Login</Button> */}
-          <div className="flex gap-2 items-center">
-            {/* <span className="font-medium">Canh</span> */}
+          <Button
+            onClick={(e) => {
+              e.stopPropagation()
+              dispatch(openAuthModal());
+            }}
+          >
+            Login
+          </Button>
+          {/* <div className="flex gap-2 items-center">
+            <span className="font-medium">Canh</span>
             <Popover>
               <PopoverTrigger>
                 <div className="bg-background flex items-center gap-1 px-2 rounded-md border">
@@ -133,19 +137,27 @@ const Header = () => {
                   </Avatar>
                 </div>
               </PopoverTrigger>
-              <PopoverContent align="end" className="w-fit">
+              <PopoverContent align="end" className="w-fit p-2">
                 <ul>
-                  <li className="py-1 px-2 hover:bg-slate-100 transition-all">Profile</li>
-                  <li className="py-1 px-2 hover:bg-slate-100 transition-all">Danh sách yêu thích</li>
-                  <li className="py-1 px-2 hover:bg-slate-100 transition-all">Cài đặt</li>
+                  <li className="py-1 px-2 hover:bg-slate-100 transition-all">
+                    Profile
+                  </li>
+                  <li className="py-1 px-2 hover:bg-slate-100 transition-all">
+                    Danh sách yêu thích
+                  </li>
+                  <li className="py-1 px-2 hover:bg-slate-100 transition-all">
+                    Cài đặt
+                  </li>
                   <li className="py-1">
                     <Separator />
                   </li>
-                  <li className="py-1 px-2 hover:bg-slate-100 transition-all">Đăng xuất</li>
+                  <li className="py-1 px-2 hover:bg-slate-100 transition-all t-destructive">
+                    Đăng xuất
+                  </li>
                 </ul>
               </PopoverContent>
             </Popover>
-          </div>
+          </div> */}
         </div>
       </div>
     </header>

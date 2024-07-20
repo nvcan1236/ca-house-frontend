@@ -6,14 +6,17 @@ import { useAppSelector } from "./stores/hooks";
 import { useTranslation } from "react-i18next";
 import DetailMotel from "./pages/DetailMotel";
 import PageNotFound from "./pages/PageNotFound";
+import AuthModal from "./components/auth/AuthModal";
 
 function App() {
   const language = useAppSelector((state) => state.common.language);
-  const {i18n} = useTranslation()
-  
-  useEffect(()=> {
+  const showAuthModal = useAppSelector((state) => state.auth.showAuthModal);
+
+  const { i18n } = useTranslation();
+
+  useEffect(() => {
     i18n.changeLanguage(language);
-  }, [i18n, language])
+  }, [i18n, language]);
 
   return (
     <BrowserRouter>
@@ -25,6 +28,7 @@ function App() {
 
         <Route path="*" element={<PageNotFound />}></Route>
       </Routes>
+      <AuthModal show={showAuthModal}></AuthModal>
     </BrowserRouter>
   );
 }

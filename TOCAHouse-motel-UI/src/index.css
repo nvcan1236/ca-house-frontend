@@ -73,3 +73,32 @@
     @apply bg-background text-foreground font-body;
   }
 }
+.modal-enter {
+  opacity: 0;
+}
+.modal-enter-active {
+  opacity: 1;
+}
+.modal-exit {
+  opacity: 1;
+}
+.modal-exit-active {
+  opacity: 0;
+}
+
+.modal-enter .content{
+  opacity: 0;
+  transform: scale(0.5);
+}
+.modal-enter-active .content{
+  opacity: 1;
+  transform: scale(1);
+}
+.modal-exit .content{
+  opacity: 1;
+  transform: scale(1);
+}
+.modal-exit-active .content{
+  opacity: 0;
+  transform: scale(0.5);
+}

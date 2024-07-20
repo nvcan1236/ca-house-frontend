@@ -4,7 +4,7 @@ import {
   CarouselContent,
   CarouselItem,
   CarouselNext,
-  CarouselPrevious
+  CarouselPrevious,
 } from "@/components/ui/carousel";
 import {
   Dialog,
@@ -19,7 +19,7 @@ const DetailMotel = () => {
   const { motelId } = useParams();
   return (
     <div className="container w-[1200px]">
-      <Dialog >
+      <Dialog>
         <DialogTrigger>
           <div className="grid grid-cols-4 gap-4  mx-auto rounded-xl overflow-hidden mt-10">
             <div className="col-span-2 row-span-2">
@@ -63,13 +63,13 @@ const DetailMotel = () => {
           <DialogHeader>
             <DialogTitle>Một vài hình ảnh của trọ</DialogTitle>
           </DialogHeader>
-          <img
-            src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aG91c2V8ZW58MHx8MHx8fDA%3D"
-            alt=""
-            className="w-full h-[400px] object-cover"
-          />
           <Carousel>
-            <CarouselContent className="h-[100px]">
+              <img
+                src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aG91c2V8ZW58MHx8MHx8fDA%3D"
+                alt=""
+                className="w-full h-[400px] object-cover"
+              />
+            <CarouselContent className="h-[100px] mt-4">
               <CarouselItem className="basis-1/5">
                 <img
                   src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aG91c2V8ZW58MHx8MHx8fDA%3D"
@@ -114,7 +114,7 @@ const DetailMotel = () => {
               </CarouselItem>
             </CarouselContent>
             <CarouselNext className="right-2" />
-            <CarouselPrevious className="left-2"/>
+            <CarouselPrevious className="left-2" />
           </Carousel>
         </DialogContent>
       </Dialog>

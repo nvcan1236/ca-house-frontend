@@ -1,9 +1,11 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import commonSlice from "./slices/commonSlice";
+import authSlice from "./slices/authSlice";
 // ...
 
 const reducer = combineReducers({
   common: commonSlice,
+  auth: authSlice,
 });
 
 const store = configureStore({
