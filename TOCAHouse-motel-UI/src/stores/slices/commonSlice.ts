@@ -15,7 +15,6 @@ export const commonSlice = createSlice({
   initialState,
   reducers: {
     switchLanguage: (state, { payload }) => {
-      
       return {
         ...state,
         language: payload,

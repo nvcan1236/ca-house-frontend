@@ -10,7 +10,6 @@ import AuthModal from "./components/auth/AuthModal";
 
 function App() {
   const language = useAppSelector((state) => state.common.language);
-  const showAuthModal = useAppSelector((state) => state.auth.showAuthModal);
 
   const { i18n } = useTranslation();
 
@@ -28,7 +27,7 @@ function App() {
 
         <Route path="*" element={<PageNotFound />}></Route>
       </Routes>
-      <AuthModal show={showAuthModal}></AuthModal>
+      <AuthModal></AuthModal>
     </BrowserRouter>
   );
 }

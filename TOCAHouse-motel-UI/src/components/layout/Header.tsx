@@ -16,7 +16,7 @@ import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { useEffect, useState } from "react";
 import { DrawerDialogFilter } from "../search/DrawerDialogFilter";
 import { useNavigate } from "react-router-dom";
-import { openAuthModal } from "@/stores/slices/authSlice";
+import { openAuthModal, switchFormType } from "@/stores/slices/authSlice";
 
 const Header = () => {
   const { i18n } = useTranslation();
@@ -117,8 +117,9 @@ const Header = () => {
         <div>
           <Button
             onClick={(e) => {
-              e.stopPropagation()
+              e.stopPropagation();
               dispatch(openAuthModal());
+              dispatch(switchFormType("login"));
             }}
           >
             Login

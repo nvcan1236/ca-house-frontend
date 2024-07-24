@@ -18,10 +18,10 @@ import { useParams } from "react-router-dom";
 const DetailMotel = () => {
   const { motelId } = useParams();
   return (
-    <div className="container w-[1200px]">
+    <div className="container w-[1200px] mt-10">
       <Dialog>
         <DialogTrigger>
-          <div className="grid grid-cols-4 gap-4  mx-auto rounded-xl overflow-hidden mt-10">
+          <div className="grid grid-cols-4 gap-4  mx-auto rounded-xl overflow-hidden ">
             <div className="col-span-2 row-span-2">
               <img
                 src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aG91c2V8ZW58MHx8MHx8fDA%3D"
@@ -64,11 +64,11 @@ const DetailMotel = () => {
             <DialogTitle>Một vài hình ảnh của trọ</DialogTitle>
           </DialogHeader>
           <Carousel>
-              <img
-                src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aG91c2V8ZW58MHx8MHx8fDA%3D"
-                alt=""
-                className="w-full h-[400px] object-cover"
-              />
+            <img
+              src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aG91c2V8ZW58MHx8MHx8fDA%3D"
+              alt=""
+              className="w-full h-[400px] object-cover"
+            />
             <CarouselContent className="h-[100px] mt-4">
               <CarouselItem className="basis-1/5">
                 <img

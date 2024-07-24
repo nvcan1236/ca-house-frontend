@@ -15,7 +15,8 @@ import { useState } from "react";
 import EyeClose from "../icon/EyeClose";
 import EyeOpen from "../icon/EyeOpen";
 import { Separator } from "../ui/separator";
-
+import { useAppDispatch } from "@/stores/hooks";
+import { switchFormType } from "@/stores/slices/authSlice";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -23,6 +24,7 @@ const LoginForm = () => {
     username: z.string().min(8),
     password: z.string().min(8),
   });
+  const dispatch = useAppDispatch();
 
   const form = useForm({
     resolver: zodResolver(loginValidationSchema),
@@ -39,9 +41,9 @@ const LoginForm = () => {
     <div>
       <Form {...form}>
         <h3 className="text-slate-500 font-semibold text-2xl text-center ">
-          Login
+          Đăng nhập
         </h3>
-          <Separator className="mt-3 mb-5 bg-main-yellow" />
+        <Separator className="mt-3 mb-5 bg-main-yellow" />
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="gap-4 flex flex-col"
@@ -104,6 +106,17 @@ const LoginForm = () => {
           <Button type="submit" className="mt-6 w-full">
             Submit
           </Button>
+          <p>
+            Chưa có tài khoản ?{" "}
+            <Button
+              className="text-main-blue"
+              variant={"link"}
+              type="button"
+              onClick={() => dispatch(switchFormType())}
+            >
+              Đăng ký
+            </Button>
+          </p>
         </form>
       </Form>
     </div>
