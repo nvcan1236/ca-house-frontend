@@ -7,6 +7,8 @@ import { useTranslation } from "react-i18next";
 import DetailMotel from "./pages/DetailMotel";
 import PageNotFound from "./pages/PageNotFound";
 import AuthModal from "./components/auth/AuthModal";
+import Profile from "./pages/Profile";
+import NoSearchLayout from "./components/layout/NoSearchLayout";
 
 function App() {
   const language = useAppSelector((state) => state.common.language);
@@ -23,6 +25,9 @@ function App() {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />}></Route>
           <Route path="motels/:motelId" element={<DetailMotel />}></Route>
+        </Route>
+        <Route path="/" element={<NoSearchLayout />}>
+          <Route path="profile/:userId" element={<Profile />}></Route>
         </Route>
 
         <Route path="*" element={<PageNotFound />}></Route>

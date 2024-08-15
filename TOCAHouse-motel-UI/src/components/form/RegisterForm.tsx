@@ -28,6 +28,9 @@ const RegisterForm = () => {
     lastname: z.string(),
     email: z.string(),
     rePassword: z.string().min(8),
+  }).refine((data) => data.password === data.rePassword, {
+    message: "Mật khẩu không trùng khớp",
+    path: ["rePassword"],
   });
   const [step, setStep] = useState<number>(1);
 
@@ -44,6 +47,7 @@ const RegisterForm = () => {
   });
 
   function onSubmit(values: z.infer<typeof loginValidationSchema>) {
+    
     console.log(values);
   }
   return (

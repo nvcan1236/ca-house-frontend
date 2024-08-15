@@ -11,20 +11,28 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EyeClose from "../icon/EyeClose";
 import EyeOpen from "../icon/EyeOpen";
 import { Separator } from "../ui/separator";
 import { useAppDispatch } from "@/stores/hooks";
-import { switchFormType } from "@/stores/slices/authSlice";
+import {
+  closeAuthModal,
+  setUserInfor,
+  switchFormType,
+} from "@/stores/slices/authSlice";
+import { getToken, setToken } from "@/services/localStorageService";
+import { caHouseEndpoint } from "@/configs/APIconfig";
+import axios from "@/services/axios";
+import googleConfig from "@/configs/googleLoginConfig";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
   const loginValidationSchema = z.object({
-    username: z.string().min(8),
+    username: z.string().min(4),
     password: z.string().min(8),
   });
-  const dispatch = useAppDispatch();
 
   const form = useForm({
     resolver: zodResolver(loginValidationSchema),
@@ -34,8 +42,66 @@ const LoginForm = () => {
     },
   });
 
+  const loginWithGoogle = () => {
+    const callbackUri = googleConfig.redirect_uris;
+    const client_id = googleConfig.client_id;
+    const authUrli = googleConfig.auth_uri;
+
+    const targetUrl = `${authUrli}?client_id=${client_id}&redirect_uri=${encodeURIComponent(
+      callbackUri
+    )}&response_type=code&scope=openid%20email%20profile&`;
+
+    window.location.href = targetUrl;
+  };
+
+  useEffect(() => {
+    const authCodeRegex = /code=([^&]+)/;
+    const isMatch = window.location.href.match(authCodeRegex);
+
+    if (isMatch) {
+      const authCode = isMatch[1];
+
+      axios
+        .post(caHouseEndpoint.outbound, null, {
+          params: {
+            code: authCode,
+          },
+        })
+        .then((data) => {
+          console.log(data)
+          setToken(data.data.result.token);
+          axios
+            .get(caHouseEndpoint.getMyInfor, {
+              headers: {
+                Authorization: `Bearer ${getToken()}`,
+              },
+            })
+            .then((data) => {
+              dispatch(setUserInfor(data.data.result));
+            });
+        });
+    }
+  }, []);
+
   function onSubmit(values: z.infer<typeof loginValidationSchema>) {
-    console.log(values);
+    axios
+      .post(caHouseEndpoint.getToken, JSON.stringify(values))
+      .then((data) => {
+        if (data.status === 200) {
+          form.reset();
+          dispatch(closeAuthModal());
+          setToken(data.data.result.token);
+          axios
+            .get(caHouseEndpoint.getMyInfor, {
+              headers: {
+                Authorization: `Bearer ${getToken()}`,
+              },
+            })
+            .then((data) => {
+              dispatch(setUserInfor(data.data.result));
+            });
+        }
+      });
   }
   return (
     <div>
@@ -53,9 +119,12 @@ const LoginForm = () => {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Username/ Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter your username" {...field} />
+                  <Input
+                    placeholder="Enter your username or email"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -89,22 +158,21 @@ const LoginForm = () => {
             )}
           />
 
-          {/* <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Username</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter your username" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          /> */}
-
           <Button type="submit" className="mt-6 w-full">
             Submit
+          </Button>
+          <Button
+            type="button"
+            className="mt-2 w-full"
+            variant={"outline"}
+            onClick={loginWithGoogle}
+          >
+            <img
+              src="/google-icon.png"
+              alt="Google Icon"
+              className="size-5 mr-4"
+            />{" "}
+            Login with Google
           </Button>
           <p>
             Chưa có tài khoản ?{" "}
