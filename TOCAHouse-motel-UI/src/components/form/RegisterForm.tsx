@@ -15,30 +15,36 @@ import EyeClose from "../icon/EyeClose";
 import EyeOpen from "../icon/EyeOpen";
 import { Separator } from "../ui/separator";
 import { useState } from "react";
-import { switchFormType } from "@/stores/slices/authSlice";
+import { closeAuthModal, switchFormType } from "@/stores/slices/authSlice";
 import { useAppDispatch } from "@/stores/hooks";
+import axios from "@/services/axios";
+import { caHouseEndpoint } from "@/configs/APIconfig";
+import { error } from "console";
+import { toast } from "sonner";
 
 const RegisterForm = () => {
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const loginValidationSchema = z.object({
-    username: z.string().min(8),
-    password: z.string().min(8),
-    firstname: z.string(),
-    lastname: z.string(),
-    email: z.string(),
-    rePassword: z.string().min(8),
-  }).refine((data) => data.password === data.rePassword, {
-    message: "Mật khẩu không trùng khớp",
-    path: ["rePassword"],
-  });
+  const loginValidationSchema = z
+    .object({
+      username: z.string().min(4),
+      password: z.string().min(8),
+      firstName: z.string(),
+      lastName: z.string(),
+      email: z.string(),
+      rePassword: z.string().min(8),
+    })
+    .refine((data) => data.password === data.rePassword, {
+      message: "Mật khẩu không trùng khớp",
+      path: ["rePassword"],
+    });
   const [step, setStep] = useState<number>(1);
 
   const form = useForm({
     resolver: zodResolver(loginValidationSchema),
     defaultValues: {
-      firstname: "",
-      lastname: "",
+      firstName: "",
+      lastName: "",
       email: "",
       username: "",
       password: "",
@@ -47,8 +53,16 @@ const RegisterForm = () => {
   });
 
   function onSubmit(values: z.infer<typeof loginValidationSchema>) {
-    
-    console.log(values);
+    const data = { ...values };
+    data.roles = ["USER"];
+    axios
+      .post(caHouseEndpoint.register, JSON.stringify(data))
+      .then((data) => {
+        form.reset();
+        dispatch(closeAuthModal());
+        console.log(data.data.result);
+      })
+      .catch((error) => toast.error(error.response.data.message));
   }
   return (
     <div>
@@ -62,7 +76,7 @@ const RegisterForm = () => {
             <div className="flex gap-4">
               <FormField
                 control={form.control}
-                name="firstname"
+                name="firstName"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Firstname</FormLabel>
@@ -75,7 +89,7 @@ const RegisterForm = () => {
               />
               <FormField
                 control={form.control}
-                name="lastname"
+                name="lastName"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Lastname</FormLabel>

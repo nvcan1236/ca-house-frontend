@@ -52,11 +52,14 @@ const Header = () => {
   };
   const [scrollY, setScrollY] = useState(0);
   useEffect(() => {
-    authAxios.get(caHouseEndpoint.getMyInfor).then((data) => {
-      if (data.status === 200) {
-        dispatch(setUserInfor(data.data.result));
-      }
-    });
+    authAxios
+      .get(caHouseEndpoint.getMyInfor)
+      .then((data) => {
+        if (data.status === 200) {
+          dispatch(setUserInfor(data.data.result));
+        }
+      })
+      .catch((error) => console.log(error.response.data.message));
 
     const handleScroll = () => {
       setScrollY(window.scrollY);
@@ -177,7 +180,9 @@ const Header = () => {
                           </DialogTrigger>
                           <DialogContent className="sm:max-w-[425px]">
                             <DialogHeader>
-                              <DialogTitle className="text-main-blue text-xl">Tạo mật khẩu</DialogTitle>
+                              <DialogTitle className="text-main-blue text-xl">
+                                Tạo mật khẩu
+                              </DialogTitle>
                               <DialogDescription>
                                 Tạo mật khẩu lần đầu vì bạn đã đăng nhập bằng
                                 Google. Từ giờ bạn có thể đăng nhập với username
@@ -192,7 +197,10 @@ const Header = () => {
                         </li>
                       </>
                     )}
-                    <li className="py-1 px-2 hover:bg-slate-100 transition-all" onClick={() => navigate(`./profile/${user.id}`)}>
+                    <li
+                      className="py-1 px-2 hover:bg-slate-100 transition-all"
+                      onClick={() => navigate(`./profile/${user.id}`)}
+                    >
                       Profile
                     </li>
                     <li className="py-1 px-2 hover:bg-slate-100 transition-all">

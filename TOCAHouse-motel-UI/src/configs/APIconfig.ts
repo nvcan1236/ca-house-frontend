@@ -8,4 +8,5 @@ export const caHouseEndpoint = {
   outbound: `${caHouseBaseUrl}/identity/auth/outbound/authentication`,
   createPassword: `${caHouseBaseUrl}/identity/auth/create-password`,
   getUserById: (userId:string) => `${caHouseBaseUrl}/identity/users/${userId}`,
+  register: `${caHouseBaseUrl}/identity/users`,
 };

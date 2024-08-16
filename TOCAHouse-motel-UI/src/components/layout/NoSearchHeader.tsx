@@ -55,7 +55,7 @@ const NoSearchHeader = () => {
   return (
     <header className="container">
       <div
-        className={`px-10 flex items-center justify-between py-4 gap-x-4 transition-all}`}
+        className={`md:px-10 flex items-center justify-between py-4 gap-x-4 transition-all}`}
       >
         <div className="w-[200px] cursor-pointer" onClick={() => navigate("/")}>
           <img src="/logo.png" alt="logo" className="object-cover w-20 h-20" />

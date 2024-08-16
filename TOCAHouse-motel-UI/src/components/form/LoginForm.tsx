@@ -25,6 +25,7 @@ import { getToken, setToken } from "@/services/localStorageService";
 import { caHouseEndpoint } from "@/configs/APIconfig";
 import axios from "@/services/axios";
 import googleConfig from "@/configs/googleLoginConfig";
+import { toast } from "sonner";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -68,7 +69,7 @@ const LoginForm = () => {
           },
         })
         .then((data) => {
-          console.log(data)
+          console.log(data);
           setToken(data.data.result.token);
           axios
             .get(caHouseEndpoint.getMyInfor, {
@@ -98,9 +99,17 @@ const LoginForm = () => {
               },
             })
             .then((data) => {
-              dispatch(setUserInfor(data.data.result));
+              if (data.status === 200) {
+                dispatch(setUserInfor(data.data.result));
+              }
+            })
+            .catch((error) => {
+              toast.error(error.response.data.message);
             });
         }
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
       });
   }
   return (

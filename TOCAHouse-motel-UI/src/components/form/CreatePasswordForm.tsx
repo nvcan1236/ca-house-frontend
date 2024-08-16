@@ -14,6 +14,10 @@ import axios from "@/services/axios";
 import { caHouseEndpoint } from "@/configs/APIconfig";
 import { getToken } from "@/services/localStorageService";
 import { Button } from "../ui/button";
+import { toast } from "sonner";
+import { useAppDispatch, useAppSelector } from "@/stores/hooks";
+import { setUserInfor } from "@/stores/slices/authSlice";
+import { User } from "lucide-react";
 
 const CreatePasswordForm = () => {
   const loginValidationSchema = z.object({
@@ -23,6 +27,8 @@ const CreatePasswordForm = () => {
     message: "Mật khẩu không trùng khớp",
     path: ["rePassword"],
   });
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(state => state.auth.user)
 
   const form = useForm({
     resolver: zodResolver(loginValidationSchema),
@@ -41,6 +47,8 @@ const CreatePasswordForm = () => {
       })
       .then((data) => {
         console.log(data.data.message);
+        toast.success(data.data.message)
+        dispatch(setUserInfor({...user, noPassword: true}))
       });
   }
   return (

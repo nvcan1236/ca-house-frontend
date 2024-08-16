@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom";
 import { useAppSelector } from "../../stores/hooks";
 import Header from "./Header";
 import Footer from "./Footer";
+import { Toaster } from "sonner";
 
 const MainLayout = () => {
   const role = useAppSelector((state) => state.common.role);
@@ -21,6 +22,7 @@ const MainLayout = () => {
       <div className="pt-[160px] pb-10">
         <Outlet />
       </div>
+      <Toaster position="top-right" richColors closeButton />
       <Footer></Footer>
     </div>
   );

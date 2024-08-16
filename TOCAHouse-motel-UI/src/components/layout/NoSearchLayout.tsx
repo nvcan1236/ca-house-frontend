@@ -6,6 +6,7 @@ import { useAppSelector } from "../../stores/hooks";
 import Header from "./Header";
 import Footer from "./Footer";
 import NoSearchHeader from "./NoSearchHeader";
+import { Toaster } from "sonner";
 
 const NoSearchLayout = () => {
   const role = useAppSelector((state) => state.common.role);
@@ -16,6 +17,7 @@ const NoSearchLayout = () => {
       <div className="">
         <Outlet />
       </div>
+      <Toaster position="top-right" richColors closeButton />
       <Footer></Footer>
     </div>
   );
