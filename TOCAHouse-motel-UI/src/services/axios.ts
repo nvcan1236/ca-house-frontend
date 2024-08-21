@@ -8,7 +8,7 @@ export default axios.create({
     "Content-Type": "application/json",
     "Cache-Control": "no-cache",
   }
-})
+}) 
 
 export const authAxios = axios.create({
   baseURL: caHouseBaseUrl,

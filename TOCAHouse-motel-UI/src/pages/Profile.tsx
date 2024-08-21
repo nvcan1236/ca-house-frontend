@@ -9,18 +9,60 @@ import { getToken } from "@/services/localStorageService";
 import { DetailUser } from "@/utils/types";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import PageNotFound from "./PageNotFound";
+import { toast } from "sonner";
 
 const Profile = () => {
   const [detailUser, setDetailUser] = useState<DetailUser | null>(null);
+  const [found, setFound] = useState<boolean>(true);
   const { userId } = useParams();
+  const [editting, setEditting] = useState({ account: false, profile: false });
+  const [chosenImage, setChosenImage] = useState(null);
+  const handleChangeImage = (event) => {
+    console.log(event.target.files[0]);
+    setChosenImage(event.target.files[0]);
+  };
+  const handleUploadImage = async () => {
+    const data: FormData = new FormData();
+    data.append("images", chosenImage);
+    axios
+      .post(caHouseEndpoint.uploadAvatar, data, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((data) => {
+        toast.success(data.data.message);
+      })
+      .catch((error) => {
+        toast.error(error.toString());
+      });
+  };
+  // const [formData, setFormData] = useState({
+  //   account: {
+  //     firstName: "",
+  //     lastName: "",
+
+  //   }
+  // })
+  // const handleChangeInput = (e) => {
+  //   setDetailUser(prev => ({
+  //     ...prev
+  //   }))
+  // }
+
   const fetchDetailUser = async () => {
     if (userId) {
       try {
         const response = await axios.get(caHouseEndpoint.getUserById(userId), {
-          headers: { Authorization: `Bearer ${getToken()}` },
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
         });
         setDetailUser(response.data.result);
       } catch (error) {
+        setFound(false);
         console.error("Error fetching user details:", error);
       }
     }
@@ -29,17 +71,64 @@ const Profile = () => {
     userId != "" && fetchDetailUser();
   }, [userId]);
 
+  if (!found)
+    return <PageNotFound message="Không tìm thấy hồ sơ"></PageNotFound>;
+
   return (
     <div className="container mb-20 xl:w-[1200px]">
       <div className=" mt-5 flex flex-col items-center">
         <div className="from-main-blue from-30% to-main-yellow bg-gradient-to-br h-[180px] w-full rounded-lg mx-auto"></div>
-        <div className="-mt-[60px] flex items-center flex-col">
-          <Avatar className="md:size-36 size-32 border">
-            <AvatarImage src={detailUser?.avatar} alt="@shadcn" />
-            <AvatarFallback className="md:text-5xl text-3xl">
-              {detailUser?.firstName[0].toLocaleUpperCase()}
-            </AvatarFallback>
-          </Avatar>
+        <div className="-mt-[60px] flex items-center flex-col hover  ">
+          <div className="group relative overflow-hidden">
+            <Avatar className="md:size-36 size-32 border avatar-hover:bg-black">
+              <AvatarImage
+                src={
+                  (chosenImage && URL.createObjectURL(chosenImage)) ||
+                  detailUser?.avatar
+                }
+                className="object-cover"
+                alt="@shadcn"
+              />
+              <AvatarFallback className="md:text-5xl text-3xl">
+                {detailUser?.firstName?.substring(0, 1).toLocaleUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col items-center justify-end top-0 left-0 absolute opacity-0 bg-black group-hover:bg-opacity-55 group-hover:opacity-100 w-full rounded-full h-full transition-all ">
+              <Input
+                accept=".png,.jpeg"
+                type="file"
+                className="invisible size-0"
+                id="avatar"
+                onChange={handleChangeImage}
+              ></Input>
+              <Label
+                className="text-white mb-10 cursor-pointer"
+                htmlFor="avatar"
+              >
+                Change avatar
+              </Label>
+            </div>
+          </div>
+          {chosenImage && (
+            <div>
+              <Button
+                className="mt-2"
+                variant={"outline"}
+                size={"sm"}
+                onClick={handleUploadImage}
+              >
+                Cập nhật
+              </Button>
+              <Button
+                className="mt-2 ml-3"
+                variant={"destructive"}
+                size={"sm"}
+                onClick={() => setChosenImage(null)}
+              >
+                Huỷ
+              </Button>
+            </div>
+          )}
           <span className="mt-4 font-semibold">
             {detailUser?.firstName} {detailUser?.lastName}
           </span>
@@ -47,49 +136,75 @@ const Profile = () => {
         </div>
       </div>
 
-      <div className="p-10 rounded-lg bg-main-blue-t8 mt-10">
-        <form action="" contentEditable={false}>
+      <div className="p-4 lg:p-10 rounded-lg bg-main-blue-t8 mt-10">
+        <form>
           <div className="flex flex-col">
             <div className="flex flex-col md:flex-row">
               <span className="md:w-1/4 font-semibold text-gray-700  md:px-10 py-4 flex justify-between items-baseline">
                 Tài khoản{" "}
-                <Button variant={"ghost"} size={"sm"}>
+                <Button
+                  variant={"ghost"}
+                  size={"sm"}
+                  type="button"
+                  className="text-main-blue"
+                  onClick={() => setEditting({ ...editting, account: true })}
+                >
                   Sửa <EditIcon className="ml-2"></EditIcon>
                 </Button>
               </span>
               <div className="border rounded-md flex-1 flex flex-col gap-2 py-3 px-6 bg-slate-50">
                 <div className="flex gap-3 items-center">
                   <Label className="w-32">Id</Label>{" "}
-                  <Input value={detailUser?.id} />
+                  <Input value={detailUser?.id} readOnly />
                 </div>
                 <div className="flex gap-3 items-center">
                   <Label className="w-32">Username</Label>{" "}
-                  <Input value={detailUser?.username} />
+                  <Input value={detailUser?.username} readOnly />
                 </div>
                 <div className="flex gap-3 items-center">
                   <Label className="w-32">Họ</Label>{" "}
-                  <Input value={detailUser?.lastName} />
+                  <Input
+                    value={detailUser?.lastName}
+                    readOnly={!editting.account}
+                    name="lastName"
+                  />
                 </div>
                 <div className="flex gap-3 items-center">
                   <Label className="w-32">Tên</Label>{" "}
-                  <Input value={detailUser?.firstName} />
+                  <Input
+                    value={detailUser?.firstName}
+                    readOnly={!editting.account}
+                    name="firstName"
+                  />
                 </div>
                 <div className="flex gap-3 items-center">
                   <Label className="w-32">Email</Label>{" "}
-                  <Input value={detailUser?.email} />
+                  <Input
+                    value={detailUser?.email}
+                    readOnly={!editting.account}
+                    name="email"
+                  />
                 </div>
-                <Button className="self-end px-10">Lưu</Button>
+                {editting.account && (
+                  <Button className="self-end px-10">Lưu</Button>
+                )}
               </div>
             </div>
           </div>
         </form>
 
-        <form action="" contentEditable={false}>
+        <form>
           <div className="flex flex-col mt-10 ">
             <div className="flex flex-col md:flex-row">
-            <span className="md:w-1/4 font-semibold text-gray-700 md:px-10 py-4 flex justify-between items-baseline">
+              <span className="md:w-1/4 font-semibold text-gray-700 md:px-10 py-4 flex justify-between items-baseline">
                 Hồ sơ{" "}
-                <Button variant={"ghost"} size={"sm"}>
+                <Button
+                  variant={"ghost"}
+                  size={"sm"}
+                  type="button"
+                  className="text-main-blue"
+                  onClick={() => setEditting({ ...editting, profile: true })}
+                >
                   Sửa <EditIcon className="ml-2"></EditIcon>
                 </Button>
               </span>
@@ -99,6 +214,7 @@ const Profile = () => {
                   <Input
                     value={detailUser?.profile?.dob}
                     placeholder="dd-mm-yyyy"
+                    readOnly={!editting.profile}
                   />
                 </div>
                 <div className="flex gap-3 items-center">
@@ -106,6 +222,7 @@ const Profile = () => {
                   <Input
                     value={detailUser?.profile?.phone}
                     placeholder="xxxx-xxx-xxx"
+                    readOnly={!editting.profile}
                   />
                 </div>
                 <div className="flex gap-3 items-center">
@@ -113,6 +230,7 @@ const Profile = () => {
                   <Input
                     value={detailUser?.profile?.messgenger}
                     placeholder="m.me/username"
+                    readOnly={!editting.profile}
                   />
                 </div>
                 <div className="flex gap-3 items-center">
@@ -120,9 +238,12 @@ const Profile = () => {
                   <Input
                     value={detailUser?.profile?.occupation}
                     placeholder="Học sinh, sinh viên, công nhân, ..."
+                    readOnly={!editting.profile}
                   />
                 </div>
-                <Button className="self-end px-10">Lưu</Button>
+                {editting.profile && (
+                  <Button className="self-end px-10">Lưu</Button>
+                )}
               </div>
             </div>
           </div>

@@ -18,17 +18,12 @@ import { DrawerDialogFilter } from "../search/DrawerDialogFilter";
 import { useNavigate } from "react-router-dom";
 import {
   logout,
-  openAuthModal,
   setUserInfor,
-  switchFormType,
 } from "@/stores/slices/authSlice";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import BarIcon from "../icon/BarIcon";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Separator } from "../ui/separator";
-import { authAxios } from "@/services/axios";
-import { caHouseEndpoint } from "@/configs/APIconfig";
-import { Alert, AlertDescription } from "../ui/alert";
 import { AlertCircle } from "lucide-react";
 import CreatePasswordForm from "../form/CreatePasswordForm";
 import {
@@ -39,6 +34,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+import { getUserInfor } from "@/services/userService";
+import LoginButton from "../button/LoginButton";
+import { Alert, AlertDescription } from "../ui/alert";
 
 const Header = () => {
   const { i18n } = useTranslation();
@@ -52,14 +50,10 @@ const Header = () => {
   };
   const [scrollY, setScrollY] = useState(0);
   useEffect(() => {
-    authAxios
-      .get(caHouseEndpoint.getMyInfor)
-      .then((data) => {
-        if (data.status === 200) {
-          dispatch(setUserInfor(data.data.result));
-        }
-      })
-      .catch((error) => console.log(error.response.data.message));
+    (async () => {
+      const userInfor = await getUserInfor();
+      dispatch(setUserInfor(userInfor));
+    })();
 
     const handleScroll = () => {
       setScrollY(window.scrollY);
@@ -73,45 +67,57 @@ const Header = () => {
   }, []);
   return (
     <header
-      className={`container z-10 fixed left-1/2 -translate-x-1/2 ${
+      className={`container z-20 fixed left-1/2 -translate-x-1/2 ${
         scrollY > 0 ? "" : ""
       }`}
     >
       <div
-        className={`px-10 flex items-center py-4 gap-x-4 transition-all ${
+        className={`md:px-10 flex items-center  py-4 md:gap-x-4 transition-all ${
           scrollY > 0
             ? "bg-background border shadow-lg rounded-t-none rounded-b-xl py-2"
             : ""
         }`}
       >
-        <div className="w-[200px] cursor-pointer" onClick={() => navigate("/")}>
+        <div
+          className="lg:w-[200px] cursor-pointer hidden md:block"
+          onClick={() => navigate("/")}
+        >
           <img src="/logo.png" alt="logo" className="object-cover w-20 h-20" />
         </div>
 
-        <div className="flex flex-col items-center flex-1">
+        <div className="grow px-4 md:px-0 ">
           <div
-            className={`flex gap-4 p-2 border border-gray-300 rounded-xl transition-all mb-2 bg-gray-50 ${
-              scrollY > 0 ? "scale-0 -translate-y-[100%] h-0 -mt-6" : ""
+            className={`flex gap-3 justify-between w-full md:justify-center items-center transition-all ${
+              scrollY > 0 ? "scale-0 -translate-y-[100%] h-0" : "mb-2"
             }`}
           >
-            <Button
-              className={`w-[160px] ${role === "for_lease" && "text-gray-500"}`}
-              variant={role === "for_rent" ? "default" : "ghost"}
-              onClick={() => {
-                dispatch(switchRole());
-              }}
+            <div
+              className={`flex gap-4 p-2 border border-gray-300 rounded-xl  bg-gray-50 `}
             >
-              Tìm phòng
-            </Button>
-            <Button
-              className={`w-[160px] ${role === "for_rent" && "text-gray-500"}`}
-              variant={role === "for_lease" ? "default" : "ghost"}
-              onClick={() => {
-                dispatch(switchRole());
-              }}
-            >
-              Tìm người thuê
-            </Button>
+              <Button
+                className={`w-[120px] ${
+                  role === "post" && "text-gray-500"
+                }`}
+                variant={role === "motel" ? "default" : "ghost"}
+                onClick={() => {
+                  dispatch(switchRole("motel"));
+                }}
+              >
+                Trọ
+              </Button>
+              <Button
+                className={`w-[120px] ${
+                  role === "motel" && "text-gray-500"
+                }`}
+                variant={role === "post" ? "default" : "ghost"}
+                onClick={() => {
+                  dispatch(switchRole("post"));
+                }}
+              >
+                Bài đăng
+              </Button>
+            </div>
+            <LoginButton className="md:hidden" />
           </div>
 
           <div className="flex w-full items-center gap-1 py-1 pl-4 pr-2 border rounded-full bg-background border-main-blue">
@@ -131,7 +137,7 @@ const Header = () => {
           </div>
         </div>
 
-        <div className="flex">
+        <div className="lg:flex hidden ">
           <Select onValueChange={changeLanguage}>
             <SelectTrigger className="w-[100px] text-sm">
               <LanguageIcon className="size-4 " />
@@ -146,6 +152,7 @@ const Header = () => {
             </SelectContent>
           </Select>
         </div>
+
         <div>
           {user && Object.keys(user).length > 0 ? (
             <div className="flex gap-2 items-center">
@@ -223,15 +230,7 @@ const Header = () => {
               </Popover>
             </div>
           ) : (
-            <Button
-              onClick={(e) => {
-                e.stopPropagation();
-                dispatch(openAuthModal());
-                dispatch(switchFormType("login"));
-              }}
-            >
-              Login
-            </Button>
+            <LoginButton className="hidden md:block" />
           )}
         </div>
       </div>

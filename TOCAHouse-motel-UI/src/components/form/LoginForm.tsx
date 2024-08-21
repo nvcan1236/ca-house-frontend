@@ -32,7 +32,7 @@ const LoginForm = () => {
   const dispatch = useAppDispatch();
   const loginValidationSchema = z.object({
     username: z.string().min(4),
-    password: z.string().min(8),
+    password: z.string().min(4),
   });
 
   const form = useForm({

@@ -23,6 +23,7 @@ module.exports = {
         "main-blue-t8": "#d7e1ed",
         "main-yellow": "#f5a742",
         "main-yellow-t9": "#fef6ec",
+        "main-yellow-t6": "#fbdcb3",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

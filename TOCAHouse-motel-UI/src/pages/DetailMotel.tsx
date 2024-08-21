@@ -13,10 +13,25 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { caHouseEndpoint } from "@/configs/APIconfig";
+import axios from "@/services/axios";
+import { IMotelDetail } from "@/utils/interfaces";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 const DetailMotel = () => {
   const { motelId } = useParams();
+  const [detailMotel, setDetailMotel] = useState<IMotelDetail|null>(null)
+  useEffect(() => {
+    motelId && axios.get(caHouseEndpoint.getDetailMotel(motelId))
+    .then((data) => {
+      setDetailMotel(data.data.result)
+    })
+    .catch(error => {
+      toast.error(error.response.data)
+    })
+  }, []);
   return (
     <div className="container w-[1200px] mt-10">
       <Dialog>
@@ -121,7 +136,7 @@ const DetailMotel = () => {
       <div className="flex mt-12 gap-8">
         <div className="w-2/3">
           <h3 className="text-3xl ">Detail Motel {motelId}</h3>
-          <p>Lorem ipsum dolor sit.</p>
+          <p>{detailMotel?.name}</p>
           <p>
             Lorem ipsum dolor sit. Lorem ipsum dolor sit amet consectetur
             adipisicing elit. Error iusto, illum molestiae quaerat harum totam.

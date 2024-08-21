@@ -1,5 +1,5 @@
 type language = "vi" | "en";
-type role = "for_rent" | "for_lease";
+type role = "motel" | "post";
 
 export type { language, role };
 
@@ -42,3 +42,8 @@ export type DetailUser = {
   roles: UserRole[];
   profile: Profile|null;
 };
+
+export type Image = {
+  id: string;
+  url:string;
+}

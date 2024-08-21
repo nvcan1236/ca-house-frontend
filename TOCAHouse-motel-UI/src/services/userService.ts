@@ -1,10 +1,16 @@
 import { caHouseEndpoint } from "@/configs/APIconfig";
 import { authAxios } from "./axios";
+import { User } from "@/utils/types";
 
-export const getUserInfor = () => {
-  const user = authAxios.get(caHouseEndpoint.getMyInfor).then((data) => {
-    return data.data.result;
-  });
+export const getUserInfor = (): User => {
+  const user = authAxios
+    .get(caHouseEndpoint.getMyInfor)
+    .then((data) => {
+      if (data.status === 200) {
+        return data.data.result;
+      }
+    })
+    .catch((error) => console.log(error?.response?.data?.message));
 
   return user;
 };

@@ -12,7 +12,7 @@ const AuthModal = () => {
 
   return (
     <Modal>
-      <div className="w-[500px] bg-background rounded-xl relative">
+      <div className="w-[400px] lg:w-[500px] mx-auto bg-background rounded-xl relative">
         <div className="p-10">
           <Button
             variant={"ghost"}

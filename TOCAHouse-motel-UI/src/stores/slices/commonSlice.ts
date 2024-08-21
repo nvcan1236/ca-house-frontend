@@ -1,14 +1,14 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { language, role } from "@/utils/types";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const initialState : {
-  language:language,
-  role: role
+const initialState: {
+  language: language;
+  role: role;
 } = {
   language: "vi",
-  role: "for_rent",
-}
+  role: "motel",
+};
 
 export const commonSlice = createSlice({
   name: "common",
@@ -20,10 +20,10 @@ export const commonSlice = createSlice({
         language: payload,
       };
     },
-    switchRole: (state) => {
+    switchRole: (state, action: PayloadAction<role>) => {
       return {
         ...state,
-        role: state.role === "for_rent" ? "for_lease" : "for_rent",
+        role: action.payload,
       };
     },
   },
