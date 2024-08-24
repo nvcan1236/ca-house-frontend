@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import FilterIcon from "../icon/FilterIcon";
+import { FilterIcon, SlidersHorizontalIcon } from "lucide-react";
 
 export function DrawerDialogFilter() {
   const [open, setOpen] = React.useState(false);
@@ -34,7 +34,7 @@ export function DrawerDialogFilter() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button size={"icon"} variant={"ghost"}>
-            <FilterIcon className="size-6" />
+            <SlidersHorizontalIcon  size={20} />
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">

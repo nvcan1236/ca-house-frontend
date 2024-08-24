@@ -1,4 +1,3 @@
-import EditIcon from "@/components/icon/EditIcon";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import PageNotFound from "./PageNotFound";
 import { toast } from "sonner";
+import { EditIcon } from "lucide-react";
 
 const Profile = () => {
   const [detailUser, setDetailUser] = useState<DetailUser | null>(null);

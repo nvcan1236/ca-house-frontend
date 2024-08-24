@@ -10,13 +10,14 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-main-blue text-primary-foreground hover:bg-main-blue-s3",
+        default:
+          "text-primary-foreground bg-gradient-to-r from-main-blue to-main-blue-s2 from-30% hover:from-main-blue-s3 hover:to-main-blue-s3",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground ",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          "hover:bg-main-blue-t8 hover:border-main-blue border border-foreground",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },

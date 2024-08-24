@@ -5,6 +5,9 @@ import axios from "@/services/axios";
 import { caHouseEndpoint } from "@/configs/APIconfig";
 import { toast } from "sonner";
 import MotelSkeleton from "./MotelSkeleton";
+import { LayoutGridIcon, MapIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Map from "../common/Map";
 
 const MotelList = () => {
   // const motel: IMotel = {
@@ -29,29 +32,51 @@ const MotelList = () => {
   // };
   const [motelList, setMotelList] = useState<IMotel[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [showMap, setShowMap] = useState<boolean>(true);
 
   useEffect(() => {
     setLoading(true);
     axios
       .get(caHouseEndpoint.getAllMotel)
       .then((data) => {
-        setMotelList(data?.data?.result?.data);
         setLoading(false);
+        setMotelList(data?.data?.result?.data);
       })
       .catch((error) => toast.error(error.response.data));
   }, []);
 
   return (
-    <div>
-      <div className="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 p-8">
-        {loading &&
-          Array(10)
-            .fill(Math.random())
-            .map((i) => <MotelSkeleton key={i} />)}
-        {motelList?.map((motel, i) => (
-          <Motel motel={motel} key={i} />
-        ))}
-      </div>
+    <div className="">
+      {showMap ? (
+        <div className="fixed inset-0 z-30">
+          <Map motels={motelList}></Map>
+        </div>
+      ) : (
+        <div className="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 p-8">
+          {loading &&
+            Array(10)
+              .fill(Math.random())
+              .map((i) => <MotelSkeleton key={i} />)}
+          {motelList?.map((motel, i) => (
+            <Motel motel={motel} key={i} />
+          ))}
+        </div>
+      )}
+
+      <Button
+        className="fixed bottom-10 left-1/2 -translate-x-1/2 z-30"
+        onClick={() => setShowMap(!showMap)}
+      >
+        {showMap ? (
+          <>
+            <LayoutGridIcon size={20} className="mr-2" /> Xem danh sách
+          </>
+        ) : (
+          <>
+            <MapIcon size={20} className="mr-2" /> Xem trên Map
+          </>
+        )}
+      </Button>
     </div>
   );
 };

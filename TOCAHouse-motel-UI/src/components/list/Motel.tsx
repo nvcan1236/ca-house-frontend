@@ -10,6 +10,8 @@ import {
 import { IMotel } from "@/utils/interfaces";
 import { Badge } from "../ui/badge";
 import { useNavigate } from "react-router-dom";
+import { Skeleton } from "../ui/skeleton";
+import H3 from "../common/H3";
 
 const Motel = ({ motel }: { motel: IMotel }) => {
   const [hoved, setHovered] = useState(false);
@@ -45,6 +47,9 @@ const Motel = ({ motel }: { motel: IMotel }) => {
               </div>
             </CarouselItem>
           ))}
+          {motel?.images.length === 0 && (
+            <Skeleton className="h-[160px] w-full" />
+          )}
         </CarouselContent>
         {hoved && (
           <>
@@ -66,7 +71,7 @@ const Motel = ({ motel }: { motel: IMotel }) => {
       <div className="p-3 text-sm">
         <div className="flex gap-2 items-center">
           <p
-            className="text-left font-medium flex-1 overflow-ellipsis line-clamp-1"
+            className="text-left font-medium flex-1 overflow-ellipsis line-clamp-1 text-slate-600"
             onClick={() => navigate(`./motels/${motel.id}`)}
           >
             {motel?.name}
@@ -78,6 +83,9 @@ const Motel = ({ motel }: { motel: IMotel }) => {
             {motel?.type?.toLowerCase()}
           </Badge>
         </div>
+        <H3 className="!text-base">
+          {motel.district}, {motel.city}
+        </H3>
         <div className="flex gap-2 items-center justify-between mt-3">
           <span>Diện tích: {motel?.area}m2</span>
           <span className="font-semibold text-main-blue text-lg">

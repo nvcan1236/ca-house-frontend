@@ -33,7 +33,7 @@ const Modal = ({ children, onClose }: ModalProps) => {
       {(state) =>
         state && (
           <div
-            className={`bg-black bg-opacity-30 fixed inset-0 z-20  items-center justify-center transition-all duration-300 hidden`}
+            className={`bg-black bg-opacity-30 fixed inset-0 z-50  items-center justify-center transition-all duration-300 hidden`}
             ref={nodeRef}
           >
             <div

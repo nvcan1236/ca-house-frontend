@@ -24,13 +24,13 @@ function App() {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />}></Route>
-          <Route path="motels/:motelId" element={<DetailMotel />}></Route>
         </Route>
         <Route path="/" element={<NoSearchLayout />}>
+          <Route path="motels/:motelId" element={<DetailMotel />}></Route>
           <Route path="profile/:userId" element={<Profile />}></Route>
         </Route>
 
-        <Route path="*" element={<PageNotFound />}></Route>
+        <Route path="*" element={<PageNotFound message="Trang không tồn tại" />}></Route>
       </Routes>
       <AuthModal></AuthModal>
     </BrowserRouter>

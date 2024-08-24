@@ -9,9 +9,14 @@ export interface IMotel {
   availableDate: string;
   status: string;
   createdAt: string;
-  images: Image[]
+  images: Image[];
+  longitude: number;
+  latitude: number;
+  district: string;
+  city: string;
 }
 
 export interface IMotelDetail extends IMotel {
-  
+  description: string;
+  ownerId: string;
 }

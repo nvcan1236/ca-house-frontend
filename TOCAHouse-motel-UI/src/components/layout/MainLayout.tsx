@@ -13,13 +13,13 @@ const MainLayout = () => {
   return (
     <div
       className={` via-slate-100 bg-gradient-to-r transition-all ${
-        role === "for_rent"
+        role === "motel"
           ? " from-main-yellow-t9 to-main-blue-t8 "
           : "from-main-blue-t8  to-main-yellow-t9 "
       }`}
     >
       <Header></Header>
-      <div className="pt-[160px] pb-10">
+      <div className="pt-[160px] pb-10 min-h-screen">
         <Outlet />
       </div>
       <Toaster position="top-right" richColors closeButton />

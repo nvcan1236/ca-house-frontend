@@ -11,8 +11,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import EyeClose from "../icon/EyeClose";
-import EyeOpen from "../icon/EyeOpen";
 import { Separator } from "../ui/separator";
 import { useState } from "react";
 import { closeAuthModal, switchFormType } from "@/stores/slices/authSlice";
@@ -21,6 +19,7 @@ import axios from "@/services/axios";
 import { caHouseEndpoint } from "@/configs/APIconfig";
 import { error } from "console";
 import { toast } from "sonner";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 const RegisterForm = () => {
   const dispatch = useAppDispatch();
@@ -163,7 +162,7 @@ const RegisterForm = () => {
                           setShowPassword(!showPassword);
                         }}
                       >
-                        {showPassword ? <EyeOpen /> : <EyeClose />}
+                        {showPassword ? <EyeIcon size={20} /> : <EyeOffIcon size={20} />}
                       </span>
                     </div>
                   </FormControl>
@@ -193,7 +192,7 @@ const RegisterForm = () => {
                           setShowPassword(!showPassword);
                         }}
                       >
-                        {showPassword ? <EyeOpen /> : <EyeClose />}
+                        {showPassword ? <EyeIcon size={20} /> : <EyeOffIcon size={20} />}
                       </span>
                     </div>
                   </FormControl>

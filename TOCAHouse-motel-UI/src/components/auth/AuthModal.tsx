@@ -2,9 +2,9 @@ import Modal from "../modal/Modal";
 import { Button } from "../ui/button";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { closeAuthModal } from "@/stores/slices/authSlice";
-import CloseIcon from "../icon/CloseIcon";
 import LoginForm from "../form/LoginForm";
 import RegisterForm from "../form/RegisterForm";
+import { XIcon } from "lucide-react";
 
 const AuthModal = () => {
   const dispatch = useAppDispatch();
@@ -20,7 +20,7 @@ const AuthModal = () => {
             className="absolute right-4 top-4 "
             onClick={() => dispatch(closeAuthModal())}
           >
-            <CloseIcon></CloseIcon>
+            <XIcon></XIcon>
           </Button>
           <div onClick={(e) => e.stopPropagation()}>
             {formType === "login" && <LoginForm></LoginForm>}

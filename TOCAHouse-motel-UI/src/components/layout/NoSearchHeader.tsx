@@ -6,7 +6,6 @@ import {
 } from "@/components/ui/select";
 
 import { Button } from "../ui/button";
-import LanguageIcon from "../icon/LanguageIcon";
 import { useTranslation } from "react-i18next";
 import { language } from "@/utils/types";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
@@ -19,13 +18,12 @@ import {
   switchFormType,
 } from "@/stores/slices/authSlice";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import BarIcon from "../icon/BarIcon";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Separator } from "../ui/separator";
 import { authAxios } from "@/services/axios";
 import { caHouseEndpoint } from "@/configs/APIconfig";
 import { Alert, AlertDescription } from "../ui/alert";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, LanguagesIcon, MenuIcon } from "lucide-react";
 import CreatePasswordForm from "../form/CreatePasswordForm";
 import {
   Dialog,
@@ -65,7 +63,7 @@ const NoSearchHeader = () => {
           <div className="flex">
             <Select onValueChange={changeLanguage}>
               <SelectTrigger className="w-[100px] text-sm">
-                <LanguageIcon className="size-4 " />
+                <LanguagesIcon className="size-4 " />
                 {`(${i18n.language.toUpperCase()}) `}
               </SelectTrigger>
               <SelectContent>
@@ -81,7 +79,7 @@ const NoSearchHeader = () => {
                 <Popover>
                   <PopoverTrigger>
                     <div className="bg-background flex items-center gap-1 rounded-md border py-2 px-4">
-                      <BarIcon />
+                      <MenuIcon />
                       <span className="font-medium max-w-20 text-ellipsis text-nowrap ml-3 mr-1 text-sm">
                         {user?.firstName}
                       </span>

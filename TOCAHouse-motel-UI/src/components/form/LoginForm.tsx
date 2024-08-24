@@ -12,8 +12,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
-import EyeClose from "../icon/EyeClose";
-import EyeOpen from "../icon/EyeOpen";
 import { Separator } from "../ui/separator";
 import { useAppDispatch } from "@/stores/hooks";
 import {
@@ -26,6 +24,7 @@ import { caHouseEndpoint } from "@/configs/APIconfig";
 import axios from "@/services/axios";
 import googleConfig from "@/configs/googleLoginConfig";
 import { toast } from "sonner";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -158,7 +157,7 @@ const LoginForm = () => {
                       className="absolute right-3 top-1/2 p-1 -translate-y-1/2"
                       onClick={() => setShowPassword(!showPassword)}
                     >
-                      {showPassword ? <EyeOpen /> : <EyeClose />}
+                      {showPassword ? <EyeIcon size={20} /> : <EyeOffIcon size={20} />}
                     </span>
                   </div>
                 </FormControl>
