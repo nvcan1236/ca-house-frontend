@@ -9,7 +9,7 @@ import ReactMapGL, {
 import { MapPinIcon } from "lucide-react";
 import MotelMarker from "./MotelMarker";
 import { IMotel } from "@/utils/interfaces";
-const Map = ({ motels }: { motels: IMotel[] }) => {
+const Map = ({ motels }: { motels: IMotel[] | null }) => {
   const [current, setCurrent] = useState({
     latitude: 0,
     longitude: 0,
@@ -92,9 +92,9 @@ const Map = ({ motels }: { motels: IMotel[] }) => {
         <Marker longitude={current.longitude} latitude={current.latitude}>
           <MapPinIcon size={32} fill="#ea4e2c" strokeWidth={1} />
         </Marker>
-        <Marker longitude={viewState.longitude} latitude={viewState.latitude}>
+        {/* <Marker longitude={viewState.longitude} latitude={viewState.latitude}>
           <MapPinIcon size={32} fill="#ea4e2c" strokeWidth={1} />
-        </Marker>
+        </Marker> */}
       </ReactMapGL>
     </div>
   );

@@ -9,6 +9,8 @@ import PageNotFound from "./pages/PageNotFound";
 import AuthModal from "./components/auth/AuthModal";
 import Profile from "./pages/Profile";
 import NoSearchLayout from "./components/layout/NoSearchLayout";
+import CreateMotel from "./pages/createMotel/CreateMotel";
+import CreateMotelLayout from "./pages/createMotel/CreateMotelLayout";
 
 function App() {
   const language = useAppSelector((state) => state.common.language);
@@ -22,15 +24,19 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<MainLayout />}>
+        <Route element={<MainLayout />}>
           <Route index element={<HomePage />}></Route>
         </Route>
-        <Route path="/" element={<NoSearchLayout />}>
-          <Route path="motels/:motelId" element={<DetailMotel />}></Route>
-          <Route path="profile/:userId" element={<Profile />}></Route>
+        <Route element={<NoSearchLayout />}>
+          <Route path="/motels/:motelId" element={<DetailMotel />}></Route>
+          <Route path="/profile/:userId" element={<Profile />}></Route>
+          <Route path="/register-motel" element={<CreateMotel />}></Route>
         </Route>
 
-        <Route path="*" element={<PageNotFound message="Trang không tồn tại" />}></Route>
+        <Route
+          path="*"
+          element={<PageNotFound message="Trang không tồn tại" />}
+        ></Route>
       </Routes>
       <AuthModal></AuthModal>
     </BrowserRouter>

@@ -32,7 +32,7 @@ const MotelList = () => {
   // };
   const [motelList, setMotelList] = useState<IMotel[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [showMap, setShowMap] = useState<boolean>(true);
+  const [showMap, setShowMap] = useState<boolean>(false);
 
   useEffect(() => {
     setLoading(true);

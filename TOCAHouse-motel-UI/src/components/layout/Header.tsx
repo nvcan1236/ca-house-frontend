@@ -14,10 +14,7 @@ import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { useEffect, useState } from "react";
 import { DrawerDialogFilter } from "../search/DrawerDialogFilter";
 import { useNavigate } from "react-router-dom";
-import {
-  logout,
-  setUserInfor,
-} from "@/stores/slices/authSlice";
+import { logout, setUserInfor } from "@/stores/slices/authSlice";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Separator } from "../ui/separator";
@@ -34,6 +31,7 @@ import {
 import { getUserInfor } from "@/services/userService";
 import LoginButton from "../button/LoginButton";
 import { Alert, AlertDescription } from "../ui/alert";
+import { toast } from "sonner";
 
 const Header = () => {
   const { i18n } = useTranslation();
@@ -62,6 +60,27 @@ const Header = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    // if (user?.roles) {
+    // }
+
+    const showSuggest = () =>
+      toast.info("Đăng phòng cho thuê", {
+        description: "Trở thành chủ nhà và đăng phòng cho mọi người",
+        action: {
+          label: "Đăng ký",
+          onClick: () => navigate("/register-motel"),
+        },
+      });
+
+    window.addEventListener("load", showSuggest);
+
+    return () => {
+      window.removeEventListener("load", showSuggest);
+    };
+  }, []);
+
   return (
     <header
       className={`container z-20 fixed left-1/2 -translate-x-1/2 ${
@@ -92,9 +111,7 @@ const Header = () => {
               className={`flex gap-4 p-2 border border-gray-300 rounded-xl  bg-gray-50 `}
             >
               <Button
-                className={`w-[120px] ${
-                  role === "post" && "text-gray-500"
-                }`}
+                className={`w-[120px] ${role === "post" && "text-gray-500"}`}
                 variant={role === "motel" ? "default" : "ghost"}
                 onClick={() => {
                   dispatch(switchRole("motel"));
@@ -103,9 +120,7 @@ const Header = () => {
                 Trọ
               </Button>
               <Button
-                className={`w-[120px] ${
-                  role === "motel" && "text-gray-500"
-                }`}
+                className={`w-[120px] ${role === "motel" && "text-gray-500"}`}
                 variant={role === "post" ? "default" : "ghost"}
                 onClick={() => {
                   dispatch(switchRole("post"));
@@ -125,11 +140,7 @@ const Header = () => {
               accept="enter"
             />
 
-            <Button
-              className="rounded-full"
-              variant={'ghost'}
-              size={"icon"}
-            >
+            <Button className="rounded-full" variant={"ghost"} size={"icon"}>
               <SearchIcon size={20} />
             </Button>
           </div>

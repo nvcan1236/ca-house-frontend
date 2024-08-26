@@ -6,6 +6,7 @@ import { useAppSelector } from "../../stores/hooks";
 import Header from "./Header";
 import Footer from "./Footer";
 import { Toaster } from "sonner";
+import { CircleCheckIcon, CircleXIcon, InfoIcon, TriangleAlertIcon } from "lucide-react";
 
 const MainLayout = () => {
   const role = useAppSelector((state) => state.common.role);
@@ -22,7 +23,17 @@ const MainLayout = () => {
       <div className="pt-[160px] pb-10 min-h-screen">
         <Outlet />
       </div>
-      <Toaster position="top-right" richColors closeButton />
+      <Toaster
+        position="top-right"
+        richColors
+        closeButton
+        icons={{
+          success: <CircleCheckIcon size={20} />,
+          info: <InfoIcon size={20} />,
+          warning: <TriangleAlertIcon size={20} />,
+          error: <CircleXIcon size={20} />,
+        }}
+      />
       <Footer></Footer>
     </div>
   );

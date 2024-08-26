@@ -20,3 +20,18 @@ export interface IMotelDetail extends IMotel {
   description: string;
   ownerId: string;
 }
+
+export interface Step {
+  component: React.ReactNode;
+  href: string;
+  nextStepHref: string | null;
+}
+
+export interface Steps {
+  regular: Step;
+  location: Step;
+  amenities: Step;
+  images: Step;
+  prices: Step;
+  requirements: Step;
+}

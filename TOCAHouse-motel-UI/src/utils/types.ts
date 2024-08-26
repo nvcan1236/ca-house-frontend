@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 type language = "vi" | "en";
 type role = "motel" | "post";
 
@@ -26,11 +28,11 @@ export type Permission = {
 };
 
 export type Profile = {
-  dob: string
-  phone: string
-  messgenger: string
-  occupation: string
-}
+  dob: string;
+  phone: string;
+  messgenger: string;
+  occupation: string;
+};
 
 export type DetailUser = {
   id: string;
@@ -40,10 +42,16 @@ export type DetailUser = {
   email: string;
   avatar: string;
   roles: UserRole[];
-  profile: Profile|null;
+  profile: Profile | null;
 };
 
 export type Image = {
   id: string;
-  url:string;
-}
+  url: string;
+};
+
+export type MotelType = {
+  label: string;
+  icon: ReactNode;
+  value: string;
+};

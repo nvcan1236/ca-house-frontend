@@ -43,7 +43,7 @@ const MotelMarker = ({ motel }: { motel: IMotel }) => {
             </div>
           </div>
         </PopoverTrigger>
-        <PopoverContent>
+        <PopoverContent className="p-2">
           <Motel motel={motel.longitude ? motel : motelDefault}></Motel>
         </PopoverContent>
       </Popover>

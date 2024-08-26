@@ -7,6 +7,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import NoSearchHeader from "./NoSearchHeader";
 import { Toaster } from "sonner";
+import { CircleCheckIcon, CircleXIcon, InfoIcon, TriangleAlertIcon } from "lucide-react";
 
 const NoSearchLayout = () => {
   const role = useAppSelector((state) => state.common.role);
@@ -14,10 +15,20 @@ const NoSearchLayout = () => {
   return (
     <div>
       <NoSearchHeader></NoSearchHeader>
-      <div className="">
+      <div className="container">
         <Outlet />
       </div>
-      <Toaster position="top-right" richColors closeButton />
+      <Toaster
+        position="top-right"
+        richColors
+        closeButton
+        icons={{
+          success: <CircleCheckIcon size={20} />,
+          info: <InfoIcon size={20} />,
+          warning: <TriangleAlertIcon size={20} />,
+          error: <CircleXIcon size={20} />,
+        }}
+      />
       <Footer></Footer>
     </div>
   );
