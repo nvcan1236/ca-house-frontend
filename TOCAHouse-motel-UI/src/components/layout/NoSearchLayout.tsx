@@ -3,7 +3,6 @@
 
 import { Outlet } from "react-router-dom";
 import { useAppSelector } from "../../stores/hooks";
-import Header from "./Header";
 import Footer from "./Footer";
 import NoSearchHeader from "./NoSearchHeader";
 import { Toaster } from "sonner";

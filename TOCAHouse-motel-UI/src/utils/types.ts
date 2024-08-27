@@ -55,3 +55,13 @@ export type MotelType = {
   icon: ReactNode;
   value: string;
 };
+
+export type Location = {
+  province: string;
+  district: string;
+  ward: string;
+  street: string;
+  other: string;
+  longitude: number | null;
+  latitude: number | null;
+};

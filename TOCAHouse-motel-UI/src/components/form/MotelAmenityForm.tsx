@@ -23,38 +23,39 @@ import {
 import { Button } from "../ui/button";
 import { nextStep, prevStep } from "@/stores/slices/createMotelSlice";
 import { useAppDispatch } from "@/stores/hooks";
+import { useState } from "react";
 
 const MotelAmenityForm = () => {
   const dispatch = useAppDispatch();
   const services = [
     {
       label: "Nhà gửi xe",
-      value: "NHAXE",
+      value: "GARAGE",
       icon: <BikeIcon size={32} />,
     },
     {
       label: "Dịch vụ giặt ủi",
-      value: "NHAXE",
+      value: "IRON",
       icon: <WashingMachineIcon size={32} />,
     },
     {
       label: "An ninh, bảo vệ",
-      value: "NHAXE",
+      value: "SECURITY",
       icon: <CctvIcon size={32} />,
     },
     {
       label: "Phòng cháy chữa cháy",
-      value: "NHAXE",
+      value: "FIRE_PROTECTION",
       icon: <FireExtinguisherIcon size={32} />,
     },
     {
       label: "Wifi, Internet",
-      value: "NHAXE",
+      value: "INTERNET",
       icon: <WifiIcon size={32} />,
     },
     {
       label: "Thang máy",
-      value: "NHAXE",
+      value: "ELEVATOR",
       icon: <DoorClosedIcon size={32} />,
     },
   ];
@@ -62,37 +63,37 @@ const MotelAmenityForm = () => {
   const furnitures = [
     {
       label: "Giường, nệm",
-      value: "NHAXE",
+      value: "BED",
       icon: <BedIcon size={32} />,
     },
     {
       label: "Tủ lạnh",
-      value: "NHAXE",
+      value: "FRIDGE",
       icon: <RefrigeratorIcon size={32} />,
     },
     {
       label: "Máy giặt",
-      value: "NHAXE",
+      value: "WASHING_MACHINE",
       icon: <WashingMachineIcon size={32} />,
     },
     {
       label: "Tủ, giá treo đồ",
-      value: "NHAXE",
+      value: "WARDROBE",
       icon: <ShirtIcon size={32} />,
     },
     {
       label: "Bếp, kệ bếp",
-      value: "NHAXE",
+      value: "KITCHEN",
       icon: <HeaterIcon size={32} />,
     },
     {
       label: "Máy lạnh",
-      value: "NHAXE",
+      value: "AC",
       icon: <AirVentIcon size={32} />,
     },
     {
       label: "Bàn ghế",
-      value: "NHAXE",
+      value: "TABLE",
       icon: <ArmchairIcon size={32} />,
     },
   ];
@@ -100,40 +101,63 @@ const MotelAmenityForm = () => {
   const facilities = [
     {
       label: "Nhà thuốc, Bênh viện",
-      value: "NHAXE",
+      value: "HOSPITAL",
       icon: <HospitalIcon size={32} />,
     },
     {
       label: "Trường học",
-      value: "NHAXE",
+      value: "SCHOOL",
       icon: <School2Icon size={32} />,
     },
     {
       label: "Chợ, tạp hoá",
-      value: "NHAXE",
+      value: "MARKET",
       icon: <CarrotIcon size={32} />,
     },
     {
       label: "Siêu thị, cửa hàng",
-      value: "NHAXE",
+      value: "SUPERMARKET",
       icon: <StoreIcon size={32} />,
     },
     {
       label: "Nhà hàng quán ăn",
-      value: "NHAXE",
+      value: "FOOD_STALL",
       icon: <SoupIcon size={32} />,
     },
     {
       label: "Trạm xe bus",
-      value: "NHAXE",
+      value: "BUSSTOP",
       icon: <BusFrontIcon size={32} />,
     },
     {
       label: "Bến xe",
-      value: "NHAXE",
+      value: "STATION",
       icon: <BusIcon size={32} />,
     },
   ];
+
+  type Data = {
+    services: string[];
+    furnitures: string[];
+    facilities: string[];
+  };
+
+  const [data, setData] = useState<Data>({
+    services: [],
+    furnitures: [],
+    facilities: [],
+  });
+
+  const updateData = (type: keyof Data, value: string) => {
+    const newData = { ...data };
+    if (newData[type].includes(value)) {
+      newData[type] = newData[type].filter((i) => i != value);
+    } else {
+      newData[type].push(value);
+    }
+
+    setData(newData);
+  };
 
   return (
     <div className="flex flex-col gap-8">
@@ -141,7 +165,14 @@ const MotelAmenityForm = () => {
         <H3 className="text-foreground">Các dịch vụ bao gồm</H3>
         <div className="grid grid-cols-4 gap-3 mt-4">
           {services?.map((service) => (
-            <div className="rounded-lg border px-6 py-4 text-center">
+            <div
+              key={service.value}
+              className={`rounded-lg border px-6 py-4 text-center ${
+                data["services"].includes(service.value) &&
+                "border-main-blue-s3 border-2"
+              }`}
+              onClick={() => updateData("services", service.value)}
+            >
               <div className="w-fit mx-auto my-2">{service.icon}</div>
               <span>{service.label}</span>
             </div>
@@ -153,7 +184,14 @@ const MotelAmenityForm = () => {
         <H3 className="text-foreground">Nội thất trong phòng</H3>
         <div className="grid grid-cols-4 gap-3 mt-4">
           {furnitures?.map((furniture) => (
-            <div className="rounded-lg border px-6 py-4 text-center">
+            <div
+              key={furniture.value}
+              className={`rounded-lg border px-6 py-4 text-center ${
+                data["furnitures"].includes(furniture.value) &&
+                "border-main-blue-s3 border-2"
+              }`}
+              onClick={() => updateData("furnitures", furniture.value)}
+            >
               <div className="w-fit mx-auto my-2">{furniture.icon}</div>
               <span>{furniture.label}</span>
             </div>
@@ -165,7 +203,14 @@ const MotelAmenityForm = () => {
         <H3 className="text-foreground">Các tiện ích xung quanh</H3>
         <div className="grid grid-cols-4 gap-3 mt-4">
           {facilities?.map((facility) => (
-            <div className="rounded-lg border px-6 py-4 text-center">
+            <div
+              key={facility.value}
+              className={`rounded-lg border px-6 py-4 text-center ${
+                data["facilities"].includes(facility.value) &&
+                "border-main-blue-s3 border-2"
+              }`}
+              onClick={() => updateData("facilities", facility.value)}
+            >
               <div className="w-fit mx-auto my-2">{facility.icon}</div>
               <span>{facility.label}</span>
             </div>
@@ -181,7 +226,13 @@ const MotelAmenityForm = () => {
         >
           Quay lại
         </Button>
-        <Button size={"lg"} onClick={() => dispatch(nextStep())}>
+        <Button
+          size={"lg"}
+          onClick={() => {
+            console.log(data)
+            dispatch(nextStep());
+          }}
+        >
           Tiếp tục
         </Button>
       </div>

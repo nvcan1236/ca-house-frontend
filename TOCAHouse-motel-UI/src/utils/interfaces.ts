@@ -35,3 +35,20 @@ export interface Steps {
   prices: Step;
   requirements: Step;
 }
+
+// Kiểu dữ liệu cho Ward (Phường/Xã)
+export interface Ward {
+  name: string;
+}
+
+// Kiểu dữ liệu cho District (Quận/Huyện)
+export interface District {
+  name: string;
+  wards: Ward[]; // Mảng các phường/xã thuộc quận/huyện này
+}
+
+// Kiểu dữ liệu cho Province (Tỉnh/Thành phố)
+export interface Province {
+  name: string;
+  districts: District[]; // Mảng các quận/huyện thuộc tỉnh/thành phố này
+}

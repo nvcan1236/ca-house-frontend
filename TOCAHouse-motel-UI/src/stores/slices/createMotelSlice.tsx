@@ -1,23 +1,23 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import AmenityInfo from "@/pages/createMotel/AmenityInfo";
-import CreateMotel from "@/pages/createMotel/CreateMotel";
 import LocationInfo from "@/pages/createMotel/LocationInfo";
 import PriceInfo from "@/pages/createMotel/PriceInfo";
 import RegularInfo from "@/pages/createMotel/RegularInfo";
 import RequirementInfo from "@/pages/createMotel/RequirementInfo";
 import UploadMotelImage from "@/pages/createMotel/UploadMotelImage";
 import { Step } from "@/utils/interfaces";
+import { Location } from "@/utils/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: {
   steps: Step[];
   currentStep: number;
-  regular: any;
-  location: any;
-  images: any;
-  amenities: any;
-  requirements: any;
-  prices: any;
+  regular: object;
+  location: Location | object;
+  images: object;
+  amenities: object;
+  requirements: object;
+  prices: object;
 } = {
   steps: [
     {
@@ -57,7 +57,7 @@ const initialState: {
       nextStepHref: null,
     },
   ],
-  currentStep: 4,
+  currentStep: 2,
   regular: {},
   location: {},
   images: {},

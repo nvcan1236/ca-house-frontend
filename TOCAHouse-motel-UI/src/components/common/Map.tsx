@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import ReactMapGL, {
   FullscreenControl,
   GeolocateControl,
@@ -9,12 +9,17 @@ import ReactMapGL, {
 import { MapPinIcon } from "lucide-react";
 import MotelMarker from "./MotelMarker";
 import { IMotel } from "@/utils/interfaces";
-const Map = ({ motels }: { motels: IMotel[] | null }) => {
+const Map = ({
+  motels,
+  children,
+}: {
+  motels?: IMotel[] | null;
+  children?: ReactNode;
+}) => {
   const [current, setCurrent] = useState({
     latitude: 0,
     longitude: 0,
   });
-
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -49,6 +54,7 @@ const Map = ({ motels }: { motels: IMotel[] | null }) => {
           anchor="bottom"
         >
           <MotelMarker motel={motel}></MotelMarker>
+          {children}
         </Marker>
       )),
     [JSON.stringify(motels)]
@@ -74,7 +80,8 @@ const Map = ({ motels }: { motels: IMotel[] | null }) => {
   return (
     <div className="w-full h-full relative">
       <div className="absolute bottom-0 p-3 bg-background z-30">
-        Lon: ${viewState.longitude} - Lat: {viewState.latitude} - Radius: {viewState.zoom}
+        Lon: ${viewState.longitude} - Lat: {viewState.latitude} - Radius:{" "}
+        {viewState.zoom}
       </div>
       <ReactMapGL
         mapStyle={"mapbox://styles/nvcan1236/cm05einzd00hf01qs8oa59aji"}
@@ -87,7 +94,7 @@ const Map = ({ motels }: { motels: IMotel[] | null }) => {
         <GeolocateControl position="top-left" />
         <FullscreenControl position="top-left" />
         <NavigationControl position="top-left" />
-        <ScaleControl/>
+        <ScaleControl />
         {motelMarkers}
         <Marker longitude={current.longitude} latitude={current.latitude}>
           <MapPinIcon size={32} fill="#ea4e2c" strokeWidth={1} />
