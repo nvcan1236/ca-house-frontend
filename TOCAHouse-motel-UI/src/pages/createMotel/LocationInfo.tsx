@@ -31,8 +31,6 @@ import ReactMapGL, {
   ScaleControl,
 } from "react-map-gl";
 
-
-
 const LocationInfo = () => {
   const dispatch = useAppDispatch();
   const provinces = getProvinces();
@@ -73,7 +71,7 @@ const LocationInfo = () => {
       });
     });
   }, []);
-  
+
   const [current, setCurrent] = useState({
     latitude: 0,
     longitude: 0,
@@ -173,13 +171,25 @@ const LocationInfo = () => {
 
               <div className="min-w-[180px]">
                 <Label htmlFor="city">Đường</Label>
-                <Input></Input>
+                <Input
+                  placeholder="Tên đường..."
+                  value={location.street}
+                  onChange={(e) =>
+                    setLocation({ ...location, street: e.target.value })
+                  }
+                ></Input>
               </div>
             </div>
             <div className="w-full flex gap-3 items-end">
               <div className="flex-1 ">
                 <Label htmlFor="city">ĐỊa chỉ khác (Tự chọn)</Label>
-                <Input placeholder={`Ấp, xóm,..`} />
+                <Input
+                  placeholder={`Ấp, xóm,..`}
+                  value={location.other}
+                  onChange={(e) =>
+                    setLocation({ ...location, other: e.target.value })
+                  }
+                />
               </div>
               <Popover>
                 <PopoverTrigger>
@@ -249,7 +259,14 @@ const LocationInfo = () => {
           >
             Quay lại
           </Button>
-          <Button size={"lg"} onClick={() => dispatch(nextStep())}>
+          <Button
+            size={"lg"}
+            onClick={() => {
+              console.log(location);
+              dispatch(nextStep());
+            }}
+            // disabled={location.longitude === null || location.latitude === null}
+          >
             Tiếp tục
           </Button>
         </div>

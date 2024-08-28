@@ -16,16 +16,41 @@ import { nextStep, prevStep } from "@/stores/slices/createMotelSlice";
 import { XIcon } from "lucide-react";
 import { useState } from "react";
 
-// type Price = {
-//   name: string;
-//   price: number;
-//   unit: string;
-// };
+type Price = {
+  type: PredefinePrice;
+  name: string | null;
+  price: number | null;
+  unit: string[];
+};
+
+type PredefinePrice =
+  | "ELECTRICITY"
+  | "WATER"
+  | "INTERNET"
+  | "PARKING"
+  | "ORTHER";
 
 const PriceInfo = () => {
   const dispatch = useAppDispatch();
 
   const [additionalPrices, setAdditionalPrices] = useState<number[]>([]);
+  const [prices, setPrices] = useState<Price[] | []>([
+    { name: "Điện", price: null, unit: ["kWh", "month"], type: "ELECTRICITY" },
+    { name: "Nước", price: null, unit: ["m3", "month"], type: "WATER" },
+    { name: "Internet", price: null, unit: ["month"], type: "INTERNET" },
+    { name: "Gửi xe", price: null, unit: ["month"], type: "PARKING" },
+    // { name: "Khác", price: null, unit: "month" },
+  ]);
+  const updatePriceData = (type: PredefinePrice, value: number) => {
+    const nextPrice = [...prices];
+    const index = nextPrice.findIndex((price) => price.type === type);
+
+    if (index !== -1) {
+      nextPrice[index] = { ...nextPrice[index], price: value };
+      setPrices(nextPrice);
+    }
+  };
+
   return (
     <div className="">
       <div className="flex gap-10 items-stretch">
@@ -44,7 +69,36 @@ const PriceInfo = () => {
 
             <H3>Các chi phí bao gồm </H3>
 
-            <div className="flex gap-3 items-center justify-between">
+            {prices.map((price) => (
+              <div
+                className="flex gap-3 items-center justify-between"
+                key={price.name}
+              >
+                <Label className="w-[120px]">{price.name} </Label>
+                <Input
+                  type="number"
+                  placeholder="(VND)"
+                  className="flex-1"
+                  onChange={(e) =>
+                    updatePriceData(price.type, Number(e.target.value))
+                  }
+                />
+                <Select defaultValue={price.unit[0]}>
+                  <SelectTrigger className="w-[100px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {price.unit.map((u) => (
+                      <SelectItem key={u} value={u}>
+                        {u}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            ))}
+
+            {/* <div className="flex gap-3 items-center justify-between">
               <Label className="w-[120px]">Điện </Label>
               <Input type="number" placeholder="(VND)" className="flex-1" />
               <Select defaultValue="kWh">
@@ -96,7 +150,7 @@ const PriceInfo = () => {
                   <SelectItem value="month">Tháng</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
+            </div> */}
 
             {additionalPrices.map((add) => (
               <div
@@ -120,9 +174,9 @@ const PriceInfo = () => {
                   className="border-destructive text-destructive"
                   type="button"
                   onClick={() =>
-                    setAdditionalPrices(() => ([
+                    setAdditionalPrices(() => [
                       ...additionalPrices.filter((i) => i !== add),
-                    ]))
+                    ])
                   }
                 >
                   <XIcon size={20}></XIcon>
@@ -136,7 +190,7 @@ const PriceInfo = () => {
               onClick={() =>
                 setAdditionalPrices([
                   ...additionalPrices,
-                  additionalPrices.length
+                  additionalPrices.length,
                 ])
               }
             >
@@ -152,7 +206,13 @@ const PriceInfo = () => {
             >
               Quay lại
             </Button>
-            <Button size={"lg"} onClick={() => dispatch(nextStep())}>
+            <Button
+              size={"lg"}
+              onClick={() => {
+                console.log(prices)
+                // dispatch(nextStep());
+              }}
+            >
               Tiếp tục
             </Button>
           </div>

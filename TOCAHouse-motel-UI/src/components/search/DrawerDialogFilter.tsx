@@ -14,16 +14,15 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { FilterIcon, SlidersHorizontalIcon } from "lucide-react";
 import H3 from "../common/H3";
+import { SlidersHorizontalIcon } from "lucide-react";
+import { Checkbox } from "../ui/checkbox";
+import { Label } from "../ui/label";
 
 export function DrawerDialogFilter() {
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -36,17 +35,79 @@ export function DrawerDialogFilter() {
             <SlidersHorizontalIcon size={20} />
           </Button>
         </DialogTrigger>
-        <DialogContent className="p-10 w-[800px]">
+        <DialogContent className="p-10 min-w-[800px]">
           <DialogHeader>
             <DialogTitle>Tìm kiếm nhanh hơn với bộ lọc</DialogTitle>
           </DialogHeader>
-          <div>
-            <H3>Loại phòng</H3>
-            <div className="grid grid-cols-4 gap-2 mt-3">
-              <div className="h-20 bg-slate-400"></div>
-              <div className="h-20 bg-slate-400"></div>
-              <div className="h-20 bg-slate-400"></div>
-              <div className="h-20 bg-slate-400"></div>
+          <div className="flex flex-col gap-4">
+            <div>
+              <H3>Loại phòng</H3>
+              <div className="grid grid-cols-4 gap-2 mt-1">
+                <div className="h-20 bg-slate-400"></div>
+                <div className="h-20 bg-slate-400"></div>
+                <div className="h-20 bg-slate-400"></div>
+                <div className="h-20 bg-slate-400"></div>
+              </div>
+            </div>
+
+            <div>
+              <H3>Khu vực</H3>
+              <div className="grid grid-cols-4 gap-2 mt-1">123 -456</div>
+            </div>
+
+            <div>
+              <H3>Khoảng giá</H3>
+              <div className="grid grid-cols-4 gap-2 mt-1">123 -456</div>
+            </div>
+
+            <div className="flex">
+              <div className="flex-1">
+                <H3>Dịch vụ</H3>
+                <div className="ml-3 mt-1">
+                  <div>
+                    <Checkbox /> <Label>An ninh</Label>
+                  </div>
+                  <div>
+                    <Checkbox /> <Label>Giặt ủi</Label>
+                  </div>
+                  <div>
+                    <Checkbox /> <Label>PCCC</Label>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex-1">
+                <H3>Nội thất</H3>
+                <div className="ml-3 mt-1">
+                  <div>
+                    <Checkbox /> <Label>An ninh</Label>
+                  </div>
+                  <div>
+                    <Checkbox /> <Label>Giặt ủi</Label>
+                  </div>
+                  <div>
+                    <Checkbox /> <Label>PCCC</Label>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex-1">
+                <H3>Tiện ích xung quanh</H3>
+                <div className="ml-3 mt-1">
+                  <div>
+                    <Checkbox /> <Label>An ninh</Label>
+                  </div>
+                  <div>
+                    <Checkbox /> <Label>Giặt ủi</Label>
+                  </div>
+                  <div>
+                    <Checkbox /> <Label>PCCC</Label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <Button className="block ml-auto mt-6 px-10">Áp dụng</Button>
             </div>
           </div>
         </DialogContent>
@@ -61,36 +122,57 @@ export function DrawerDialogFilter() {
           <SlidersHorizontalIcon className="size-6" />
         </Button>
       </DrawerTrigger>
-      <DrawerContent>
+      <DrawerContent className="p-6">
         <DrawerHeader className="text-left">
-          <DrawerTitle>Edit profile</DrawerTitle>
-          <DrawerDescription>
-            Make changes to your profile here. Click save when you're done.
-          </DrawerDescription>
+          <DrawerTitle>Tìm kiếm nhanh hơn với bộ lọc</DrawerTitle>
         </DrawerHeader>
-        <ProfileForm className="px-4" />
-        <DrawerFooter className="pt-2">
-          <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
+        <div className="flex flex-col gap-4">
+          <div>
+            <H3>Loại phòng</H3>
+            <div className="grid grid-cols-4 gap-2 mt-1">
+              <div className="h-20 bg-slate-400"></div>
+              <div className="h-20 bg-slate-400"></div>
+              <div className="h-20 bg-slate-400"></div>
+              <div className="h-20 bg-slate-400"></div>
+            </div>
+          </div>
+
+          <div>
+            <H3>Khu vực</H3>
+            <div className="grid grid-cols-4 gap-2 mt-1">123 -456</div>
+          </div>
+
+          <div>
+            <H3>Khoảng giá</H3>
+            <div className="grid grid-cols-4 gap-2 mt-1">123 -456</div>
+          </div>
+
+          <div className="flex">
+            <div>
+              <H3>Dịch vụ</H3>
+              <div className="grid grid-cols-4 gap-2 mt-1">123 -456</div>
+            </div>
+
+            <div>
+              <H3>Nội thất</H3>
+              <div className="grid grid-cols-4 gap-2 mt-1">123 -456</div>
+            </div>
+
+            <div>
+              <H3>Tiện ích xung quanh</H3>
+              <div className="grid grid-cols-4 gap-2 mt-1">123 -456</div>
+            </div>
+          </div>
+        </div>
+        <DrawerFooter className="pt-6">
+          <div className="flex gap-3 ">
+            <DrawerClose asChild className="w-1/2">
+              <Button variant="secondary">Huỷ</Button>
+            </DrawerClose>
+            <Button className="w-1/2">Áp dụng</Button>
+          </div>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
-  );
-}
-
-function ProfileForm({ className }: React.ComponentProps<"form">) {
-  return (
-    <form className={cn("grid items-start gap-4", className)}>
-      <div className="grid gap-2">
-        <Label htmlFor="email">Email</Label>
-        <Input type="email" id="email" defaultValue="shadcn@example.com" />
-      </div>
-      <div className="grid gap-2">
-        <Label htmlFor="username">Username</Label>
-        <Input id="username" defaultValue="@shadcn" />
-      </div>
-      <Button type="submit">Save changes</Button>
-    </form>
   );
 }

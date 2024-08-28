@@ -50,7 +50,13 @@ const UploadMotelImage = () => {
           >
             Quay lại
           </Button>
-          <Button size={"lg"} onClick={() => dispatch(nextStep())}>
+          <Button
+            size={"lg"}
+            onClick={() => {
+              // console.log(files)
+              dispatch(nextStep());
+            }}
+          >
             Tiếp tục
           </Button>
         </div>

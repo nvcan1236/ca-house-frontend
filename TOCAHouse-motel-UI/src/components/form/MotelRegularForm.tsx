@@ -31,33 +31,49 @@ const MotelRegularForm = () => {
   const dispatch = useAppDispatch();
 
   const loginValidationSchema = z.object({
-    username: z.string().min(4),
-    password: z.string().min(4),
+    name: z.string().min(1),
+    description: z.string(),
+    price: z.string(),
+    type: z.string(),
+    area: z.string(),
+    availableDate: z.date(),
   });
 
   const form = useForm({
     resolver: zodResolver(loginValidationSchema),
+    reValidateMode: "onChange",
     defaultValues: {
-      username: "",
-      password: "",
+      name: "",
+      description: "",
+      price: "0",
+      type: "",
+      area: "0",
+      availableDate: "",
     },
   });
 
-  useEffect(() => {}, []);
 
   const motelTypes: MotelType[] = [
-    { label: "Phòng đơn", icon: <HouseIcon size={32}></HouseIcon>, value: "" },
+    {
+      label: "Phòng đơn",
+      icon: <HouseIcon size={32}></HouseIcon>,
+      value: "SINGLE",
+    },
     {
       label: "Nhà nguyên căn",
       icon: <SchoolIcon size={32}></SchoolIcon>,
-      value: "",
+      value: "WHOLE_HOUSE",
     },
     {
       label: "Căn hộ chung cư",
       icon: <Building size={32}></Building>,
-      value: "",
+      value: "APARTMENT",
     },
-    { label: "Ký túc xá", icon: <BedIcon size={32}></BedIcon>, value: "" },
+    {
+      label: "Ký túc xá",
+      icon: <BedIcon size={32}></BedIcon>,
+      value: "DORMITARY",
+    },
   ];
 
   function onSubmit(values: z.infer<typeof loginValidationSchema>) {
@@ -79,7 +95,7 @@ const MotelRegularForm = () => {
         >
           <FormField
             control={form.control}
-            name="username"
+            name="name"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Đặt tên cho căn trọ</FormLabel>
@@ -96,7 +112,7 @@ const MotelRegularForm = () => {
 
           <FormField
             control={form.control}
-            name="username"
+            name="description"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Thêm mô tả</FormLabel>
@@ -113,7 +129,7 @@ const MotelRegularForm = () => {
 
           <FormField
             control={form.control}
-            name="username"
+            name="price"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Bạn sẽ cho thuê với giá bao nhiêu 1 tháng</FormLabel>
@@ -127,12 +143,16 @@ const MotelRegularForm = () => {
 
           <FormField
             control={form.control}
-            name="username"
+            name="type"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Loại phòng</FormLabel>
                 <FormControl>
-                  <RadioGroup defaultValue="option-one" {...field}>
+                  <RadioGroup
+                    // defaultValue="option-one"
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                       {motelTypes?.map((type) => (
                         <div className="h-full">
@@ -142,11 +162,16 @@ const MotelRegularForm = () => {
                             className="invisible size-0 hidden"
                           />
                           <Label htmlFor={type.label}>
-                            <div className="border size-full rounded-lg p-4 text-center">
+                            <div
+                              className={`border size-full rounded-lg border-2 p-4 text-center ${
+                                form.getValues("type") === type.value &&
+                                "border-main-blue-s3 "
+                              } `}
+                            >
                               <div className="w-fit mx-auto py-1">
                                 {type.icon}
                               </div>
-                              <p className="text-xs text-center mt-2">
+                              <p className="text-xs text-center mt-2 line-clamp-2">
                                 {type.label}
                               </p>
                             </div>
@@ -163,12 +188,12 @@ const MotelRegularForm = () => {
 
           <FormField
             control={form.control}
-            name="password"
+            name="area"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Diện tích</FormLabel>
                 <FormControl>
-                  <Input placeholder="Đơn vị (m2)" {...field} />
+                  <Input type="number" placeholder="Đơn vị (m2)" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -177,8 +202,8 @@ const MotelRegularForm = () => {
 
           <FormField
             control={form.control}
-            name="password"
-            render={({ field }) => (
+            name="availableDate"
+            render={({ field }: { field: any }) => (
               <FormItem>
                 <div>
                   <FormLabel>Ngày phòng trống</FormLabel>
@@ -197,7 +222,14 @@ const MotelRegularForm = () => {
             >
               Quay lại
             </Button>
-            <Button size={"lg"} onClick={() => dispatch(nextStep())}>
+            <Button
+              // disabled={!form.formState.isValid}
+              size={"lg"}
+              onClick={() => {
+                console.log(form.getValues());
+                dispatch(nextStep());
+              }}
+            >
               Tiếp tục
             </Button>
           </div>

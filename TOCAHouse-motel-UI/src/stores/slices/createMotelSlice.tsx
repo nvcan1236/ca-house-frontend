@@ -57,7 +57,7 @@ const initialState: {
       nextStepHref: null,
     },
   ],
-  currentStep: 2,
+  currentStep: 5,
   regular: {},
   location: {},
   images: {},
