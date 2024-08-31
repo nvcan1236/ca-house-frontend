@@ -21,12 +21,22 @@ import {
   WifiIcon,
 } from "lucide-react";
 import { Button } from "../ui/button";
-import { nextStep, prevStep } from "@/stores/slices/createMotelSlice";
-import { useAppDispatch } from "@/stores/hooks";
+import {
+  nextStep,
+  prevStep,
+  setData as setMotelData,
+} from "@/stores/slices/createMotelSlice";
+import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { useState } from "react";
+import axios, { authAxios } from "@/services/axios";
+import { caHouseEndpoint } from "@/configs/APIconfig";
+import { getToken } from "@/services/localStorageService";
+import { toast } from "sonner";
 
 const MotelAmenityForm = () => {
   const dispatch = useAppDispatch();
+  const id: string | null = useAppSelector((state) => state.createMotel.id);
+  console.log(id);
   const services = [
     {
       label: "Nhà gửi xe",
@@ -158,6 +168,15 @@ const MotelAmenityForm = () => {
 
     setData(newData);
   };
+  const getStringData = () => {
+    const arrData: { name: string; type: string }[] = [];
+    data.services.forEach((s) => arrData.push({ name: s, type: "SERVICE" }));
+    data.furnitures.forEach((f) =>
+      arrData.push({ name: f, type: "FURNITURE" })
+    );
+    data.facilities.forEach((f) => arrData.push({ name: f, type: "FACILITY" }));
+    return JSON.stringify(arrData);
+  };
 
   return (
     <div className="flex flex-col gap-8">
@@ -229,8 +248,22 @@ const MotelAmenityForm = () => {
         <Button
           size={"lg"}
           onClick={() => {
-            console.log(data)
-            dispatch(nextStep());
+            console.log(getStringData());
+            id &&
+                authAxios
+                  .post(
+                    caHouseEndpoint.addMotelInfo(id, "amenity"),
+                    getStringData(),
+                  )
+                  .then((data) => {
+                    console.log(data.data);
+                    dispatch(nextStep());
+                  })
+                  .catch((error) => {
+                    toast.error(error.response.data.message);
+                  });
+            dispatch(setMotelData({ type: "amenities", data: data }));
+            // dispatch(nextStep());
           }}
         >
           Tiếp tục

@@ -65,3 +65,19 @@ export type Location = {
   longitude: number | null;
   latitude: number | null;
 };
+
+export type Price = {
+  type: PredefinePrice;
+  name: string | null;
+  price: number | null;
+  unit: string;
+  units: string[];
+};
+
+export type PredefinePrice =
+  | "ELECTRICITY"
+  | "WATER"
+  | "INTERNET"
+  | "PARKING"
+  | "SERVICE"
+  | "ORTHER";

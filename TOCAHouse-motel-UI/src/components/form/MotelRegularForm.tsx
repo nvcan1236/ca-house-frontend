@@ -11,7 +11,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
-import { useEffect } from "react";
 import { caHouseEndpoint } from "@/configs/APIconfig";
 import axios from "@/services/axios";
 import { toast } from "sonner";
@@ -25,7 +24,7 @@ import { MotelType } from "@/utils/types";
 import DatePicker from "./DatePicker";
 import { Button } from "../ui/button";
 import { useAppDispatch } from "@/stores/hooks";
-import { nextStep, prevStep } from "@/stores/slices/createMotelSlice";
+import { nextStep, prevStep, setData } from "@/stores/slices/createMotelSlice";
 
 const MotelRegularForm = () => {
   const dispatch = useAppDispatch();
@@ -52,12 +51,11 @@ const MotelRegularForm = () => {
     },
   });
 
-
   const motelTypes: MotelType[] = [
     {
       label: "Phòng đơn",
       icon: <HouseIcon size={32}></HouseIcon>,
-      value: "SINGLE",
+      value: "SINGLE_ROOM",
     },
     {
       label: "Nhà nguyên căn",
@@ -72,14 +70,21 @@ const MotelRegularForm = () => {
     {
       label: "Ký túc xá",
       icon: <BedIcon size={32}></BedIcon>,
-      value: "DORMITARY",
+      value: "DORMITORY",
     },
   ];
 
   function onSubmit(values: z.infer<typeof loginValidationSchema>) {
+    dispatch(setData({type: "id", data: "123"}));
+    dispatch(nextStep());
+
     // axios
-    //   .post(caHouseEndpoint.getToken, JSON.stringify(values))
-    //   .then(() => {})
+    //   .post(caHouseEndpoint.createMotel, JSON.stringify(values))
+    //   .then((data) => {
+    //     console.log(data.data)
+    //     // dispatch(setData("id", data.data.result.id))
+    //     dispatch(nextStep());
+    //   })
     //   .catch((error) => {
     //     toast.error(error.response.data.message);
     //   });
@@ -226,8 +231,7 @@ const MotelRegularForm = () => {
               // disabled={!form.formState.isValid}
               size={"lg"}
               onClick={() => {
-                console.log(form.getValues());
-                dispatch(nextStep());
+                dispatch(setData({ type: "regular", data: form.getValues() }));
               }}
             >
               Tiếp tục

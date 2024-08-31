@@ -6,10 +6,11 @@ import RegularInfo from "@/pages/createMotel/RegularInfo";
 import RequirementInfo from "@/pages/createMotel/RequirementInfo";
 import UploadMotelImage from "@/pages/createMotel/UploadMotelImage";
 import { Step } from "@/utils/interfaces";
-import { Location } from "@/utils/types";
+import { Location, Price } from "@/utils/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: {
+  id: string|null,
   steps: Step[];
   currentStep: number;
   regular: object;
@@ -17,8 +18,9 @@ const initialState: {
   images: object;
   amenities: object;
   requirements: object;
-  prices: object;
+  prices: Price[] | [];
 } = {
+  id: "608e8029-cb91-4f84-a1ae-580d67ce65c6",
   steps: [
     {
       component: "",
@@ -57,13 +59,13 @@ const initialState: {
       nextStepHref: null,
     },
   ],
-  currentStep: 5,
+  currentStep: 6,
   regular: {},
   location: {},
   images: {},
   amenities: {},
   requirements: {},
-  prices: {},
+  prices: [],
 };
 
 export const createMotelSlice = createSlice({
@@ -71,18 +73,21 @@ export const createMotelSlice = createSlice({
   initialState,
   reducers: {
     nextStep: (state) => {
-      if (state.currentStep === state.steps.length) state.currentStep = 0;
+      if (state.currentStep + 1 === state.steps.length) state.currentStep = 0;
       else state.currentStep = state.currentStep + 1;
     },
     prevStep: (state) => {
       if (state.currentStep === 0) return;
       else state.currentStep = state.currentStep - 1;
     },
-    setData: (state, action: PayloadAction) => {
-      return {
-        ...state,
-        role: action.payload,
-      };
+    setData: (
+      state,
+      action: PayloadAction<{ type: keyof typeof state; data: any }>
+    ) => {
+      const { type, data } = action.payload;
+      if (type in state) {
+        state[type] = data;
+      }
     },
   },
 });

@@ -6,7 +6,6 @@ export default axios.create({
   baseURL: caHouseBaseUrl,
   headers: {
     "Content-Type": "application/json",
-    "Cache-Control": "no-cache",
   }
 }) 
 
@@ -15,7 +14,6 @@ export const authAxios = axios.create({
   headers: {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${getToken()}` ,
-    "Cache-Control": "no-cache",
   }
 })
 
@@ -24,6 +22,5 @@ export const formDataAxios = axios.create({
   headers: {
     "Content-Type": "multipart/form-data",
     "Authorization": `Bearer ${getToken()}` ,
-    "Cache-Control": "no-cache",
   }
 })

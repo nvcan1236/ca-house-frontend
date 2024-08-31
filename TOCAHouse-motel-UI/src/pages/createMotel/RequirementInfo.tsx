@@ -3,19 +3,77 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useAppDispatch } from "@/stores/hooks";
+import { Textarea } from "@/components/ui/textarea";
+import { caHouseEndpoint } from "@/configs/APIconfig";
+import { authAxios } from "@/services/axios";
+import { useAppDispatch, useAppSelector} from "@/stores/hooks";
 import { nextStep, prevStep } from "@/stores/slices/createMotelSlice";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const RequirementInfo = () => {
   const dispatch = useAppDispatch();
+  const id: string | null = useAppSelector((state) => state.createMotel.id);
+  type Job = "STUDENT" | "WORKER" | "OFFICER" | "FREELANCER" | "OTHER";
+  type Requirement = {
+    deposit: number;
+    contractAmount: number;
+    allowPet: boolean;
+    jobs: Job[];
+    other: string | null;
+  };
+  const definedJobs: { type: Job; label: string }[] = [
+    {
+      type: "STUDENT",
+      label: "Học sinh, sinh viên",
+    },
+    {
+      type: "OFFICER",
+      label: "Nhân viên văn phòng",
+    },
+    {
+      type: "WORKER",
+      label: "Công nhân",
+    },
+    {
+      type: "FREELANCER",
+      label: "Làm việc tự do",
+    },
+    {
+      type: "OTHER",
+      label: "Khác",
+    },
+  ];
+  const [requirement, setRequirement] = useState<Requirement>({
+    deposit: 0,
+    contractAmount: 0,
+    allowPet: false,
+    jobs: [],
+    other: null,
+  });
+  const handleChange = (
+    type: keyof Requirement,
+    value: number | string | boolean
+  ) => {
+    console.log(type, value);
+
+    if (type == "jobs") {
+      const nextJobs = requirement?.jobs.includes(value)
+        ? [...requirement.jobs.filter((job) => job !== value)]
+        : [...requirement.jobs, value];
+
+      setRequirement({
+        ...requirement,
+        jobs: nextJobs,
+      });
+    } else {
+      setRequirement({
+        ...requirement,
+        [type]: value,
+      });
+    }
+  };
   return (
     <div className="">
       <div className="flex gap-10 items-stretch">
@@ -29,34 +87,51 @@ const RequirementInfo = () => {
           <div className="mb-12 flex-1 flex flex-col gap-6">
             <div>
               <Label>Yêu cầu cọc</Label>
-              <Input type="number"></Input>
+              <Input
+                type="number"
+                value={requirement?.deposit}
+                onChange={(e) => handleChange("deposit", e.target.value)}
+              ></Input>
             </div>
             <div>
               <Label>Hợp đồng (tháng)</Label>
-              <Input type="number"></Input>
+              <Input
+                type="number"
+                value={requirement?.contractAmount}
+                onChange={(e) => handleChange("contractAmount", e.target.value)}
+              ></Input>
             </div>
             <div className="flex items-center gap-4">
               <Label>Cho nuôi thú cưng</Label>
-              <Checkbox className="size-6"  id="terms" />
+              <Checkbox
+                className="size-6"
+                id="terms"
+                checked={requirement?.allowPet}
+                onCheckedChange={(e) => handleChange("allowPet", e)}
+              />
             </div>
             <div>
               <Label>Đối tượng cho thuê</Label>
               <div className="mt-3 ml-4 ">
-                <div className="flex items-center mt-3 gap-3">
-                  <Checkbox className="size-6"  id="terms" />
-                  <Label>Học sinh, sinh viên</Label>
-                </div>
-
-                <div className="flex items-center mt-3 gap-3">
-                  <Checkbox className="size-6"  id="terms" />
-                  <Label>Công nhân</Label>
-                </div>
-
-                <div className="flex items-center mt-3 gap-3">
-                  <Checkbox className="size-6"  id="terms" />
-                  <Label>Công việc tự do</Label>
-                </div>
+                {definedJobs.map((job) => (
+                  <div className="flex items-center mt-3 gap-3" key={job.type}>
+                    <Checkbox
+                      className="size-6"
+                      id="terms"
+                      checked={requirement?.jobs.includes(job.type)}
+                      onCheckedChange={() => handleChange("jobs", job.type)}
+                    />
+                    <Label>{job.label}</Label>
+                  </div>
+                ))}
               </div>
+            </div>
+            <div>
+              <Label>Yêu cầu khác</Label>
+              <Textarea
+                value={requirement?.other}
+                onChange={(e) => handleChange("other", e.target.value)}
+              ></Textarea>
             </div>
           </div>
         </div>
@@ -70,7 +145,25 @@ const RequirementInfo = () => {
         >
           Quay lại
         </Button>
-        <Button size={"lg"} onClick={() => dispatch(nextStep())}>
+        <Button
+          size={"lg"}
+          onClick={() => {
+            id &&
+                authAxios
+                  .post(
+                    caHouseEndpoint.addMotelInfo(id, "requirement"),
+                    JSON.stringify(requirement)
+                  )
+                  .then((data) => {
+                    console.log(data.data);
+                    dispatch(nextStep());
+                  })
+                  .catch((error) => {
+                    toast.error(error.response.data.message);
+                  });
+          }}
+          
+        >
           Hoàn thành
         </Button>
       </div>

@@ -14,13 +14,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { geoMapEndpoint } from "@/configs/APIconfig";
+import { caHouseEndpoint, geoMapEndpoint } from "@/configs/APIconfig";
 import { getDistricts, getProvinces, getWards } from "@/configs/provincesData";
-import { useAppDispatch } from "@/stores/hooks";
-import { nextStep, prevStep } from "@/stores/slices/createMotelSlice";
+import axios from "@/services/axios";
+import { getToken } from "@/services/localStorageService";
+import { useAppDispatch, useAppSelector } from "@/stores/hooks";
+import { nextStep, prevStep, setData } from "@/stores/slices/createMotelSlice";
 import { District, Ward } from "@/utils/interfaces";
 import { Location } from "@/utils/types";
-import axios from "axios";
 import { MapPinIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import ReactMapGL, {
@@ -30,6 +31,7 @@ import ReactMapGL, {
   NavigationControl,
   ScaleControl,
 } from "react-map-gl";
+import { toast } from "sonner";
 
 const LocationInfo = () => {
   const dispatch = useAppDispatch();
@@ -93,6 +95,8 @@ const LocationInfo = () => {
       latitude: loc.lat,
     });
   };
+  const id: string | null = useAppSelector((state) => state.createMotel.id);
+  console.log(id);
 
   return (
     <div className="">
@@ -203,6 +207,7 @@ const LocationInfo = () => {
                       <li
                         className="px-4 py-2 hover:bg-main-yellow-t9 transition-all"
                         onClick={() => handleClickLocation(loc)}
+                        key={loc.display_name}
                       >
                         {loc.display_name}
                       </li>
@@ -263,7 +268,28 @@ const LocationInfo = () => {
             size={"lg"}
             onClick={() => {
               console.log(location);
-              dispatch(nextStep());
+
+              dispatch(setData({ type: "location", data: location }));
+              console.log(id);
+
+              id &&
+                axios
+                  .post(
+                    caHouseEndpoint.addMotelInfo(id, "location"),
+                    JSON.stringify(location),
+                    {
+                      headers: {
+                        Authorization: `Bearer ${getToken()}`,
+                      },
+                    }
+                  )
+                  .then((data) => {
+                    console.log(data.data);
+                    dispatch(nextStep());
+                  })
+                  .catch((error) => {
+                    toast.error(error.response.data.message);
+                  });
             }}
             // disabled={location.longitude === null || location.latitude === null}
           >
