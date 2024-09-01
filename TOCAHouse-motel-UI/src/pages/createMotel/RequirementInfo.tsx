@@ -9,13 +9,15 @@ import { caHouseEndpoint } from "@/configs/APIconfig";
 import { authAxios } from "@/services/axios";
 import { useAppDispatch, useAppSelector} from "@/stores/hooks";
 import { nextStep, prevStep } from "@/stores/slices/createMotelSlice";
+import { definedJobs } from "@/utils/predefinedData";
+import { Job } from "@/utils/types";
 import { useState } from "react";
 import { toast } from "sonner";
 
 const RequirementInfo = () => {
   const dispatch = useAppDispatch();
   const id: string | null = useAppSelector((state) => state.createMotel.id);
-  type Job = "STUDENT" | "WORKER" | "OFFICER" | "FREELANCER" | "OTHER";
+  
   type Requirement = {
     deposit: number;
     contractAmount: number;
@@ -23,28 +25,7 @@ const RequirementInfo = () => {
     jobs: Job[];
     other: string | null;
   };
-  const definedJobs: { type: Job; label: string }[] = [
-    {
-      type: "STUDENT",
-      label: "Học sinh, sinh viên",
-    },
-    {
-      type: "OFFICER",
-      label: "Nhân viên văn phòng",
-    },
-    {
-      type: "WORKER",
-      label: "Công nhân",
-    },
-    {
-      type: "FREELANCER",
-      label: "Làm việc tự do",
-    },
-    {
-      type: "OTHER",
-      label: "Khác",
-    },
-  ];
+  
   const [requirement, setRequirement] = useState<Requirement>({
     deposit: 0,
     contractAmount: 0,

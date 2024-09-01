@@ -18,13 +18,11 @@ import { Textarea } from "../ui/textarea";
 import { RadioGroup } from "@radix-ui/react-radio-group";
 import { RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
-
-import { BedIcon, Building, HouseIcon, SchoolIcon } from "lucide-react";
-import { MotelType } from "@/utils/types";
 import DatePicker from "./DatePicker";
 import { Button } from "../ui/button";
 import { useAppDispatch } from "@/stores/hooks";
 import { nextStep, prevStep, setData } from "@/stores/slices/createMotelSlice";
+import { motelTypes } from "@/utils/predefinedData";
 
 const MotelRegularForm = () => {
   const dispatch = useAppDispatch();
@@ -51,31 +49,8 @@ const MotelRegularForm = () => {
     },
   });
 
-  const motelTypes: MotelType[] = [
-    {
-      label: "Phòng đơn",
-      icon: <HouseIcon size={32}></HouseIcon>,
-      value: "SINGLE_ROOM",
-    },
-    {
-      label: "Nhà nguyên căn",
-      icon: <SchoolIcon size={32}></SchoolIcon>,
-      value: "WHOLE_HOUSE",
-    },
-    {
-      label: "Căn hộ chung cư",
-      icon: <Building size={32}></Building>,
-      value: "APARTMENT",
-    },
-    {
-      label: "Ký túc xá",
-      icon: <BedIcon size={32}></BedIcon>,
-      value: "DORMITORY",
-    },
-  ];
-
   function onSubmit(values: z.infer<typeof loginValidationSchema>) {
-    dispatch(setData({type: "id", data: "123"}));
+    dispatch(setData({ type: "id", data: "123" }));
     dispatch(nextStep());
 
     // axios
@@ -208,7 +183,7 @@ const MotelRegularForm = () => {
           <FormField
             control={form.control}
             name="availableDate"
-            render={({ field }: { field: any }) => (
+            render={({ field }) => (
               <FormItem>
                 <div>
                   <FormLabel>Ngày phòng trống</FormLabel>

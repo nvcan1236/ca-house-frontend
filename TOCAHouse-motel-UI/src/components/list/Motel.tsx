@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { Skeleton } from "../ui/skeleton";
 import H3 from "../common/H3";
 
-const Motel = ({ motel }: { motel: IMotel }) => {
+const Motel = ({ motel, onClick }: { motel: IMotel; onClick?: () => void }) => {
   const [hoved, setHovered] = useState(false);
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
@@ -39,7 +39,9 @@ const Motel = ({ motel }: { motel: IMotel }) => {
       className="overflow-hidden border rounded-lg shadow-sm bg-background cursor-pointer"
     >
       <Carousel setApi={setApi} className="relative">
-        <CarouselContent onClick={() => navigate(`./motels/${motel?.id}`)}>
+        <CarouselContent
+          onClick={onClick || (() => navigate(`/motels/${motel?.id}`))}
+        >
           {motel?.images.map((image) => (
             <CarouselItem className="" key={image.id}>
               <div className=" h-[160px] text-3xl font-bold flex items-center justify-center bg-background ">

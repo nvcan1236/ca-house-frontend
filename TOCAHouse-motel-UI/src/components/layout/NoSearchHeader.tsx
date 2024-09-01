@@ -23,11 +23,7 @@ import { Separator } from "../ui/separator";
 import { authAxios } from "@/services/axios";
 import { caHouseEndpoint } from "@/configs/APIconfig";
 import { Alert, AlertDescription } from "../ui/alert";
-import {
-  AlertCircle,
-  LanguagesIcon,
-  MenuIcon,
-} from "lucide-react";
+import { AlertCircle, LanguagesIcon, MenuIcon } from "lucide-react";
 import CreatePasswordForm from "../form/CreatePasswordForm";
 import {
   Dialog,
@@ -37,6 +33,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+import { LogoutDialog } from "../common/LogoutDialog";
 
 const NoSearchHeader = () => {
   const { i18n } = useTranslation();
@@ -146,11 +143,8 @@ const NoSearchHeader = () => {
                         <li className="py-1">
                           <Separator />
                         </li>
-                        <li
-                          className="py-1 px-2 hover:bg-slate-100 transition-all t-destructive"
-                          onClick={() => dispatch(logout())}
-                        >
-                          Đăng xuất
+                        <li className="py-1 px-2 hover:bg-slate-100 transition-all t-destructive">
+                          <LogoutDialog />
                         </li>
                       </ul>
                     </PopoverContent>
@@ -169,8 +163,6 @@ const NoSearchHeader = () => {
               )}
             </div>
           </div>
-
-          
         </div>
       </div>
     </header>

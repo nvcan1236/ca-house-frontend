@@ -81,3 +81,10 @@ export type PredefinePrice =
   | "PARKING"
   | "SERVICE"
   | "ORTHER";
+
+export type MotelStatus = {
+  label: string,
+  value: "RENTING"|"AVAILABLE"
+}
+
+export type Job = "STUDENT" | "WORKER" | "OFFICER" | "FREELANCER" | "OTHER";

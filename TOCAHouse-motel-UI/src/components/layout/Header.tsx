@@ -13,8 +13,8 @@ import { language } from "@/utils/types";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { useEffect, useState } from "react";
 import { DrawerDialogFilter } from "../search/DrawerDialogFilter";
-import { useNavigate } from "react-router-dom";
-import { logout, setUserInfor } from "@/stores/slices/authSlice";
+import { Link, useNavigate } from "react-router-dom";
+import { setUserInfor } from "@/stores/slices/authSlice";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Separator } from "../ui/separator";
@@ -37,6 +37,7 @@ import {
 import { getUserInfor } from "@/services/userService";
 import LoginButton from "../button/LoginButton";
 import { Alert, AlertDescription } from "../ui/alert";
+import { LogoutDialog } from "../common/LogoutDialog";
 
 const Header = () => {
   const { i18n } = useTranslation();
@@ -220,6 +221,10 @@ const Header = () => {
                         <li className="py-1 px-2 hover:bg-slate-100 transition-all">
                           Danh sách yêu thích
                         </li>
+                        <li className="py-1 px-2 hover:bg-slate-100 transition-all" >
+                          <Link to={"/my-motel"} >Quản lý trọ</Link>
+
+                        </li>
                         <li className="py-1 px-2 hover:bg-slate-100 transition-all">
                           Cài đặt
                         </li>
@@ -228,9 +233,8 @@ const Header = () => {
                         </li>
                         <li
                           className="py-1 px-2 hover:bg-slate-100 transition-all t-destructive"
-                          onClick={() => dispatch(logout())}
                         >
-                          Đăng xuất
+                          <LogoutDialog />
                         </li>
                       </ul>
                     </PopoverContent>

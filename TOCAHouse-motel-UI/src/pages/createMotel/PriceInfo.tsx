@@ -14,7 +14,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { caHouseEndpoint } from "@/configs/APIconfig";
 import { authAxios } from "@/services/axios";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
-import { nextStep, prevStep} from "@/stores/slices/createMotelSlice";
+import { nextStep, prevStep } from "@/stores/slices/createMotelSlice";
+import { prices as predefinedPrices } from "@/utils/predefinedData";
 import { PredefinePrice, Price } from "@/utils/types";
 import { PlusIcon, XIcon } from "lucide-react";
 import { useState } from "react";
@@ -24,43 +25,7 @@ const PriceInfo = () => {
   const dispatch = useAppDispatch();
   const id: string | null = useAppSelector((state) => state.createMotel.id);
 
-  const [prices, setPrices] = useState<Price[] | []>([
-    {
-      name: "Điện",
-      price: null,
-      unit: "kWh",
-      units: ["kWh", "month"],
-      type: "ELECTRICITY",
-    },
-    {
-      name: "Nước",
-      price: null,
-      unit: "m3",
-      units: ["m3", "month"],
-      type: "WATER",
-    },
-    {
-      name: "Internet",
-      price: null,
-      unit: "month",
-      units: ["month"],
-      type: "INTERNET",
-    },
-    {
-      name: "Gửi xe",
-      price: null,
-      unit: "month",
-      units: ["month"],
-      type: "PARKING",
-    },
-    {
-      name: "Dịch vụ",
-      price: null,
-      unit: "month",
-      units: ["month"],
-      type: "SERVICE",
-    },
-  ]);
+  const [prices, setPrices] = useState<Price[] | []>(predefinedPrices);
   const [otherPrice, setOtherPrice] = useState<Price>({
     name: "",
     price: null,
@@ -99,13 +64,6 @@ const PriceInfo = () => {
             Các loại giá cả
           </DecorativeHeading>
           <div className=" mb-12 flex-1 flex flex-col gap-6">
-            <div>
-              <H3>Giá thuê hàng tháng</H3>
-              <Input className="mt-3" type="number" placeholder="(VND)" />
-            </div>
-
-            <H3>Các chi phí bao gồm </H3>
-
             {prices.map((price) => (
               <div
                 className="flex gap-3 items-center justify-between"
@@ -217,12 +175,12 @@ const PriceInfo = () => {
               size={"lg"}
               onClick={() => {
                 console.log(prices);
-                const postPrices = prices.map(price => ({
+                const postPrices = prices.map((price) => ({
                   name: price.name,
                   type: price.type,
                   unit: price.unit,
                   value: price.price,
-                }))
+                }));
                 id &&
                   authAxios
                     .post(

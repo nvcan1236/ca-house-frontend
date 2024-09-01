@@ -2,17 +2,22 @@
 // import { Outlet } from "react-router-dom";
 
 import { Outlet } from "react-router-dom";
-import { useAppSelector } from "../../stores/hooks";
 import Footer from "./Footer";
 import NoSearchHeader from "./NoSearchHeader";
 import { Toaster } from "sonner";
-import { CircleCheckIcon, CircleXIcon, InfoIcon, TriangleAlertIcon } from "lucide-react";
+import {
+  CircleCheckIcon,
+  CircleXIcon,
+  InfoIcon,
+  TriangleAlertIcon,
+} from "lucide-react";
 
 const NoSearchLayout = () => {
-  const role = useAppSelector((state) => state.common.role);
 
   return (
-    <div>
+    <div
+      className={` bg-gradient-to-r transition-all from-slate-100 to-main-blue-t8 "`}
+    >
       <NoSearchHeader></NoSearchHeader>
       <div className="container">
         <Outlet />

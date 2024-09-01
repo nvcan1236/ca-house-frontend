@@ -1,25 +1,5 @@
 import H3 from "../common/H3";
-import {
-  AirVentIcon,
-  ArmchairIcon,
-  BedIcon,
-  BikeIcon,
-  BusFrontIcon,
-  BusIcon,
-  CarrotIcon,
-  CctvIcon,
-  DoorClosedIcon,
-  FireExtinguisherIcon,
-  HeaterIcon,
-  HospitalIcon,
-  RefrigeratorIcon,
-  School2Icon,
-  ShirtIcon,
-  SoupIcon,
-  StoreIcon,
-  WashingMachineIcon,
-  WifiIcon,
-} from "lucide-react";
+
 import { Button } from "../ui/button";
 import {
   nextStep,
@@ -28,123 +8,15 @@ import {
 } from "@/stores/slices/createMotelSlice";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { useState } from "react";
-import axios, { authAxios } from "@/services/axios";
+import { authAxios } from "@/services/axios";
 import { caHouseEndpoint } from "@/configs/APIconfig";
-import { getToken } from "@/services/localStorageService";
 import { toast } from "sonner";
+import { facilities, furnitures, services } from "@/utils/predefinedData";
 
 const MotelAmenityForm = () => {
   const dispatch = useAppDispatch();
   const id: string | null = useAppSelector((state) => state.createMotel.id);
   console.log(id);
-  const services = [
-    {
-      label: "Nhà gửi xe",
-      value: "GARAGE",
-      icon: <BikeIcon size={32} />,
-    },
-    {
-      label: "Dịch vụ giặt ủi",
-      value: "IRON",
-      icon: <WashingMachineIcon size={32} />,
-    },
-    {
-      label: "An ninh, bảo vệ",
-      value: "SECURITY",
-      icon: <CctvIcon size={32} />,
-    },
-    {
-      label: "Phòng cháy chữa cháy",
-      value: "FIRE_PROTECTION",
-      icon: <FireExtinguisherIcon size={32} />,
-    },
-    {
-      label: "Wifi, Internet",
-      value: "INTERNET",
-      icon: <WifiIcon size={32} />,
-    },
-    {
-      label: "Thang máy",
-      value: "ELEVATOR",
-      icon: <DoorClosedIcon size={32} />,
-    },
-  ];
-
-  const furnitures = [
-    {
-      label: "Giường, nệm",
-      value: "BED",
-      icon: <BedIcon size={32} />,
-    },
-    {
-      label: "Tủ lạnh",
-      value: "FRIDGE",
-      icon: <RefrigeratorIcon size={32} />,
-    },
-    {
-      label: "Máy giặt",
-      value: "WASHING_MACHINE",
-      icon: <WashingMachineIcon size={32} />,
-    },
-    {
-      label: "Tủ, giá treo đồ",
-      value: "WARDROBE",
-      icon: <ShirtIcon size={32} />,
-    },
-    {
-      label: "Bếp, kệ bếp",
-      value: "KITCHEN",
-      icon: <HeaterIcon size={32} />,
-    },
-    {
-      label: "Máy lạnh",
-      value: "AC",
-      icon: <AirVentIcon size={32} />,
-    },
-    {
-      label: "Bàn ghế",
-      value: "TABLE",
-      icon: <ArmchairIcon size={32} />,
-    },
-  ];
-
-  const facilities = [
-    {
-      label: "Nhà thuốc, Bênh viện",
-      value: "HOSPITAL",
-      icon: <HospitalIcon size={32} />,
-    },
-    {
-      label: "Trường học",
-      value: "SCHOOL",
-      icon: <School2Icon size={32} />,
-    },
-    {
-      label: "Chợ, tạp hoá",
-      value: "MARKET",
-      icon: <CarrotIcon size={32} />,
-    },
-    {
-      label: "Siêu thị, cửa hàng",
-      value: "SUPERMARKET",
-      icon: <StoreIcon size={32} />,
-    },
-    {
-      label: "Nhà hàng quán ăn",
-      value: "FOOD_STALL",
-      icon: <SoupIcon size={32} />,
-    },
-    {
-      label: "Trạm xe bus",
-      value: "BUSSTOP",
-      icon: <BusFrontIcon size={32} />,
-    },
-    {
-      label: "Bến xe",
-      value: "STATION",
-      icon: <BusIcon size={32} />,
-    },
-  ];
 
   type Data = {
     services: string[];
@@ -250,18 +122,18 @@ const MotelAmenityForm = () => {
           onClick={() => {
             console.log(getStringData());
             id &&
-                authAxios
-                  .post(
-                    caHouseEndpoint.addMotelInfo(id, "amenity"),
-                    getStringData(),
-                  )
-                  .then((data) => {
-                    console.log(data.data);
-                    dispatch(nextStep());
-                  })
-                  .catch((error) => {
-                    toast.error(error.response.data.message);
-                  });
+              authAxios
+                .post(
+                  caHouseEndpoint.addMotelInfo(id, "amenity"),
+                  getStringData()
+                )
+                .then((data) => {
+                  console.log(data.data);
+                  dispatch(nextStep());
+                })
+                .catch((error) => {
+                  toast.error(error.response.data.message);
+                });
             dispatch(setMotelData({ type: "amenities", data: data }));
             // dispatch(nextStep());
           }}

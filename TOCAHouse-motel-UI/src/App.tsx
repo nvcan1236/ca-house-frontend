@@ -10,7 +10,8 @@ import AuthModal from "./components/auth/AuthModal";
 import Profile from "./pages/Profile";
 import NoSearchLayout from "./components/layout/NoSearchLayout";
 import CreateMotel from "./pages/createMotel/CreateMotel";
-import CreateMotelLayout from "./pages/createMotel/CreateMotelLayout";
+import MotelManage from "./pages/MotelManage";
+import DetailMotelManage from "./pages/DetailMotelManage";
 
 function App() {
   const language = useAppSelector((state) => state.common.language);
@@ -31,6 +32,8 @@ function App() {
           <Route path="/motels/:motelId" element={<DetailMotel />}></Route>
           <Route path="/profile/:userId" element={<Profile />}></Route>
           <Route path="/register-motel" element={<CreateMotel />}></Route>
+          <Route path="/my-motel" element={<MotelManage />}></Route>
+          <Route path="/my-motel/:motelId" element={<DetailMotelManage />}></Route>
         </Route>
 
         <Route

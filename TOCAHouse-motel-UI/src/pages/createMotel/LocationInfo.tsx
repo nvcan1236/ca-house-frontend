@@ -186,7 +186,7 @@ const LocationInfo = () => {
             </div>
             <div className="w-full flex gap-3 items-end">
               <div className="flex-1 ">
-                <Label htmlFor="city">ĐỊa chỉ khác (Tự chọn)</Label>
+                <Label htmlFor="city">Địa chỉ khác (Tự chọn)</Label>
                 <Input
                   placeholder={`Ấp, xóm,..`}
                   value={location.other}
