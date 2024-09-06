@@ -21,8 +21,12 @@ import {
   StoreIcon,
   WashingMachineIcon,
   WifiIcon,
+  ThumbsUpIcon,
+  SmileIcon,
+  FrownIcon,
+  AngryIcon,
 } from "lucide-react";
-import { Job, MotelStatus, MotelType, Price } from "./types";
+import { Job, MotelStatus, MotelType, Price, Reaction } from "./types";
 
 export const motelTypes: MotelType[] = [
   {
@@ -62,32 +66,32 @@ export const services = [
   {
     label: "Nhà gửi xe",
     value: "GARAGE",
-    icon: <BikeIcon size={32} />,
+    icon: <BikeIcon size={32} className="text-main-blue-s5" />,
   },
   {
     label: "Dịch vụ giặt ủi",
     value: "IRON",
-    icon: <WashingMachineIcon size={32} />,
+    icon: <WashingMachineIcon size={32} className="text-main-blue-s5" />,
   },
   {
     label: "An ninh, bảo vệ",
     value: "SECURITY",
-    icon: <CctvIcon size={32} />,
+    icon: <CctvIcon size={32} className="text-main-blue-s5" />,
   },
   {
     label: "Phòng cháy chữa cháy",
     value: "FIRE_PROTECTION",
-    icon: <FireExtinguisherIcon size={32} />,
+    icon: <FireExtinguisherIcon size={32} className="text-main-blue-s5" />,
   },
   {
     label: "Wifi, Internet",
     value: "INTERNET",
-    icon: <WifiIcon size={32} />,
+    icon: <WifiIcon size={32} className="text-main-blue-s5" />,
   },
   {
     label: "Thang máy",
     value: "ELEVATOR",
-    icon: <DoorClosedIcon size={32} />,
+    icon: <DoorClosedIcon size={32} className="text-main-blue-s5" />,
   },
 ];
 
@@ -95,37 +99,37 @@ export const furnitures = [
   {
     label: "Giường, nệm",
     value: "BED",
-    icon: <BedIcon size={32} />,
+    icon: <BedIcon size={32} className="text-main-blue-s5" />,
   },
   {
     label: "Tủ lạnh",
     value: "FRIDGE",
-    icon: <RefrigeratorIcon size={32} />,
+    icon: <RefrigeratorIcon size={32} className="text-main-blue-s5" />,
   },
   {
     label: "Máy giặt",
     value: "WASHING_MACHINE",
-    icon: <WashingMachineIcon size={32} />,
+    icon: <WashingMachineIcon size={32} className="text-main-blue-s5" />,
   },
   {
     label: "Tủ, giá treo đồ",
     value: "WARDROBE",
-    icon: <ShirtIcon size={32} />,
+    icon: <ShirtIcon size={32} className="text-main-blue-s5" />,
   },
   {
     label: "Bếp, kệ bếp",
     value: "KITCHEN",
-    icon: <HeaterIcon size={32} />,
+    icon: <HeaterIcon size={32} className="text-main-blue-s5" />,
   },
   {
     label: "Máy lạnh",
     value: "AC",
-    icon: <AirVentIcon size={32} />,
+    icon: <AirVentIcon size={32} className="text-main-blue-s5" />,
   },
   {
     label: "Bàn ghế",
     value: "TABLE",
-    icon: <ArmchairIcon size={32} />,
+    icon: <ArmchairIcon size={32} className="text-main-blue-s5" />,
   },
 ];
 
@@ -133,37 +137,37 @@ export const facilities = [
   {
     label: "Nhà thuốc, Bênh viện",
     value: "HOSPITAL",
-    icon: <HospitalIcon size={32} />,
+    icon: <HospitalIcon size={32} className="text-main-blue-s5" />,
   },
   {
     label: "Trường học",
     value: "SCHOOL",
-    icon: <School2Icon size={32} />,
+    icon: <School2Icon size={32} className="text-main-blue-s5" />,
   },
   {
     label: "Chợ, tạp hoá",
     value: "MARKET",
-    icon: <CarrotIcon size={32} />,
+    icon: <CarrotIcon size={32} className="text-main-blue-s5" />,
   },
   {
     label: "Siêu thị, cửa hàng",
     value: "SUPERMARKET",
-    icon: <StoreIcon size={32} />,
+    icon: <StoreIcon size={32} className="text-main-blue-s5" />,
   },
   {
     label: "Nhà hàng quán ăn",
     value: "FOOD_STALL",
-    icon: <SoupIcon size={32} />,
+    icon: <SoupIcon size={32} className="text-main-blue-s5" />,
   },
   {
     label: "Trạm xe bus",
     value: "BUSSTOP",
-    icon: <BusFrontIcon size={32} />,
+    icon: <BusFrontIcon size={32} className="text-main-blue-s5" />,
   },
   {
     label: "Bến xe",
     value: "STATION",
-    icon: <BusIcon size={32} />,
+    icon: <BusIcon size={32} className="text-main-blue-s5" />,
   },
 ];
 export const prices: Price[] = [
@@ -223,5 +227,25 @@ export const definedJobs: { type: Job; label: string }[] = [
   {
     type: "OTHER",
     label: "Khác",
+  },
+];
+
+
+export const reactions: Reaction[] = [
+  {
+    type: "LIKE",
+    icon: <ThumbsUpIcon></ThumbsUpIcon>,
+  },
+  {
+    type: "HAPPY",
+    icon: <SmileIcon></SmileIcon>,
+  },
+  {
+    type: "SAD",
+    icon: <FrownIcon></FrownIcon>,
+  },
+  {
+    type: "ANGRY",
+    icon: <AngryIcon></AngryIcon>,
   },
 ];

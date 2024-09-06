@@ -16,7 +16,7 @@ const NoSearchLayout = () => {
 
   return (
     <div
-      className={` bg-gradient-to-r transition-all from-slate-100 to-main-blue-t8 "`}
+      className={` bg-gradient-to-t transition-all from-slate-100 to-main-blue-t8 "`}
     >
       <NoSearchHeader></NoSearchHeader>
       <div className="container">

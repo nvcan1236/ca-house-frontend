@@ -88,3 +88,8 @@ export type MotelStatus = {
 }
 
 export type Job = "STUDENT" | "WORKER" | "OFFICER" | "FREELANCER" | "OTHER";
+
+export type Reaction = {
+  type: "LIKE" | "SAD" | "HAPPY" | "ANGRY";
+  icon: ReactNode;
+};

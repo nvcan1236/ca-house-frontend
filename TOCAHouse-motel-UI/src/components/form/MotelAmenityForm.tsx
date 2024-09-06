@@ -58,7 +58,7 @@ const MotelAmenityForm = () => {
           {services?.map((service) => (
             <div
               key={service.value}
-              className={`rounded-lg border px-6 py-4 text-center ${
+              className={`rounded-lg border px-6 py-4 text-center bg-background ${
                 data["services"].includes(service.value) &&
                 "border-main-blue-s3 border-2"
               }`}
@@ -77,7 +77,7 @@ const MotelAmenityForm = () => {
           {furnitures?.map((furniture) => (
             <div
               key={furniture.value}
-              className={`rounded-lg border px-6 py-4 text-center ${
+              className={`rounded-lg border px-6 py-4 text-center bg-background ${
                 data["furnitures"].includes(furniture.value) &&
                 "border-main-blue-s3 border-2"
               }`}
@@ -96,7 +96,7 @@ const MotelAmenityForm = () => {
           {facilities?.map((facility) => (
             <div
               key={facility.value}
-              className={`rounded-lg border px-6 py-4 text-center ${
+              className={`rounded-lg border px-6 py-4 text-center bg-background ${
                 data["facilities"].includes(facility.value) &&
                 "border-main-blue-s3 border-2"
               }`}

@@ -20,7 +20,7 @@ const MainLayout = () => {
       }`}
     >
       <Header></Header>
-      <div className="pt-[160px] pb-10 min-h-screen">
+      <div className="pt-[160px] pb-10">
         <Outlet />
       </div>
       <Toaster

@@ -19,7 +19,6 @@ const Profile = () => {
   const [editting, setEditting] = useState({ account: false, profile: false });
   const [chosenImage, setChosenImage] = useState(null);
   const handleChangeImage = (event) => {
-    console.log(event.target.files[0]);
     setChosenImage(event.target.files[0]);
   };
   const handleUploadImage = async () => {
