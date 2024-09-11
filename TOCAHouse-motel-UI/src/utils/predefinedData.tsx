@@ -25,8 +25,9 @@ import {
   SmileIcon,
   FrownIcon,
   AngryIcon,
+  HeartIcon,
 } from "lucide-react";
-import { Job, MotelStatus, MotelType, Price, Reaction } from "./types";
+import { Job, MotelStatus, MotelType, Price } from "./types";
 
 export const motelTypes: MotelType[] = [
   {
@@ -230,22 +231,32 @@ export const definedJobs: { type: Job; label: string }[] = [
   },
 ];
 
+export const reactions = {
+  LIKE: {
+    icon: <ThumbsUpIcon />,
+    label: "Like",
+  },
+  LOVE: {
+    icon: <HeartIcon />,
+    label: "Love",
+  },
+  HAPPY: {
+    icon: <SmileIcon />,
+    label: "Happy",
+  },
+  SAD: {
+    icon: <FrownIcon />,
+    label: "Sad",
+  },
+  ANGRY: {
+    icon: <AngryIcon />,
+    label: "Angry",
+  },
+};
 
-export const reactions: Reaction[] = [
-  {
-    type: "LIKE",
-    icon: <ThumbsUpIcon></ThumbsUpIcon>,
-  },
-  {
-    type: "HAPPY",
-    icon: <SmileIcon></SmileIcon>,
-  },
-  {
-    type: "SAD",
-    icon: <FrownIcon></FrownIcon>,
-  },
-  {
-    type: "ANGRY",
-    icon: <AngryIcon></AngryIcon>,
-  },
-];
+export const postType = {
+  REVIEW: "Review",
+  PASS_ROOM: "Pass phòng",
+  FIND_ROOM: "Tìm phòng",
+  FIND_ROOMMATE: "Tìm người ở ghép",
+};

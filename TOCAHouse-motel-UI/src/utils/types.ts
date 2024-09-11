@@ -1,9 +1,7 @@
 import { ReactNode } from "react";
 
-type language = "vi" | "en";
-type role = "motel" | "post";
-
-export type { language, role };
+export type language = "vi" | "en";
+export type role = "motel" | "post";
 
 export type User = {
   id: string;
@@ -83,9 +81,9 @@ export type PredefinePrice =
   | "ORTHER";
 
 export type MotelStatus = {
-  label: string,
-  value: "RENTING"|"AVAILABLE"
-}
+  label: string;
+  value: "RENTING" | "AVAILABLE";
+};
 
 export type Job = "STUDENT" | "WORKER" | "OFFICER" | "FREELANCER" | "OTHER";
 
@@ -93,3 +91,29 @@ export type Reaction = {
   type: "LIKE" | "SAD" | "HAPPY" | "ANGRY";
   icon: ReactNode;
 };
+
+export type ApiResponse<T> = {
+  code: number;
+  result: T;
+  message: string;
+};
+
+export interface PageResult<T> {
+  currentPage: number;
+  pageSize: number;
+  totalPage: number;
+  totalElement: number;
+  data: T[];
+}
+
+export type LoginForm = {
+  username: string;
+  password: string;
+};
+
+export type TokenData = {
+  authenticated: boolean;
+  token: string;
+};
+
+export type CreatePasswordData = { password: string; rePassword: string };

@@ -9,19 +9,14 @@ import { Button } from "../ui/button";
 import { useTranslation } from "react-i18next";
 import { language } from "@/utils/types";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  logout,
   openAuthModal,
-  setUserInfor,
   switchFormType,
 } from "@/stores/slices/authSlice";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Separator } from "../ui/separator";
-import { authAxios } from "@/services/axios";
-import { caHouseEndpoint } from "@/configs/APIconfig";
 import { Alert, AlertDescription } from "../ui/alert";
 import { AlertCircle, LanguagesIcon, MenuIcon } from "lucide-react";
 import CreatePasswordForm from "../form/CreatePasswordForm";
@@ -44,13 +39,6 @@ const NoSearchHeader = () => {
     console.log(value);
     i18n.changeLanguage(value);
   };
-  useEffect(() => {
-    authAxios.get(caHouseEndpoint.getMyInfor).then((data) => {
-      if (data.status === 200) {
-        dispatch(setUserInfor(data.data.result));
-      }
-    });
-  }, []);
   return (
     <header className="container">
       <div

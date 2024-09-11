@@ -16,10 +16,10 @@ const SelectBox = ({
   onSelectChange,
 }: {
   options: Option[];
-  onSelectChange: () => void;
+  onSelectChange: (value:) => void;
 }) => {
   return (
-    <Select onValueChange={onSelectChange}>
+    <Select onValueChange={(value) => onSelectChange(value)}>
       <SelectTrigger className="w-full mb-2 ">
         <SelectValue placeholder="Tìm trọ" />
       </SelectTrigger>

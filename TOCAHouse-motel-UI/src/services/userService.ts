@@ -2,7 +2,7 @@ import { caHouseEndpoint } from "@/configs/APIconfig";
 import { authAxios } from "./axios";
 import { User } from "@/utils/types";
 
-export const getUserInfor = (): User => {
+export const getUserInfor = (): Promise<User> => {
   const user = authAxios
     .get(caHouseEndpoint.getMyInfor)
     .then((data) => {

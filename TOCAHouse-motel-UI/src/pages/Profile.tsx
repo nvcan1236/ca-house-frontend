@@ -2,75 +2,32 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { caHouseEndpoint } from "@/configs/APIconfig";
-import axios from "@/services/axios";
-import { getToken } from "@/services/localStorageService";
-import { DetailUser } from "@/utils/types";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 import PageNotFound from "./PageNotFound";
-import { toast } from "sonner";
 import { EditIcon } from "lucide-react";
+import { useGetUserByIdQuery, useUpdateUserMutation } from "@/stores/api/userApi";
 
 const Profile = () => {
-  const [detailUser, setDetailUser] = useState<DetailUser | null>(null);
-  const [found, setFound] = useState<boolean>(true);
-  const { userId } = useParams();
   const [editting, setEditting] = useState({ account: false, profile: false });
-  const [chosenImage, setChosenImage] = useState(null);
-  const handleChangeImage = (event) => {
-    setChosenImage(event.target.files[0]);
+  const [chosenImage, setChosenImage] = useState<File | null>(null);
+  const handleChangeImage = (event: ChangeEvent<HTMLInputElement>) => {
+    event.target.files && setChosenImage(event.target.files[0]);
   };
+
+  const { userId } = useParams();
+  const { data } = useGetUserByIdQuery(userId || "");
+  const detailUser = data?.result;
+
+  const [uploadAvatar] = useUpdateUserMutation()
   const handleUploadImage = async () => {
     const data: FormData = new FormData();
-    data.append("images", chosenImage);
-    axios
-      .post(caHouseEndpoint.uploadAvatar, data, {
-        headers: {
-          Authorization: `Bearer ${getToken()}`,
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((data) => {
-        toast.success(data.data.message);
-      })
-      .catch((error) => {
-        toast.error(error.toString());
-      });
+    data.append("images", chosenImage as Blob);
+    uploadAvatar(data).unwrap()
   };
-  // const [formData, setFormData] = useState({
-  //   account: {
-  //     firstName: "",
-  //     lastName: "",
 
-  //   }
-  // })
-  // const handleChangeInput = (e) => {
-  //   setDetailUser(prev => ({
-  //     ...prev
-  //   }))
-  // }
 
-  const fetchDetailUser = async () => {
-    if (userId) {
-      try {
-        const response = await axios.get(caHouseEndpoint.getUserById(userId), {
-          headers: {
-            Authorization: `Bearer ${getToken()}`,
-          },
-        });
-        setDetailUser(response.data.result);
-      } catch (error) {
-        setFound(false);
-        console.error("Error fetching user details:", error);
-      }
-    }
-  };
-  useEffect(() => {
-    userId != "" && fetchDetailUser();
-  }, [userId]);
-
-  if (!found)
+  if (data && data.code == 1004)
     return <PageNotFound message="Không tìm thấy hồ sơ"></PageNotFound>;
 
   return (
@@ -94,7 +51,7 @@ const Profile = () => {
             </Avatar>
             <div className="flex flex-col items-center justify-end top-0 left-0 absolute opacity-0 bg-black group-hover:bg-opacity-55 group-hover:opacity-100 w-full rounded-full h-full transition-all ">
               <Input
-                accept=".png,.jpeg"
+                accept=".png,.jpeg, .jpg"
                 type="file"
                 className="invisible size-0"
                 id="avatar"

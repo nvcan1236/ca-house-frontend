@@ -10,25 +10,25 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import axios from "@/services/axios";
-import { caHouseEndpoint } from "@/configs/APIconfig";
-import { getToken } from "@/services/localStorageService";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { setUserInfor } from "@/stores/slices/authSlice";
-import { User } from "lucide-react";
+import { useCreatePasswordMutation } from "@/stores/api/userApi";
 
 const CreatePasswordForm = () => {
-  const loginValidationSchema = z.object({
-    password: z.string().min(8, "Mật khẩu tối thiểu 8 ký tự."),
-    rePassword: z.string().min(8, "Mật khẩu tối thiểu 8 ký tự."),
-  }).refine((data) => data.password === data.rePassword, {
-    message: "Mật khẩu không trùng khớp",
-    path: ["rePassword"],
-  });
+  const loginValidationSchema = z
+    .object({
+      password: z.string().min(8, "Mật khẩu tối thiểu 8 ký tự."),
+      rePassword: z.string().min(8, "Mật khẩu tối thiểu 8 ký tự."),
+    })
+    .refine((data) => data.password === data.rePassword, {
+      message: "Mật khẩu không trùng khớp",
+      path: ["rePassword"],
+    });
   const dispatch = useAppDispatch();
-  const user = useAppSelector(state => state.auth.user)
+  const user = useAppSelector((state) => state.auth.user);
+  const [createPassword] = useCreatePasswordMutation();
 
   const form = useForm({
     resolver: zodResolver(loginValidationSchema),
@@ -39,17 +39,13 @@ const CreatePasswordForm = () => {
   });
 
   function onSubmit(values: z.infer<typeof loginValidationSchema>) {
-    axios
-      .post(caHouseEndpoint.createPassword, JSON.stringify(values), {
-        headers: {
-          Authorization: `Bearer ${getToken()}`,
-        },
-      })
-      .then((data) => {
-        console.log(data.data.message);
-        toast.success(data.data.message)
-        dispatch(setUserInfor({...user, noPassword: true}))
-      });
+    createPassword(values).then((response) => {
+      toast.success(response.data?.message);
+      if (user) {
+        const nextDetailUser = { ...user, noPassword: true };
+        dispatch(setUserInfor(nextDetailUser));
+      }
+    });
   }
   return (
     <div>

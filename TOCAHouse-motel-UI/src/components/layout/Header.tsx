@@ -14,7 +14,6 @@ import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { useEffect, useState } from "react";
 import { DrawerDialogFilter } from "../search/DrawerDialogFilter";
 import { Link, useNavigate } from "react-router-dom";
-import { setUserInfor } from "@/stores/slices/authSlice";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Separator } from "../ui/separator";
@@ -34,7 +33,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { getUserInfor } from "@/services/userService";
 import LoginButton from "../button/LoginButton";
 import { Alert, AlertDescription } from "../ui/alert";
 import { LogoutDialog } from "../common/LogoutDialog";
@@ -46,15 +44,12 @@ const Header = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const changeLanguage = (value: language) => {
-    console.log(value);
     i18n.changeLanguage(value);
   };
   const [scrollY, setScrollY] = useState(0);
+  
+
   useEffect(() => {
-    (async () => {
-      const userInfor = await getUserInfor();
-      dispatch(setUserInfor(userInfor));
-    })();
 
     const handleScroll = () => {
       setScrollY(window.scrollY);
@@ -135,7 +130,7 @@ const Header = () => {
         <div className="flex flex-col gap-2">
           <Button
             variant={"secondary"}
-            className="border-main-yellow text-main-yellow bg-main-yellow-t9 hover:bg-main-yellow-t6 transition-all hover:border-main-yellow hover:border-2"
+            className="hidden lg:flex border-main-yellow text-main-yellow bg-main-yellow-t9 hover:bg-main-yellow-t6 transition-all hover:border-main-yellow hover:border-2"
             onClick={() => navigate("/register-motel")}
           >
             <HousePlusIcon size={20} className="mr-3"></HousePlusIcon> Đăng trọ
@@ -221,9 +216,8 @@ const Header = () => {
                         <li className="py-1 px-2 hover:bg-slate-100 transition-all">
                           Danh sách yêu thích
                         </li>
-                        <li className="py-1 px-2 hover:bg-slate-100 transition-all" >
-                          <Link to={"/my-motel"} >Quản lý trọ</Link>
-
+                        <li className="py-1 px-2 hover:bg-slate-100 transition-all">
+                          <Link to={"/my-motel"}>Quản lý trọ</Link>
                         </li>
                         <li className="py-1 px-2 hover:bg-slate-100 transition-all">
                           Cài đặt
@@ -231,9 +225,7 @@ const Header = () => {
                         <li className="py-1">
                           <Separator />
                         </li>
-                        <li
-                          className="py-1 px-2 hover:bg-slate-100 transition-all t-destructive"
-                        >
+                        <li className="py-1 px-2 hover:bg-slate-100 transition-all t-destructive">
                           <LogoutDialog />
                         </li>
                       </ul>

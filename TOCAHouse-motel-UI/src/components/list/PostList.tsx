@@ -9,13 +9,34 @@ import SelectBox from "../common/SelectBox";
 import { Input } from "../ui/input";
 import ImageSlider from "../common/ImageSlider";
 import { ChangeEvent, useState } from "react";
+import { useGetPostsQuery } from "@/stores/api/postApi";
+import { IPostCreate } from "@/utils/interfaces";
 
 const PostList = () => {
   const [images, setImages] = useState<FileList | null>(null);
+  const { data, isFetching } = useGetPostsQuery();
   const handleChangeImage = (event: ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.files);
     setImages(event.target.files);
   };
+  const postList = data?.result;
+  const postInit: IPostCreate = {
+    content: "",
+    type: "FIND_ROOM",
+  };
+
+  const [postCreateData, setPostCreateData] = useState<IPostCreate>(postInit);
+  const handleChangePost = (
+    type: keyof IPostCreate,
+    value: string | typeof postInit.type
+  ) => {
+    const nextData = {
+      ...postCreateData,
+      [type]: value,
+    };
+    setPostCreateData(nextData);
+  };
+
   return (
     <div className="container flex mt-3 items-start justify-center gap-3">
       <div
@@ -45,11 +66,10 @@ const PostList = () => {
       </div>
       <div className="flex-1">
         <div className="flex flex-col gap-4">
-          <Post></Post>
-          <Post></Post>
-          <Post></Post>
-          <Post></Post>
-          <Post></Post>
+          {isFetching && "...fetching"}
+          {postList?.map((post) => (
+            <Post key={post.id} data={post} />
+          ))}
         </div>
       </div>
       <div
@@ -66,11 +86,16 @@ const PostList = () => {
                 { value: "REVIEW", label: "Review" },
                 { value: "FIND_ROOMMATE", label: "Tìm người ở ghép" },
               ]}
-              onSelectChange={() => {}}
+              onSelectChange={(e) => handleChangePost('type', e.) }
             ></SelectBox>
           </div>
           <div className="relative">
-            <Textarea placeholder="Nội dung bài viết..." rows={7}></Textarea>
+            <Textarea
+              placeholder="Nội dung bài viết..."
+              rows={7}
+              value={postCreateData.content}
+              onChange={(e) => handleChangePost("content", e.target.value)}
+            ></Textarea>
             <Button
               size={"sm"}
               variant={"ghost"}

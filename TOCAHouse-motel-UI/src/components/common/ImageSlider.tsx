@@ -51,7 +51,12 @@ const ImageSlider = ({
             <img src={image.url} alt="" className="size-full object-cover" />
           </CarouselItem>
         ))}
-        {images.length === 0 && <Skeleton className="h-[160px] w-full" />}
+        {images.length === 0 && (
+          <Skeleton
+            className="h-full w-full"
+            style={{ height: height ? height : "auto" }}
+          />
+        )}
       </CarouselContent>
       {hoved && (
         <>

@@ -16,7 +16,7 @@ export function LogoutDialog() {
   const dispatch = useAppDispatch();
   return (
     <AlertDialog>
-      <AlertDialogTrigger>Đăng xuất</AlertDialogTrigger>
+      <AlertDialogTrigger className="w-full text-left">Đăng xuất</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Thông báo</AlertDialogTitle>

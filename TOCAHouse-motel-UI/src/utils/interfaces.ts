@@ -1,3 +1,4 @@
+import { postType, reactions } from "./predefinedData";
 import { Image } from "./types";
 
 export interface IMotel {
@@ -51,4 +52,34 @@ export interface District {
 export interface Province {
   name: string;
   districts: District[]; // Mảng các quận/huyện thuộc tỉnh/thành phố này
+}
+
+export interface IPost {
+  content: string;
+  id: string;
+  type: keyof typeof postType;
+  create_by: string;
+  images: Image[];
+  comment_count: number;
+  react_count: number;
+  liked: keyof typeof reactions | null;
+  create_at: string;
+}
+
+export interface IComment {
+  id: string
+  create_at: string
+  post_id: string
+  user_id: string
+  content: string
+  reply_to: unknown
+}
+
+export interface ICommentCreate {
+  content: string
+}
+
+export interface IPostCreate {
+  content: string
+  type: keyof typeof postType
 }

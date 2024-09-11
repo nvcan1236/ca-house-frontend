@@ -4,13 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { CalendarIcon, HeartIcon, MapIcon, MapPinnedIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -18,13 +11,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { caHouseEndpoint } from "@/configs/APIconfig";
-import axios from "@/services/axios";
-import { IMotelDetail } from "@/utils/interfaces";
 import { MessageCircle } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { toast } from "sonner";
+import { Link, useParams } from "react-router-dom";
 import Item from "@/components/common/Item";
 import {
   Pagination,
@@ -36,21 +24,16 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
+import { useGetMotelQuery } from "@/stores/api/motelApi";
+import ImageSlider from "@/components/common/ImageSlider";
+import DetailMotelSkeleton from "@/components/list/DetailMotelSkeleton";
 
 const DetailMotel = () => {
   const { motelId } = useParams();
-  const [detailMotel, setDetailMotel] = useState<IMotelDetail | null>(null);
-  useEffect(() => {
-    motelId &&
-      axios
-        .get(caHouseEndpoint.getDetailMotel(motelId))
-        .then((data) => {
-          setDetailMotel(data.data.result);
-        })
-        .catch((error) => {
-          toast.error(error.response.data.message);
-        });
-  }, []);
+  const { data, isLoading } = useGetMotelQuery(motelId || "");
+  const detailMotel = data?.result;
+  if (isLoading) return <DetailMotelSkeleton />;
+
   return (
     <div className="container w-[1200px] mt-10">
       <Dialog>
@@ -97,59 +80,7 @@ const DetailMotel = () => {
           <DialogHeader>
             <DialogTitle>Một vài hình ảnh của trọ</DialogTitle>
           </DialogHeader>
-          <Carousel>
-            <img
-              src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aG91c2V8ZW58MHx8MHx8fDA%3D"
-              alt=""
-              className="w-full h-[400px] object-cover"
-            />
-            <CarouselContent className="h-[100px] mt-4">
-              <CarouselItem className="basis-1/5">
-                <img
-                  src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aG91c2V8ZW58MHx8MHx8fDA%3D"
-                  alt=""
-                  className="w-full h-full object-cover"
-                />
-              </CarouselItem>
-              <CarouselItem className="basis-1/5">
-                <img
-                  src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aG91c2V8ZW58MHx8MHx8fDA%3D"
-                  alt=""
-                  className="w-full h-full object-cover"
-                />
-              </CarouselItem>
-              <CarouselItem className="basis-1/5">
-                <img
-                  src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aG91c2V8ZW58MHx8MHx8fDA%3D"
-                  alt=""
-                  className="w-full h-full object-cover"
-                />
-              </CarouselItem>
-              <CarouselItem className="basis-1/5">
-                <img
-                  src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aG91c2V8ZW58MHx8MHx8fDA%3D"
-                  alt=""
-                  className="w-full h-full object-cover"
-                />
-              </CarouselItem>
-              <CarouselItem className="basis-1/5">
-                <img
-                  src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aG91c2V8ZW58MHx8MHx8fDA%3D"
-                  alt=""
-                  className="w-full h-full object-cover"
-                />
-              </CarouselItem>
-              <CarouselItem className="basis-1/5">
-                <img
-                  src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aG91c2V8ZW58MHx8MHx8fDA%3D"
-                  alt=""
-                  className="w-full h-full object-cover"
-                />
-              </CarouselItem>
-            </CarouselContent>
-            <CarouselNext className="right-2" />
-            <CarouselPrevious className="left-2" />
-          </Carousel>
+          <ImageSlider height={300} images={[]} />
         </DialogContent>
       </Dialog>
       <div className="flex mt-12 gap-8 items-start ">
@@ -167,7 +98,6 @@ const DetailMotel = () => {
                   Lương, Phước Kiển, Nhà Bè, Tp.HCM
                 </span>
                 <Button variant={"outline"}>
-                  {" "}
                   <MapIcon size={20} className="mr-2" /> Xem trên bản đồ
                 </Button>
               </p>
@@ -247,9 +177,9 @@ const DetailMotel = () => {
                 <AvatarFallback>C</AvatarFallback>
               </Avatar>
               <div>
-                <Button variant={"link"} className="p-0">
-                  {detailMotel?.ownerId} Chủ nhà
-                </Button>
+                <Link to={`/profile/${detailMotel?.ownerId}`} className="p-0">
+                  {detailMotel?.ownerId}
+                </Link>
                 <p>
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   Minus, enim!
@@ -344,7 +274,7 @@ const DetailMotel = () => {
             </div>
           </div>
         </div>
-        <Pagination>
+        <Pagination className="mt-6">
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious href="#" />

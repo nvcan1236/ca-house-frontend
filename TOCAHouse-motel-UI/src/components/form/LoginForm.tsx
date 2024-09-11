@@ -23,8 +23,8 @@ import { getToken, setToken } from "@/services/localStorageService";
 import { caHouseEndpoint } from "@/configs/APIconfig";
 import axios from "@/services/axios";
 import googleConfig from "@/configs/googleLoginConfig";
-import { toast } from "sonner";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { useLoginMutation } from "@/stores/api/userApi";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -83,34 +83,18 @@ const LoginForm = () => {
     }
   }, []);
 
+  const [login] = useLoginMutation();
   function onSubmit(values: z.infer<typeof loginValidationSchema>) {
-    axios
-      .post(caHouseEndpoint.getToken, JSON.stringify(values))
-      .then((data) => {
-        if (data.status === 200) {
-          form.reset();
-          dispatch(closeAuthModal());
-          setToken(data.data.result.token);
-          axios
-            .get(caHouseEndpoint.getMyInfor, {
-              headers: {
-                Authorization: `Bearer ${getToken()}`,
-              },
-            })
-            .then((data) => {
-              if (data.status === 200) {
-                dispatch(setUserInfor(data.data.result));
-              }
-            })
-            .catch((error) => {
-              toast.error(error.response.data.message);
-            });
-        }
-      })
-      .catch((error) => {
-        toast.error(error.response.data.message);
-      });
+    login(values).then((response) => {
+      const token = response?.data?.result?.token;
+      if (token) {
+        setToken(token);
+        form.reset()
+        dispatch(closeAuthModal());
+      }
+    });
   }
+
   return (
     <div>
       <Form {...form}>
@@ -157,7 +141,11 @@ const LoginForm = () => {
                       className="absolute right-3 top-1/2 p-1 -translate-y-1/2"
                       onClick={() => setShowPassword(!showPassword)}
                     >
-                      {showPassword ? <EyeIcon size={20} /> : <EyeOffIcon size={20} />}
+                      {showPassword ? (
+                        <EyeIcon size={20} />
+                      ) : (
+                        <EyeOffIcon size={20} />
+                      )}
                     </span>
                   </div>
                 </FormControl>
