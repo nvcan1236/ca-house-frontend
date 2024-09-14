@@ -36,6 +36,7 @@ import {
 import LoginButton from "../button/LoginButton";
 import { Alert, AlertDescription } from "../ui/alert";
 import { LogoutDialog } from "../common/LogoutDialog";
+import { toast } from "sonner";
 
 const Header = () => {
   const { i18n } = useTranslation();
@@ -47,10 +48,8 @@ const Header = () => {
     i18n.changeLanguage(value);
   };
   const [scrollY, setScrollY] = useState(0);
-  
 
   useEffect(() => {
-
     const handleScroll = () => {
       setScrollY(window.scrollY);
     };
@@ -61,6 +60,14 @@ const Header = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const handleCreateMotel = () => {
+    if(!user || !user.id) {
+      toast.warning("Vui lòng đăng nhập trước!!")
+      return;
+    }
+    navigate("/register-motel");
+  };
 
   return (
     <header
@@ -131,7 +138,7 @@ const Header = () => {
           <Button
             variant={"secondary"}
             className="hidden lg:flex border-main-yellow text-main-yellow bg-main-yellow-t9 hover:bg-main-yellow-t6 transition-all hover:border-main-yellow hover:border-2"
-            onClick={() => navigate("/register-motel")}
+            onClick={handleCreateMotel}
           >
             <HousePlusIcon size={20} className="mr-3"></HousePlusIcon> Đăng trọ
           </Button>
@@ -217,7 +224,9 @@ const Header = () => {
                           Danh sách yêu thích
                         </li>
                         <li className="py-1 px-2 hover:bg-slate-100 transition-all">
-                          <Link to={"/my-motel"}>Quản lý trọ</Link>
+                          {user.roles.includes("OWNER") && (
+                            <Link to={"/my-motel"}>Quản lý trọ</Link>
+                          )}
                         </li>
                         <li className="py-1 px-2 hover:bg-slate-100 transition-all">
                           Cài đặt

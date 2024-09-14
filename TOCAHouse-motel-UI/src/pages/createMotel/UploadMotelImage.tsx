@@ -1,10 +1,9 @@
 import DecorativeHeading from "@/components/common/DecorativeHeading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { caHouseEndpoint } from "@/configs/APIconfig";
-import { formDataAxios } from "@/services/axios";
+import { useUploadImageyMotelMutation } from "@/stores/api/motelApi";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
-import { nextStep, prevStep, setData } from "@/stores/slices/createMotelSlice";
+import { nextStep, prevStep } from "@/stores/slices/createMotelSlice";
 import { UploadIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -13,13 +12,23 @@ const UploadMotelImage = () => {
   const dispatch = useAppDispatch();
   const id: string | null = useAppSelector((state) => state.createMotel.id);
   const [files, setFiles] = useState<FileList | null>();
-  const getImagesFormData = () => {
-    const formData:FormData = new FormData();
-    if(files?.length) {
-      Array.from(files).forEach(file => formData.append("images", file))
+  const [uploadImage] = useUploadImageyMotelMutation()
+  const handleUploadImage = () => {
+    if(!files || files.length < 5) {
+      toast.error("Vui long upload ít nhất 5 ảnh")
+      return;
     }
-    return formData
-  }
+
+    id &&
+      uploadImage({motelId: id, images:files})
+        .then(() => {
+          dispatch(nextStep());
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+        });
+  };
+
   return (
     <div className="">
       <div className="flex flex-col gap-10">
@@ -61,27 +70,7 @@ const UploadMotelImage = () => {
           >
             Quay lại
           </Button>
-          <Button
-            size={"lg"}
-            onClick={() => {
-              console.log(getImagesFormData())
-              id &&
-                formDataAxios
-                  .post(
-                    caHouseEndpoint.addMotelInfo(id, "images"),
-                    getImagesFormData(),
-                  )
-                  .then((data) => {
-                    console.log(data.data);
-                    dispatch(nextStep());
-                  })
-                  .catch((error) => {
-                    toast.error(error.response.data.message);
-                  });
-              dispatch(setData({type: "images", data: files}));
-              // dispatch(nextStep());
-            }}
-          >
+          <Button size={"lg"} onClick={handleUploadImage}>
             Tiếp tục
           </Button>
         </div>

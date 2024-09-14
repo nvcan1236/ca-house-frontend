@@ -11,8 +11,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
-import { caHouseEndpoint } from "@/configs/APIconfig";
-import axios from "@/services/axios";
 import { toast } from "sonner";
 import { Textarea } from "../ui/textarea";
 import { RadioGroup } from "@radix-ui/react-radio-group";
@@ -23,17 +21,31 @@ import { Button } from "../ui/button";
 import { useAppDispatch } from "@/stores/hooks";
 import { nextStep, prevStep, setData } from "@/stores/slices/createMotelSlice";
 import { motelTypes } from "@/utils/predefinedData";
+import { useCreateRegularMotelMutation } from "@/stores/api/motelApi";
+import { RegularCreate } from "@/utils/interfaces";
 
 const MotelRegularForm = () => {
   const dispatch = useAppDispatch();
+  const [createRegular] = useCreateRegularMotelMutation();
 
   const loginValidationSchema = z.object({
     name: z.string().min(1),
     description: z.string(),
-    price: z.string(),
+    price: z.coerce.number(),
     type: z.string(),
-    area: z.string(),
-    availableDate: z.date(),
+    area: z.coerce.number(),
+    availableDate: z.preprocess(
+      (arg) => {
+        if (typeof arg === "string" || arg instanceof Date) {
+          const date = new Date(arg);
+          return date.toISOString(); 
+        }
+        return arg;
+      },
+      z.string().refine((val) => !isNaN(Date.parse(val)), {
+        message: "Invalid date format",
+      })
+    ),
   });
 
   const form = useForm({
@@ -42,29 +54,24 @@ const MotelRegularForm = () => {
     defaultValues: {
       name: "",
       description: "",
-      price: "0",
+      price: 0,
       type: "",
-      area: "0",
+      area: 0,
       availableDate: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof loginValidationSchema>) {
-    dispatch(setData({ type: "id", data: "123" }));
-    dispatch(nextStep());
-
-    // axios
-    //   .post(caHouseEndpoint.createMotel, JSON.stringify(values))
-    //   .then((data) => {
-    //     console.log(data.data)
-    //     // dispatch(setData("id", data.data.result.id))
-    //     dispatch(nextStep());
-    //   })
-    //   .catch((error) => {
-    //     toast.error(error.response.data.message);
-    //   });
-
-    console.log(values);
+  async function onSubmit(values: RegularCreate) {
+    try {
+      const data = await createRegular(values as RegularCreate).unwrap();
+      const motelId = data?.result.id;
+      if (motelId) {
+        dispatch(setData({ type: "id", data: motelId }));
+      }
+      dispatch(nextStep());
+    } catch (error) {
+      toast.error("Đã xãy ra lỗi. Vui lòng thử lại");
+    }
   }
   return (
     <div>
@@ -114,7 +121,7 @@ const MotelRegularForm = () => {
               <FormItem>
                 <FormLabel>Bạn sẽ cho thuê với giá bao nhiêu 1 tháng</FormLabel>
                 <FormControl>
-                  <Input {...field} type="number" />
+                  <Input {...field} type="number" defaultValue={field.value} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -135,7 +142,7 @@ const MotelRegularForm = () => {
                   >
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                       {motelTypes?.map((type) => (
-                        <div className="h-full">
+                        <div className="h-full" key={type.value}>
                           <RadioGroupItem
                             value={type.value}
                             id={type.label}
@@ -143,7 +150,7 @@ const MotelRegularForm = () => {
                           />
                           <Label htmlFor={type.label}>
                             <div
-                              className={`border size-full rounded-lg border-2 p-4 text-center ${
+                              className={` size-full rounded-lg border-2 p-4 text-center ${
                                 form.getValues("type") === type.value &&
                                 "border-main-blue-s3 "
                               } `}
@@ -173,7 +180,7 @@ const MotelRegularForm = () => {
               <FormItem>
                 <FormLabel>Diện tích</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="Đơn vị (m2)" {...field} />
+                  <Input type="number" {...field} defaultValue={field.value} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -205,9 +212,6 @@ const MotelRegularForm = () => {
             <Button
               // disabled={!form.formState.isValid}
               size={"lg"}
-              onClick={() => {
-                dispatch(setData({ type: "regular", data: form.getValues() }));
-              }}
             >
               Tiếp tục
             </Button>

@@ -5,27 +5,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
-import { caHouseEndpoint } from "@/configs/APIconfig";
-import { authAxios } from "@/services/axios";
-import { useAppDispatch, useAppSelector} from "@/stores/hooks";
+import { useCreateRequirementMotelMutation } from "@/stores/api/motelApi";
+import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { nextStep, prevStep } from "@/stores/slices/createMotelSlice";
 import { definedJobs } from "@/utils/predefinedData";
-import { Job } from "@/utils/types";
+import { Requirement } from "@/utils/types";
 import { useState } from "react";
 import { toast } from "sonner";
 
 const RequirementInfo = () => {
   const dispatch = useAppDispatch();
   const id: string | null = useAppSelector((state) => state.createMotel.id);
-  
-  type Requirement = {
-    deposit: number;
-    contractAmount: number;
-    allowPet: boolean;
-    jobs: Job[];
-    other: string | null;
-  };
-  
+
   const [requirement, setRequirement] = useState<Requirement>({
     deposit: 0,
     contractAmount: 0,
@@ -54,6 +45,18 @@ const RequirementInfo = () => {
         [type]: value,
       });
     }
+  };
+  const [createRequirement] = useCreateRequirementMotelMutation();
+  const handleCreateRequirement = () => {
+    id &&
+      createRequirement({ motelId: id, data: requirement })
+        .then((data) => {
+          console.log(data.data);
+          dispatch(nextStep());
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+        });
   };
   return (
     <div className="">
@@ -110,7 +113,7 @@ const RequirementInfo = () => {
             <div>
               <Label>Yêu cầu khác</Label>
               <Textarea
-                value={requirement?.other}
+                value={requirement?.other || ""}
                 onChange={(e) => handleChange("other", e.target.value)}
               ></Textarea>
             </div>
@@ -126,25 +129,7 @@ const RequirementInfo = () => {
         >
           Quay lại
         </Button>
-        <Button
-          size={"lg"}
-          onClick={() => {
-            id &&
-                authAxios
-                  .post(
-                    caHouseEndpoint.addMotelInfo(id, "requirement"),
-                    JSON.stringify(requirement)
-                  )
-                  .then((data) => {
-                    console.log(data.data);
-                    dispatch(nextStep());
-                  })
-                  .catch((error) => {
-                    toast.error(error.response.data.message);
-                  });
-          }}
-          
-        >
+        <Button size={"lg"} onClick={handleCreateRequirement}>
           Hoàn thành
         </Button>
       </div>

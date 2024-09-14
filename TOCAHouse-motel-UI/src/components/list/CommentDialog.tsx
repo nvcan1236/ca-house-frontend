@@ -50,6 +50,8 @@ const CommentDialog = ({
         content,
       },
     });
+
+    setContent("")
   };
 
   return (

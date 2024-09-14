@@ -8,13 +8,14 @@ import {
 } from "@/stores/slices/createMotelSlice";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { useState } from "react";
-import { authAxios } from "@/services/axios";
-import { caHouseEndpoint } from "@/configs/APIconfig";
 import { toast } from "sonner";
 import { facilities, furnitures, services } from "@/utils/predefinedData";
+import { useCreateAmenityMotelMutation } from "@/stores/api/motelApi";
+import { Amenity } from "@/utils/types";
 
 const MotelAmenityForm = () => {
   const dispatch = useAppDispatch();
+  const [createAmenity] = useCreateAmenityMotelMutation();
   const id: string | null = useAppSelector((state) => state.createMotel.id);
   console.log(id);
 
@@ -40,14 +41,30 @@ const MotelAmenityForm = () => {
 
     setData(newData);
   };
-  const getStringData = () => {
-    const arrData: { name: string; type: string }[] = [];
+  const getStringData = (): Amenity[] => {
+    const arrData: Amenity[] = [];
     data.services.forEach((s) => arrData.push({ name: s, type: "SERVICE" }));
     data.furnitures.forEach((f) =>
       arrData.push({ name: f, type: "FURNITURE" })
     );
     data.facilities.forEach((f) => arrData.push({ name: f, type: "FACILITY" }));
-    return JSON.stringify(arrData);
+    return arrData;
+  };
+
+  const handleFetchAmenity = () => {
+    const amenities = getStringData();
+    console.log(getStringData());
+    id &&
+      createAmenity({ motelId: id, data: amenities })
+        .then((data) => {
+          console.log(data.data);
+          dispatch(nextStep());
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+        });
+    dispatch(setMotelData({ type: "amenities", data: data }));
+    dispatch(nextStep());
   };
 
   return (
@@ -117,27 +134,7 @@ const MotelAmenityForm = () => {
         >
           Quay lại
         </Button>
-        <Button
-          size={"lg"}
-          onClick={() => {
-            console.log(getStringData());
-            id &&
-              authAxios
-                .post(
-                  caHouseEndpoint.addMotelInfo(id, "amenity"),
-                  getStringData()
-                )
-                .then((data) => {
-                  console.log(data.data);
-                  dispatch(nextStep());
-                })
-                .catch((error) => {
-                  toast.error(error.response.data.message);
-                });
-            dispatch(setMotelData({ type: "amenities", data: data }));
-            // dispatch(nextStep());
-          }}
-        >
+        <Button size={"lg"} onClick={handleFetchAmenity}>
           Tiếp tục
         </Button>
       </div>

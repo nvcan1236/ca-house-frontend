@@ -19,6 +19,7 @@ import { useAppSelector } from "@/stores/hooks";
 import { toast } from "sonner";
 
 const Post = ({ data }: { data: IPost }) => {
+  console.log(data);
   const [currentReact, setCurrentReact] = useState<
     keyof typeof reactions | null
   >(data.liked);
@@ -33,8 +34,6 @@ const Post = ({ data }: { data: IPost }) => {
     reactPost({ postId, type });
     setCurrentReact(type);
   };
-
-  
 
   return (
     <div className="bg-background border rounded-xl p-6 pb-4">
@@ -78,7 +77,7 @@ const Post = ({ data }: { data: IPost }) => {
             </div>
           )}
         </div>
-        <div className="pt-3 border-t flex flex-1">
+        <div className="pt-3 border-t flex flex-1 text-sm">
           <div className="flex gap-2 items-center flex-1">
             <HoverCard>
               <HoverCardTrigger
@@ -87,9 +86,7 @@ const Post = ({ data }: { data: IPost }) => {
               >
                 {currentReact ? (
                   <span className="text-main-yellow">
-                    {currentReact
-                      ? reactions[currentReact].icon
-                      : reactions.LIKE.icon}
+                    {reactions[currentReact].icon}
                   </span>
                 ) : (
                   <span className="text-slate-600">{reactions.LIKE.icon}</span>
@@ -123,9 +120,10 @@ const Post = ({ data }: { data: IPost }) => {
               {data.comment_count} Bình luận
             </CommentDialog>
           </div>
-          <Button variant={"outline"} size={"sm"} className="flex-1">
-            <Link to={`/motels/123`} className="flex justify-center">
-              Xem phòng<HouseIcon size={20} className="ml-3"></HouseIcon>
+          <Button variant={"outline"} size={"sm"} className="">
+            <Link to={`/motels/123`} className="flex justify-center gap-3">
+              <span className="hidden sm:inline">Xem phòng</span>
+              <HouseIcon size={20}></HouseIcon>
             </Link>
           </Button>
         </div>

@@ -25,6 +25,7 @@ import axios from "@/services/axios";
 import googleConfig from "@/configs/googleLoginConfig";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { useLoginMutation } from "@/stores/api/userApi";
+import { toast } from "sonner";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -84,15 +85,24 @@ const LoginForm = () => {
   }, []);
 
   const [login] = useLoginMutation();
-  function onSubmit(values: z.infer<typeof loginValidationSchema>) {
-    login(values).then((response) => {
-      const token = response?.data?.result?.token;
-      if (token) {
-        setToken(token);
-        form.reset()
-        dispatch(closeAuthModal());
+  async function onSubmit(values: z.infer<typeof loginValidationSchema>) {
+    try {
+      const data = await login(values).unwrap();
+  
+      if (data?.result?.token) {
+        setToken(data.result.token); 
+        form.reset(); 
+        dispatch(closeAuthModal());  
       }
-    });
+    } catch (error) {
+      if (error?.data?.code === 2001) {
+        toast.error("Thông tin đăng nhập không chính xác!!! Vui lòng thử lại.");
+      } else if (error?.data?.code === 1004) {
+        toast.error("Username không chính xác!!! Vui lòng thử lại.");
+      } else {
+        toast.error("Đã xảy ra lỗi, vui lòng thử lại sau.");
+      }
+    }
   }
 
   return (

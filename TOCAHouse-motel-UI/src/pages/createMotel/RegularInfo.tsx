@@ -1,13 +1,12 @@
 import DecorativeHeading from "@/components/common/DecorativeHeading";
 import MotelRegularForm from "@/components/form/MotelRegularForm";
-import { Skeleton } from "@/components/ui/skeleton";
 
 const RegularInfo = () => {
   return (
     <div className="">
-      <div className="flex gap-10 items-stretch">
-        <div className="w-1/2 h-[500px] md:block hidden">
-          <Skeleton className="size-full"></Skeleton>
+      <div className="flex gap-10 items-start">
+        <div className="w-1/2 md:block hidden">
+          <img src="/house-banner-1.jpg" alt="" className="size-full object-cover" />
         </div>
         <div className=" w-1/2 flex flex-col flex-1">
           <DecorativeHeading className="text-xl mb-5 text-main-blue-s3 mt-10">

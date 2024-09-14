@@ -59,7 +59,28 @@ export const postApi = createApi({
           },
         };
       },
-      invalidatesTags: ["COMMENTS", "POSTS"],
+      invalidatesTags: ["POSTS"],
+    }),
+    uploadImage: builder.mutation<
+      ApiResponse<IPost>,
+      { postId: string; images: FileList }
+    >({
+      query: (data) => {
+        const token = getToken();
+        const formData = new FormData();
+        Array.from(data.images).forEach((image) =>
+          formData.append("images", image)
+        );
+        return {
+          url: `/post/${data.postId}/images/`,
+          body: formData,
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      },
+      invalidatesTags: ["POSTS"],
     }),
     getComments: builder.query<ApiResponse<IComment[]>, string>({
       query: (postId) => `/post/${postId}/comment`,
@@ -91,4 +112,6 @@ export const {
   useReactMutation,
   useGetCommentsQuery,
   usePostCommentMutation,
+  useCreatePostMutation,
+  useUploadImageMutation
 } = postApi;

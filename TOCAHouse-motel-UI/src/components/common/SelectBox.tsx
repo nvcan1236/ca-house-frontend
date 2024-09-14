@@ -16,7 +16,7 @@ const SelectBox = ({
   onSelectChange,
 }: {
   options: Option[];
-  onSelectChange: (value:) => void;
+  onSelectChange: (value:string) => void;
 }) => {
   return (
     <Select onValueChange={(value) => onSelectChange(value)}>

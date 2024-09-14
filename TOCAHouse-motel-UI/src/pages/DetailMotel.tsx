@@ -14,77 +14,66 @@ import { Label } from "@/components/ui/label";
 import { MessageCircle } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import Item from "@/components/common/Item";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { Separator } from "@/components/ui/separator";
 import { useGetMotelQuery } from "@/stores/api/motelApi";
 import ImageSlider from "@/components/common/ImageSlider";
 import DetailMotelSkeleton from "@/components/list/DetailMotelSkeleton";
+import { Amenity } from "@/utils/types";
+import Pagination from "@/components/common/Pagination";
 
 const DetailMotel = () => {
   const { motelId } = useParams();
   const { data, isLoading } = useGetMotelQuery(motelId || "");
   const detailMotel = data?.result;
   if (isLoading) return <DetailMotelSkeleton />;
+  const amenityByType = detailMotel?.amenities.reduce((acc, item: Amenity) => {
+    if (!item.type) return acc;
+
+    if (!acc[item.type]) {
+      acc[item.type] = [];
+    }
+
+    acc[item.type].push(item);
+
+    return acc;
+  }, {});
 
   return (
-    <div className="container w-[1200px] mt-10">
-      <Dialog>
-        <DialogTrigger>
-          <div className="grid grid-cols-4 gap-4  mx-auto rounded-xl overflow-hidden ">
-            <div className="col-span-2 row-span-2">
-              <img
-                src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aG91c2V8ZW58MHx8MHx8fDA%3D"
-                alt=""
-                className="w-full h-full object-cover"
-              />
+    <div className="container mt-10">
+      <div className="lg:hidden">
+        <ImageSlider
+          images={data?.result.images || []}
+          height={300}
+        ></ImageSlider>
+      </div>
+      <div className="hidden lg:block">
+        <Dialog>
+          <DialogTrigger>
+            <div className="grid-cols-4 gap-4  mx-auto rounded-xl overflow-hidden grid ">
+              {detailMotel?.images.map((image) => (
+                <div
+                  className="last:opacity-40 first:row-span-2 first:col-span-2"
+                  key={image.id}
+                >
+                  <img
+                    src={image.url}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
             </div>
-            <div className="">
-              <img
-                src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2V8ZW58MHx8MHx8fDA%3D"
-                alt=""
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="">
-              <img
-                src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aG91c2V8ZW58MHx8MHx8fDA%3D"
-                alt=""
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="">
-              <img
-                src="https://images.unsplash.com/photo-1579762687857-b2f08f7cd067?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8bW90ZWx8ZW58MHx8MHx8fDA%3D"
-                alt=""
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="last:opacity-40">
-              <img
-                src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2V8ZW58MHx8MHx8fDA%3D"
-                alt=""
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-        </DialogTrigger>
-        <DialogContent className="p-8 max-w-[1000px]">
-          <DialogHeader>
-            <DialogTitle>Một vài hình ảnh của trọ</DialogTitle>
-          </DialogHeader>
-          <ImageSlider height={300} images={[]} />
-        </DialogContent>
-      </Dialog>
+          </DialogTrigger>
+          <DialogContent className="p-8 max-w-[1000px]">
+            <DialogHeader>
+              <DialogTitle>Một vài hình ảnh của trọ</DialogTitle>
+            </DialogHeader>
+            <ImageSlider height={500} images={detailMotel?.images || []} />
+          </DialogContent>
+        </Dialog>
+      </div>
       <div className="flex mt-12 gap-8 items-start ">
-        <div className="w-2/3 flex flex-col gap-6">
+        <div className="lg:w-2/3 flex flex-col gap-6">
           <div>
             <div>
               <h3 className="text-3xl ">{detailMotel?.name}</h3>
@@ -92,13 +81,18 @@ const DetailMotel = () => {
                 {detailMotel?.description}
               </p>
 
-              <p className="text-xl font-medium mt-5 flex justify-between items-center">
+              <p className="text-xl font-medium mt-5 flex justify-between items-center gap-3">
                 <span>
-                  <MapPinnedIcon className="inline-block mr-3" /> 1454, Lê Văn
-                  Lương, Phước Kiển, Nhà Bè, Tp.HCM
+                  <MapPinnedIcon className="inline-block mr-3" />{" "}
+                  {`${detailMotel?.location?.province}, 
+                  ${detailMotel?.location?.district}, 
+                  ${detailMotel?.location?.ward}, 
+                  ${detailMotel?.location?.street}, 
+                  ${detailMotel?.location?.other}, `}
                 </span>
-                <Button variant={"outline"}>
-                  <MapIcon size={20} className="mr-2" /> Xem trên bản đồ
+                <Button variant={"outline"} className="flex -gap-2">
+                  <MapIcon size={20} />{" "}
+                  <span className="hidden lg:inline">Xem trên bản đồ</span>
                 </Button>
               </p>
             </div>
@@ -138,34 +132,67 @@ const DetailMotel = () => {
             </Button>
           </div>
 
-          <div className="">
+          {/* GIÁ: CHỈ HIỆN Ở MOBILE, TABLET */}
+          <div className="border border-main-yellow-t6 p-4 rounded-xl bg-background lg:hidden">
+            <DecorativeHeading>Giá cả</DecorativeHeading>
+            <div className="flex flex-col gap-3 mt-4">
+              <Item>
+                <Label>Giá thuê: </Label>
+                <p className="text-sm text-slate-700">
+                  <span className="text-lg text-main-blue font-medium">
+                    {Number(detailMotel?.price).toLocaleString()}đ{" "}
+                  </span>
+                  / tháng
+                </p>
+              </Item>
+              {detailMotel?.prices.map((price) => (
+                <Item key={price.type}>
+                  <Label>{price.name}: </Label>
+                  <p className="text-sm text-slate-700">
+                    <span className="text-base text-foreground">
+                      {Number(price.value).toLocaleString("vi")}đ
+                    </span>
+                    / {price.unit}
+                  </p>
+                </Item>
+              ))}
+            </div>
+            <Separator className="mt-4 mb-2"></Separator>
+            <p className="text-slate-600 text-xs">
+              Nếu bạn muốn giữ phòng này đến khi thuê ban có thể đặt cọc phòng
+              này. Sau khi đặt cọc phòng sẽ bị ẩn với các người khác. Tiền đặt
+              cọc mỗi ngày sẽ bằng giá thuê chia 30.
+            </p>
+            <Button className="mt-4 w-full">Đặt cọc</Button>
+          </div>
+
+          <div>
             <DecorativeHeading>Tiện nghi</DecorativeHeading>
             <div className="mt-4 pl-3">
-              <p>
-                <Label>Nội thất:</Label> <span>Tủ lạnh, máy giặt, sofa</span>
-              </p>
-              <p>
-                <Label>Vị trí:</Label> <span>Gần siêu thị, chợ, tập hoá</span>
-              </p>
-              <p>
-                <Label>An ninh:</Label> <span>Camera, Khoá từ</span>
-              </p>
+              {/* {Object.keys(amenityByType).map()} */}
+              {Object.keys(amenityByType).map((type) => (
+                <p key={type}>
+                  <Label>{type}:</Label>{" "}
+                  <div className="inline-block">
+                    {amenityByType[type].map((amenity) => (
+                      <span key={amenity.name}>{amenity.name},</span>
+                    ))}
+                  </div>
+                </p>
+              ))}
             </div>
           </div>
 
           <div className="">
             <DecorativeHeading>Yêu cầu từ chủ trọ</DecorativeHeading>
             <div className="mt-4 pl-3">
-              <p>
-                <Label>Thú cưng:</Label> <span>Không nuôi thú cưng</span>
-              </p>
-              <p>
-                <Label>Đối tượng cho thuê:</Label>{" "}
-                <span>Học sinh, sinh viên</span>
-              </p>
-              <p>
-                <Label>Hợp đồng:</Label> <span>Tối thiểu 3 tháng</span>
-              </p>
+              {detailMotel.requirement &&
+                Object.keys(detailMotel?.requirement).map((req) => (
+                  <p key={req}>
+                    <Label>{req}:</Label>{" "}
+                    <span>{detailMotel?.requirement[req]}</span>
+                  </p>
+                ))}
             </div>
           </div>
 
@@ -174,17 +201,14 @@ const DetailMotel = () => {
             <div className="py-6 px-8 border rounded-xl  mt-4 flex gap-4 bg-background shadow-md">
               <Avatar className="size-20 border">
                 <AvatarImage src=""></AvatarImage>
-                <AvatarFallback>C</AvatarFallback>
+                <AvatarFallback>A</AvatarFallback>
               </Avatar>
               <div>
                 <Link to={`/profile/${detailMotel?.ownerId}`} className="p-0">
                   {detailMotel?.ownerId}
                 </Link>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Minus, enim!
-                </p>
-                <Button className="mt-4">
+
+                <Button className="mt-4 flex">
                   <MessageCircle size={20} className="mr-2"></MessageCircle>{" "}
                   Nhắn tin cho chủ nhà{" "}
                 </Button>
@@ -193,37 +217,29 @@ const DetailMotel = () => {
           </div>
         </div>
 
-        <div className="flex-1 border border-main-yellow-t6 p-4 rounded-xl bg-background sticky top-40">
+        <div className="flex-1 border border-main-yellow-t6 p-4 rounded-xl bg-background sticky top-40 hidden lg:block">
           <DecorativeHeading>Giá cả</DecorativeHeading>
           <div className="flex flex-col gap-3 mt-4">
             <Item>
               <Label>Giá thuê: </Label>
               <p className="text-sm text-slate-700">
                 <span className="text-lg text-main-blue font-medium">
-                  {detailMotel?.price}đ{" "}
+                  {Number(detailMotel?.price).toLocaleString()}đ{" "}
                 </span>
                 / tháng
               </p>
             </Item>
-            <Item>
-              <Label>Điện: </Label>
-              <p className="text-sm text-slate-700">
-                <span className="text-base text-foreground">3500đ</span>/ kWh
-              </p>
-            </Item>
-            <Item>
-              <Label>Nước: </Label>
-              <p className="text-sm text-slate-700">
-                <span className="text-base text-foreground">10000đ</span>/ m3
-              </p>
-            </Item>
-            <Item>
-              <Label>Wifi: </Label>
-              <p className="text-sm text-slate-700">
-                <span className="text-base text-foreground">100.000đ</span>/
-                tháng
-              </p>
-            </Item>
+            {detailMotel?.prices.map((price) => (
+              <Item key={price.type}>
+                <Label>{price.name}: </Label>
+                <p className="text-sm text-slate-700">
+                  <span className="text-base text-foreground">
+                    {Number(price.value).toLocaleString("vi")}đ
+                  </span>
+                  / {price.unit}
+                </p>
+              </Item>
+            ))}
           </div>
           <Separator className="mt-4 mb-2"></Separator>
           <p className="text-slate-600 text-xs">
@@ -234,6 +250,7 @@ const DetailMotel = () => {
           <Button className="mt-4 w-full">Đặt cọc</Button>
         </div>
       </div>
+
       <div className=" mt-8">
         <DecorativeHeading>Đánh giá</DecorativeHeading>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
@@ -274,22 +291,9 @@ const DetailMotel = () => {
             </div>
           </div>
         </div>
-        <Pagination className="mt-6">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious href="#" />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationEllipsis />
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationNext href="#" />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+        <div className="mt-4">
+          <Pagination current={1} max={4}></Pagination>
+        </div>
       </div>
     </div>
   );

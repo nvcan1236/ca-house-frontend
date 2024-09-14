@@ -14,12 +14,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { caHouseEndpoint, geoMapEndpoint } from "@/configs/APIconfig";
+import { geoMapEndpoint } from "@/configs/APIconfig";
 import { getDistricts, getProvinces, getWards } from "@/configs/provincesData";
 import axios from "@/services/axios";
-import { getToken } from "@/services/localStorageService";
+import { useCreateLocationMotelMutation } from "@/stores/api/motelApi";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
-import { nextStep, prevStep, setData } from "@/stores/slices/createMotelSlice";
+import { nextStep, prevStep} from "@/stores/slices/createMotelSlice";
 import { District, Ward } from "@/utils/interfaces";
 import { Location } from "@/utils/types";
 import { MapPinIcon } from "lucide-react";
@@ -39,6 +39,7 @@ const LocationInfo = () => {
   const [districtList, setDistrictList] = useState<District[]>([]);
   const [wardList, setWardList] = useState<Ward[]>([]);
   const [locationList, setLocationList] = useState([]);
+  const [createLocation] = useCreateLocationMotelMutation();
   const [location, setLocation] = useState<Location>({
     province: "",
     district: "",
@@ -73,6 +74,18 @@ const LocationInfo = () => {
       });
     });
   }, []);
+
+  const handleCreateLocation = () => {
+    id &&
+      createLocation({ motelId: id, data: location })
+        .then((data) => {
+          console.log(data.data);
+          dispatch(nextStep());
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+        });
+  };
 
   const [current, setCurrent] = useState({
     latitude: 0,
@@ -217,7 +230,6 @@ const LocationInfo = () => {
               </Popover>
             </div>
             <div className="h-[400px] rounded-xl">
-              {location.longitude},{location.latitude}
               <ReactMapGL
                 mapStyle={"mapbox://styles/nvcan1236/cm05einzd00hf01qs8oa59aji"}
                 mapboxAccessToken={MAP_TOKEN}
@@ -266,31 +278,7 @@ const LocationInfo = () => {
           </Button>
           <Button
             size={"lg"}
-            onClick={() => {
-              console.log(location);
-
-              dispatch(setData({ type: "location", data: location }));
-              console.log(id);
-
-              id &&
-                axios
-                  .post(
-                    caHouseEndpoint.addMotelInfo(id, "location"),
-                    JSON.stringify(location),
-                    {
-                      headers: {
-                        Authorization: `Bearer ${getToken()}`,
-                      },
-                    }
-                  )
-                  .then((data) => {
-                    console.log(data.data);
-                    dispatch(nextStep());
-                  })
-                  .catch((error) => {
-                    toast.error(error.response.data.message);
-                  });
-            }}
+            onClick={handleCreateLocation}
             // disabled={location.longitude === null || location.latitude === null}
           >
             Tiếp tục

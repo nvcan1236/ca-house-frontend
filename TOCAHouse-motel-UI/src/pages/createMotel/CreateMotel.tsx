@@ -1,4 +1,5 @@
 import H3 from "@/components/common/H3";
+import MapInCreate from "@/components/common/MapInCreate";
 // import MapInCreate from "@/components/common/MapInCreate";
 import { Button } from "@/components/ui/button";
 
@@ -26,7 +27,7 @@ const CreateMotel = () => {
           </Button>
         </div>
         <div className="w-1/2 h-[500px]">
-          {/* <MapInCreate></MapInCreate> */}
+          <MapInCreate></MapInCreate>
         </div>
       </div>
     );

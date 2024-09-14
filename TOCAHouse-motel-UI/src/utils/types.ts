@@ -9,16 +9,12 @@ export type User = {
   firstName: string;
   lastName: string;
   email: string;
-  roles: object[];
+  roles: UserRole[];
   avatar: string;
   noPassword: boolean;
 };
 
-export type UserRole = {
-  name: string;
-  description: string;
-  permissions: Permission[];
-};
+export type UserRole = "USER" | "OWNER" | "ADMIN";
 
 export type Permission = {
   name: string;
@@ -64,12 +60,22 @@ export type Location = {
   latitude: number | null;
 };
 
+export type Amenity = { name: string; type: string };
+
 export type Price = {
   type: PredefinePrice;
   name: string | null;
-  price: number | null;
+  value: number | null;
   unit: string;
   units: string[];
+};
+
+export type Requirement = {
+  deposit: number;
+  contractAmount: number;
+  allowPet: boolean;
+  jobs: Job[];
+  other: string | null;
 };
 
 export type PredefinePrice =

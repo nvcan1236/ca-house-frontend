@@ -5,24 +5,36 @@ import { LayoutGridIcon, MapIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Map from "../common/Map";
 import { useGetMotelsQuery } from "@/stores/api/motelApi";
+import { useSearchParams } from "react-router-dom";
+import Pagination from "../common/Pagination";
 
 const MotelList = () => {
   const [showMap, setShowMap] = useState<boolean>(false);
-  const { data, isFetching } = useGetMotelsQuery({});
+  const [pageParam] = useSearchParams();
+
+  const { data, isFetching } = useGetMotelsQuery({
+    page: Number(pageParam.get("page")),
+  });
   const motelList = data?.result.data;
   return (
     <div className="">
       {showMap ? (
         <div className="fixed inset-0 z-30">
-          <Map motels={motelList}></Map>
+          <Map></Map>
         </div>
       ) : (
-        <div className="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 p-8">
-          {isFetching
-            ? Array(10)
-                .fill(0)
-                .map((_, index) => <MotelSkeleton key={index} />)
-            : motelList?.map((motel, i) => <Motel motel={motel} key={i} />)}
+        <div>
+          <div className="container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 p-8">
+            {isFetching
+              ? Array(10)
+                  .fill(0)
+                  .map((_, index) => <MotelSkeleton key={index} />)
+              : motelList?.map((motel, i) => <Motel motel={motel} key={i} />)}
+          </div>
+          <Pagination
+            current={data?.result.currentPage || 1}
+            max={data?.result.totalPage || 1}
+          />
         </div>
       )}
 

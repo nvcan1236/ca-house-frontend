@@ -11,8 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { caHouseEndpoint } from "@/configs/APIconfig";
-import { authAxios } from "@/services/axios";
+import { useCreatePriceMotelMutation } from "@/stores/api/motelApi";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { nextStep, prevStep } from "@/stores/slices/createMotelSlice";
 import { prices as predefinedPrices } from "@/utils/predefinedData";
@@ -53,6 +52,25 @@ const PriceInfo = () => {
     }
   };
 
+  const [createPrices] = useCreatePriceMotelMutation();
+  const handleCreatePrices = () => {
+    const postPrices: Omit<Price, "units">[] = prices.map((price) => ({
+      name: price.name,
+      type: price.type,
+      unit: price.unit,
+      price: price.price,
+    }));
+    id &&
+      createPrices({ motelId: id, data: postPrices })
+        .then((data) => {
+          console.log(data.data);
+          dispatch(nextStep());
+        })
+        .catch((error) => {
+          toast.error(error.response.data.message);
+        });
+  };
+
   return (
     <div className="">
       <div className="flex gap-10 items-stretch">
@@ -74,7 +92,7 @@ const PriceInfo = () => {
                   type="number"
                   placeholder="(VND)"
                   className="flex-1"
-                  value={price.price}
+                  value={price?.price || 0}
                   onChange={(e) =>
                     updatePriceData(price.type, Number(e.target.value))
                   }
@@ -122,7 +140,7 @@ const PriceInfo = () => {
                 type="text"
                 placeholder="Tên chi phí"
                 className="w-[120px]"
-                value={otherPrice.name}
+                value={otherPrice?.name || ""}
                 onChange={(e) =>
                   setOtherPrice({ ...otherPrice, name: e.target.value })
                 }
@@ -131,7 +149,7 @@ const PriceInfo = () => {
                 type="number"
                 placeholder="Giá (VND)"
                 className="flex-1"
-                value={otherPrice.price}
+                value={otherPrice.price || 0}
                 onChange={(e) =>
                   setOtherPrice({
                     ...otherPrice,
@@ -173,28 +191,7 @@ const PriceInfo = () => {
             </Button>
             <Button
               size={"lg"}
-              onClick={() => {
-                console.log(prices);
-                const postPrices = prices.map((price) => ({
-                  name: price.name,
-                  type: price.type,
-                  unit: price.unit,
-                  value: price.price,
-                }));
-                id &&
-                  authAxios
-                    .post(
-                      caHouseEndpoint.addMotelInfo(id, "price"),
-                      JSON.stringify(postPrices)
-                    )
-                    .then((data) => {
-                      console.log(data.data);
-                      dispatch(nextStep());
-                    })
-                    .catch((error) => {
-                      toast.error(error.response.data.message);
-                    });
-              }}
+              onClick={handleCreatePrices}
               disabled={!prices.every((price) => price.price !== null)}
             >
               Tiếp tục

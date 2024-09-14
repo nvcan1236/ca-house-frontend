@@ -1,5 +1,5 @@
 import { postType, reactions } from "./predefinedData";
-import { Image } from "./types";
+import { Amenity, Image, Location, Price, Requirement } from "./types";
 
 export interface IMotel {
   id: string;
@@ -20,6 +20,11 @@ export interface IMotel {
 export interface IMotelDetail extends IMotel {
   description: string;
   ownerId: string;
+  amenities: Amenity[]
+  requirement: Requirement
+  prices: Omit<Price, "units">[]
+  images: Image[]
+  location: Location
 }
 
 export interface Step {
@@ -35,6 +40,15 @@ export interface Steps {
   images: Step;
   prices: Step;
   requirements: Step;
+}
+
+export interface RegularCreate {
+  name: string
+  description: string
+  price: number
+  type: string
+  area: number
+  availableDate: string
 }
 
 // Kiểu dữ liệu cho Ward (Phường/Xã)

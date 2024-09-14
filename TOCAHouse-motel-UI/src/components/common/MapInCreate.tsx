@@ -38,10 +38,6 @@ const MapInCreate = () => {
 
   return (
     <div className="w-full h-full relative">
-      <div className="absolute bottom-0 p-3 bg-background z-30">
-        Lon: ${viewState.longitude} - Lat: {viewState.latitude} - Radius:{" "}
-        {viewState.zoom}
-      </div>
       <ReactMapGL
         mapStyle={"mapbox://styles/nvcan1236/cm05einzd00hf01qs8oa59aji"}
         mapboxAccessToken={MAP_TOKEN}

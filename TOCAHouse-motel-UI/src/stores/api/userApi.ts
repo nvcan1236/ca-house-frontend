@@ -30,9 +30,6 @@ export const userApi = createApi({
       query: (userId) => ({
         url: `/identity/users/${userId}`,
         method: "GET",
-        headers: {
-          Authorization: `Bearer ${getToken()}`,
-        },
       }),
     }),
     login: builder.mutation<ApiResponse<TokenData>, LoginForm>({
