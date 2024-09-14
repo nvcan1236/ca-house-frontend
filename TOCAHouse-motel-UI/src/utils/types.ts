@@ -51,7 +51,7 @@ export type MotelType = {
 };
 
 export type Location = {
-  province: string;
+  city: string;
   district: string;
   ward: string;
   street: string;
@@ -64,8 +64,8 @@ export type Amenity = { name: string; type: string };
 
 export type Price = {
   type: PredefinePrice;
-  name: string | null;
-  value: number | null;
+  name: string;
+  value: number;
   unit: string;
   units: string[];
 };

@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { setUserInfor } from "@/stores/slices/authSlice";
 import { useCreatePasswordMutation } from "@/stores/api/userApi";
+import { User } from "@/utils/types";
 
 const CreatePasswordForm = () => {
   const loginValidationSchema = z
@@ -38,14 +39,17 @@ const CreatePasswordForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof loginValidationSchema>) {
-    createPassword(values).then((response) => {
-      toast.success(response.data?.message);
+  async function onSubmit(values: z.infer<typeof loginValidationSchema>) {
+    try {
+      const data = await createPassword(values).unwrap();
       if (user) {
-        const nextDetailUser = { ...user, noPassword: true };
+        const nextDetailUser: User = { ...user, noPassword: true };
         dispatch(setUserInfor(nextDetailUser));
       }
-    });
+      toast.success(data.result);
+    } catch (error) {
+      toast.error("Đã có lỗi xảy ra.");
+    }
   }
   return (
     <div>

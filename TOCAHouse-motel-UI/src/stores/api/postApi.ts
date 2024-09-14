@@ -16,15 +16,19 @@ export const postApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: caHouseBaseUrl }),
   tagTypes: ["POSTS", "COMMENTS"],
   endpoints: (builder) => ({
-    getPosts: builder.query<ApiResponse<IPost[]>, void>({
-      query: () => ({
-        url: `/post/`,
-        headers: {
-          ...(getToken() !== null && {
-            Authorization: `Bearer ${getToken()}`,
-          }),
-        },
-      }),
+    getPosts: builder.query<ApiResponse<IPost[]>, number>({
+      query: (offset) => {
+        const param = new URLSearchParams();
+        offset && param.append("offset", offset.toString());
+        return {
+          url: `/post/?${param.toString()}`,
+          headers: {
+            ...(getToken() !== null && {
+              Authorization: `Bearer ${getToken()}`,
+            }),
+          },
+        };
+      },
       providesTags: ["POSTS"],
     }),
     getPost: builder.query<ApiResponse<IMotelDetail>, string>({
@@ -108,10 +112,11 @@ export const postApi = createApi({
 
 export const {
   useGetPostQuery,
+  useLazyGetPostsQuery,
   useGetPostsQuery,
   useReactMutation,
   useGetCommentsQuery,
   usePostCommentMutation,
   useCreatePostMutation,
-  useUploadImageMutation
+  useUploadImageMutation,
 } = postApi;

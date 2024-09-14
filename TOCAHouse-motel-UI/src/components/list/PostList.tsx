@@ -8,31 +8,57 @@ import { HouseIcon, ImageIcon, PenToolIcon } from "lucide-react";
 import SelectBox from "../common/SelectBox";
 import { Input } from "../ui/input";
 import ImageSlider from "../common/ImageSlider";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import {
   useCreatePostMutation,
-  useGetPostsQuery,
+  useLazyGetPostsQuery,
   useUploadImageMutation,
 } from "@/stores/api/postApi";
-import { IPostCreate } from "@/utils/interfaces";
+import { IPost, IPostCreate } from "@/utils/interfaces";
 import { useAppSelector } from "@/stores/hooks";
 import { toast } from "sonner";
 
 const PostList = () => {
   const [images, setImages] = useState<FileList | null>(null);
-  const { data, isFetching } = useGetPostsQuery();
   const [createPost] = useCreatePostMutation();
   const [uploadImages] = useUploadImageMutation();
   const user = useAppSelector((state) => state.auth.user);
-  const handleChangeImage = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.files);
-    setImages(event.target.files);
-  };
-  const postList = data?.result;
+
+  const [offset, setOffset] = useState(0);
+  const [trigger, { data, isFetching }] = useLazyGetPostsQuery();
+  const [postList, setPostList] = useState<IPost[]>([]);
+  const [hasMore, setHasMore] = useState(false)
   const postInit: IPostCreate = {
     content: "",
     type: "FIND_ROOM",
   };
+
+  useEffect(() => {
+    trigger(offset);
+  }, [offset, trigger]);
+
+  useEffect(() => {
+    if (data) {
+      setPostList((prevPosts) => [...prevPosts, ...data.result]);
+      setHasMore(data.result.length == 10);
+    }
+  }, [data]);
+
+  const handleScroll = () => {
+    if (
+      window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 50 &&
+      !isFetching &&
+      hasMore
+    ) {
+      setOffset((prevPage) => prevPage + 10); // Tăng số trang khi cuộn gần đến cuối
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll); // Xóa sự kiện khi component bị unmount
+  }, [isFetching, hasMore]);
 
   const [postCreateData, setPostCreateData] = useState<IPostCreate>(postInit);
   const handleChangePost = (
@@ -44,6 +70,11 @@ const PostList = () => {
       [type]: value,
     };
     setPostCreateData(nextData);
+  };
+
+  const handleChangeImage = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.files);
+    setImages(event.target.files);
   };
 
   const handleSubmitPost = () => {

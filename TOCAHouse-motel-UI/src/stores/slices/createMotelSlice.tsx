@@ -20,7 +20,7 @@ const initialState: {
   requirements: object;
   prices: Price[] | [];
 } = {
-  id: "608e8029-cb91-4f84-a1ae-580d67ce65c6",
+  id: "ae2ef93c-a756-4ee9-a4d4-57996cf513cb",
   steps: [
     {
       component: "",
@@ -59,7 +59,7 @@ const initialState: {
       nextStepHref: null,
     },
   ],
-  currentStep: 0,
+  currentStep: 4,
   regular: {},
   location: {},
   images: {},

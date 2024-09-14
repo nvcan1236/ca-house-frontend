@@ -21,11 +21,11 @@ import {
 } from "@/stores/slices/authSlice";
 import { getToken, setToken } from "@/services/localStorageService";
 import { caHouseEndpoint } from "@/configs/APIconfig";
-import axios from "@/services/axios";
 import googleConfig from "@/configs/googleLoginConfig";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { useLoginMutation } from "@/stores/api/userApi";
 import { toast } from "sonner";
+import axios from "axios";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -61,26 +61,25 @@ const LoginForm = () => {
 
     if (isMatch) {
       const authCode = isMatch[1];
+      console.log(authCode);
 
-      axios
-        .post(caHouseEndpoint.outbound, null, {
-          params: {
-            code: authCode,
-          },
-        })
-        .then((data) => {
-          console.log(data);
-          setToken(data.data.result.token);
-          axios
-            .get(caHouseEndpoint.getMyInfor, {
-              headers: {
-                Authorization: `Bearer ${getToken()}`,
-              },
-            })
-            .then((data) => {
-              dispatch(setUserInfor(data.data.result));
-            });
-        });
+      fetch(`${caHouseEndpoint.outbound}?code=${authCode}`, {
+        method: "POST",
+      })
+      .then(res => res.json())
+      .then((data) => {
+        console.log(data);
+        setToken(data.result.token);
+        axios
+          .get(caHouseEndpoint.getMyInfor, {
+            headers: {
+              Authorization: `Bearer ${getToken()}`,
+            },
+          })
+          .then((data) => {
+            dispatch(setUserInfor(data.data.result));
+          });
+      });
     }
   }, []);
 
@@ -88,11 +87,11 @@ const LoginForm = () => {
   async function onSubmit(values: z.infer<typeof loginValidationSchema>) {
     try {
       const data = await login(values).unwrap();
-  
+
       if (data?.result?.token) {
-        setToken(data.result.token); 
-        form.reset(); 
-        dispatch(closeAuthModal());  
+        setToken(data.result.token);
+        form.reset();
+        dispatch(closeAuthModal());
       }
     } catch (error) {
       if (error?.data?.code === 2001) {

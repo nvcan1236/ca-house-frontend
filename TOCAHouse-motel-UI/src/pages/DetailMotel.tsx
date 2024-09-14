@@ -49,10 +49,10 @@ const DetailMotel = () => {
       <div className="hidden lg:block">
         <Dialog>
           <DialogTrigger>
-            <div className="grid-cols-4 gap-4  mx-auto rounded-xl overflow-hidden grid ">
-              {detailMotel?.images.map((image) => (
+            <div className="grid-cols-4 gap-4  mx-auto rounded-xl overflow-hidden grid">
+              {detailMotel?.images.slice(0, 5).map((image) => (
                 <div
-                  className="last:opacity-40 first:row-span-2 first:col-span-2"
+                  className="last:opacity-40 first:row-span-2 first:col-span-2 h-[200px] first:h-[416px]"
                   key={image.id}
                 >
                   <img
@@ -84,11 +84,13 @@ const DetailMotel = () => {
               <p className="text-xl font-medium mt-5 flex justify-between items-center gap-3">
                 <span>
                   <MapPinnedIcon className="inline-block mr-3" />{" "}
-                  {`${detailMotel?.location?.province}, 
-                  ${detailMotel?.location?.district}, 
-                  ${detailMotel?.location?.ward}, 
+                  {`
+                  ${detailMotel?.location?.other}, 
                   ${detailMotel?.location?.street}, 
-                  ${detailMotel?.location?.other}, `}
+                  ${detailMotel?.location?.ward}, 
+                  ${detailMotel?.location?.district}, 
+                  ${detailMotel?.location?.city} 
+                  `}
                 </span>
                 <Button variant={"outline"} className="flex -gap-2">
                   <MapIcon size={20} />{" "}

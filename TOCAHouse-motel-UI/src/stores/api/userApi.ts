@@ -69,6 +69,7 @@ export const userApi = createApi({
       query(data) {
         return {
           url: "/identity/auth/create-password",
+          method: "POST",
           body: data,
           headers: {
             Authorization: `Bearer ${getToken()}`,

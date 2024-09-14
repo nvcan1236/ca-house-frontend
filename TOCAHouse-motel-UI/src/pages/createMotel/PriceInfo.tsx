@@ -27,7 +27,7 @@ const PriceInfo = () => {
   const [prices, setPrices] = useState<Price[] | []>(predefinedPrices);
   const [otherPrice, setOtherPrice] = useState<Price>({
     name: "",
-    price: null,
+    value: 0,
     unit: "month",
     units: ["month"],
     type: "ORTHER",
@@ -37,7 +37,7 @@ const PriceInfo = () => {
     const index = nextPrice.findIndex((price) => price.type === type);
 
     if (index !== -1) {
-      nextPrice[index] = { ...nextPrice[index], price: value };
+      nextPrice[index] = { ...nextPrice[index], value: value };
       setPrices(nextPrice);
     }
   };
@@ -58,7 +58,7 @@ const PriceInfo = () => {
       name: price.name,
       type: price.type,
       unit: price.unit,
-      price: price.price,
+      value: price.value,
     }));
     id &&
       createPrices({ motelId: id, data: postPrices })
@@ -92,7 +92,7 @@ const PriceInfo = () => {
                   type="number"
                   placeholder="(VND)"
                   className="flex-1"
-                  value={price?.price || 0}
+                  value={price?.value}
                   onChange={(e) =>
                     updatePriceData(price.type, Number(e.target.value))
                   }
@@ -149,11 +149,11 @@ const PriceInfo = () => {
                 type="number"
                 placeholder="Giá (VND)"
                 className="flex-1"
-                value={otherPrice.price || 0}
+                value={otherPrice?.value}
                 onChange={(e) =>
                   setOtherPrice({
                     ...otherPrice,
-                    price: Number(e.target.value),
+                    value: Number(e.target.value),
                   })
                 }
               />
@@ -192,7 +192,7 @@ const PriceInfo = () => {
             <Button
               size={"lg"}
               onClick={handleCreatePrices}
-              disabled={!prices.every((price) => price.price !== null)}
+              disabled={!prices.every((price) => price.value !== null)}
             >
               Tiếp tục
             </Button>

@@ -41,7 +41,7 @@ const LocationInfo = () => {
   const [locationList, setLocationList] = useState([]);
   const [createLocation] = useCreateLocationMotelMutation();
   const [location, setLocation] = useState<Location>({
-    province: "",
+    city: "",
     district: "",
     ward: "",
     street: "",
@@ -56,7 +56,7 @@ const LocationInfo = () => {
     axios
       .get(
         geoMapEndpoint(
-          `${location?.street},${location?.ward},${location?.district},${location?.province}`
+          `${location?.street},${location?.ward},${location?.district},${location?.city}`
         )
       )
       .then((data) => setLocationList(data.data.map((loc) => loc)));
@@ -126,7 +126,7 @@ const LocationInfo = () => {
                 <Select
                   defaultValue={""}
                   onValueChange={(value) => {
-                    setLocation({ ...location, province: value });
+                    setLocation({ ...location, city: value });
                     setDistrictList(getDistricts(value));
                   }}
                 >
@@ -149,7 +149,7 @@ const LocationInfo = () => {
                   defaultValue={""}
                   onValueChange={(value) => {
                     setLocation({ ...location, district: value });
-                    setWardList(getWards(location.province, value));
+                    setWardList(getWards(location.city, value));
                   }}
                 >
                   <SelectTrigger>

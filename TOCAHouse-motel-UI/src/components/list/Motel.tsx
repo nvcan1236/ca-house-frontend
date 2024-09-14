@@ -37,7 +37,8 @@ const Motel = ({ motel, onClick }: { motel: IMotel; onClick?: () => void }) => {
         <div className="flex gap-2 items-center justify-between mt-3">
           <span>Diện tích: {motel?.area}m2</span>
           <span className="font-semibold text-main-blue text-lg">
-            {motel?.price}/<span className="text-xs">tháng</span>
+            {Number(motel?.price).toLocaleString()}/
+            <span className="text-xs">tháng</span>
           </span>
         </div>
       </div>

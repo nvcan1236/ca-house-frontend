@@ -19,7 +19,6 @@ import { useAppSelector } from "@/stores/hooks";
 import { toast } from "sonner";
 
 const Post = ({ data }: { data: IPost }) => {
-  console.log(data);
   const [currentReact, setCurrentReact] = useState<
     keyof typeof reactions | null
   >(data.liked);

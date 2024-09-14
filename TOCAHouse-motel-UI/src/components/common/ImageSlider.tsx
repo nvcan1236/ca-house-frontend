@@ -48,7 +48,7 @@ const ImageSlider = ({
             style={{ height: height ? height : "auto" }}
             key={image.id}
           >
-            <img src={image.url} alt="" className="size-full object-cover" />
+            <img src={image.url} alt="" className="size-full object-cover" loading="lazy" />
           </CarouselItem>
         ))}
         {images.length === 0 && (

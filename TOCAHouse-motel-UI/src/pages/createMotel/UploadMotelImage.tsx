@@ -12,21 +12,21 @@ const UploadMotelImage = () => {
   const dispatch = useAppDispatch();
   const id: string | null = useAppSelector((state) => state.createMotel.id);
   const [files, setFiles] = useState<FileList | null>();
-  const [uploadImage] = useUploadImageyMotelMutation()
-  const handleUploadImage = () => {
-    if(!files || files.length < 5) {
-      toast.error("Vui long upload ít nhất 5 ảnh")
+  const [uploadImage] = useUploadImageyMotelMutation();
+  const handleUploadImage = async () => {
+    if (!files || files.length < 5) {
+      toast.error("Vui long upload ít nhất 5 ảnh");
       return;
     }
 
-    id &&
-      uploadImage({motelId: id, images:files})
-        .then(() => {
-          dispatch(nextStep());
-        })
-        .catch((error) => {
-          toast.error(error.response.data.message);
-        });
+    if (id) {
+      try {
+        const data = await uploadImage({ motelId: id, images: files }).unwrap();
+        data.code == 1000 && dispatch(nextStep());
+      } catch (error) {
+        toast.error(error.data.message);
+      }
+    }
   };
 
   return (
