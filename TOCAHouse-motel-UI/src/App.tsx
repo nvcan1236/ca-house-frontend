@@ -15,12 +15,17 @@ import DetailMotelManage from "./pages/DetailMotelManage";
 import { useGetCurrentUserQuery } from "./stores/api/userApi";
 import { setUserInfor } from "./stores/slices/authSlice";
 import { setToken } from "./services/localStorageService";
+import AdminLayout from "./components/layout/AdminLayout";
+import ManageUsers from "./pages/admin/users/ManageUsers";
+import ManageMotel from "./pages/admin/motels/ManageMotel";
+import ManagePosts from "./pages/admin/posts/ManagePosts";
+import StatUser from "./pages/admin/users/StatUser";
 
 function App() {
   const language = useAppSelector((state) => state.common.language);
   const { i18n } = useTranslation();
   const { data, isError } = useGetCurrentUserQuery();
-  isError && setToken(null)
+  isError && setToken(null);
   const dispatch = useAppDispatch();
   data?.code === 1000 && dispatch(setUserInfor(data.result));
   useEffect(() => {
@@ -42,6 +47,16 @@ function App() {
             path="/my-motel/:motelId"
             element={<DetailMotelManage />}
           ></Route>
+        </Route>
+
+        <Route element={<AdminLayout />}>
+          <Route path="/admin" element={<>Body</>}></Route>
+          <Route path="/admin/motels" element={<ManageMotel />}></Route>
+          <Route path="/admin/users" element={<ManageUsers />}></Route>
+          <Route path="/admin/posts" element={<ManagePosts />}></Route>
+          <Route path="/admin/stat/motels" element={<StatUser />}></Route>
+          <Route path="/admin/stat/users" element={<StatUser />}></Route>
+          <Route path="/admin/stat/posts" element={<>Body</>}></Route>
         </Route>
 
         <Route

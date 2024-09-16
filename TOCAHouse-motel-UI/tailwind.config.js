@@ -23,6 +23,7 @@ module.exports = {
         "main-blue-s3": "#274875",
         "main-blue-s5": "#1c3454",
         "main-blue-t8": "#d7e1ed",
+        "main-blue-t9": "#ebf0f6",
         "main-yellow": "#f5a742",
         "main-yellow-t9": "#fef6ec",
         "main-yellow-t6": "#fbdcb3",
