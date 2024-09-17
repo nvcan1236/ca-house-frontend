@@ -4,9 +4,11 @@ import { Button } from "../ui/button";
 import {
   ArrowLeftFromLineIcon,
   ArrowRightFromLineIcon,
+  FileCheckIcon,
   FileImageIcon,
+  HomeIcon,
   HouseIcon,
-  UserIcon,
+  UserRoundIcon,
 } from "lucide-react";
 import { Separator } from "../ui/separator";
 import { NavLink } from "react-router-dom";
@@ -18,36 +20,37 @@ const AdminSidebar = () => {
     {
       label: "Người dùng",
       to: "/admin/users",
-      icon: <UserIcon size={16} />,
+      icon: <UserRoundIcon size={20} />,
     },
     {
       label: "Nhà trọ",
       to: "/admin/motels",
-      icon: <HouseIcon size={16} />,
+      icon: <HouseIcon size={20} />,
     },
     {
       label: "Bài đăng",
       to: "/admin/posts",
-      icon: <FileImageIcon size={16} />,
+      icon: <FileImageIcon size={20} />,
     },
   ];
   const statNavData: NavItem[] = [
     {
       label: "Người dùng",
       to: "/admin/stat/users",
-      icon: <UserIcon size={16} />,
+      icon: <UserRoundIcon size={20} />,
     },
     {
       label: "Nhà trọ",
       to: "/admin/stat/motels",
-      icon: <HouseIcon size={16} />,
+      icon: <HouseIcon size={20} />,
     },
     {
       label: "Bài đăng",
       to: "/admin/stat/posts",
-      icon: <FileImageIcon size={16} />,
+      icon: <FileImageIcon size={20} />,
     },
   ];
+
   return (
     <div className={`${show ? "w-[240px]" : "w-[100px]"}`}>
       <div
@@ -55,7 +58,11 @@ const AdminSidebar = () => {
           show ? "w-[240px]" : "w-fit"
         }`}
       >
-        <div className={` flex gap-3 items-center ${show ? "h-12" : "h-10"}`}>
+        <div
+          className={` flex gap-3 items-center mb-16 mt-6 ${
+            show ? "h-12" : "h-10"
+          }`}
+        >
           <img src="/logo-no-text.png" alt="logo" className="h-full pl-3" />
           {show && (
             <div className="font-semibold text-main-blue text-sm flex-1 mt-2">
@@ -63,7 +70,20 @@ const AdminSidebar = () => {
             </div>
           )}
         </div>
-        <Label className="mt-16 text-base mb-3 text-foreground">
+
+        <div className=" flex flex-col gap-0.5">
+          <SidebarItem to={"/admin/home"}>
+            <HomeIcon size={20} /> {show && "Home"}
+          </SidebarItem>
+
+          <SidebarItem to={"/admin/approve"}>
+            <FileCheckIcon size={20} /> {show && "Duyệt nhà trọ"}
+          </SidebarItem>
+        </div>
+
+        <Separator className="mt-2"></Separator>
+
+        <Label className=" mt-4 text-base mb-3 text-foreground">
           {show && "Quản lý thông tin"}
         </Label>
         <ul className="flex flex-col gap-0.5">

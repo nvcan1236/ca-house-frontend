@@ -4,7 +4,7 @@ import Post from "./Post";
 import { Checkbox } from "../ui/checkbox";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
-import { HouseIcon, ImageIcon, PenToolIcon } from "lucide-react";
+import { HouseIcon, ImageIcon } from "lucide-react";
 import SelectBox from "../common/SelectBox";
 import { Input } from "../ui/input";
 import ImageSlider from "../common/ImageSlider";
@@ -17,20 +17,38 @@ import {
 import { IPost, IPostCreate } from "@/utils/interfaces";
 import { useAppSelector } from "@/stores/hooks";
 import { toast } from "sonner";
+import { postType } from "@/utils/predefinedData";
+import SuggestPostContent from "../common/SuggestPostContent";
 
 const PostList = () => {
   const [images, setImages] = useState<FileList | null>(null);
   const [createPost] = useCreatePostMutation();
   const [uploadImages] = useUploadImageMutation();
   const user = useAppSelector((state) => state.auth.user);
-
   const [offset, setOffset] = useState(0);
   const [trigger, { data, isFetching }] = useLazyGetPostsQuery();
   const [postList, setPostList] = useState<IPost[]>([]);
-  const [hasMore, setHasMore] = useState(false)
+  const [hasMore, setHasMore] = useState(false);
   const postInit: IPostCreate = {
     content: "",
     type: "FIND_ROOM",
+  };
+
+  const [filterPost, setFilterPost] = useState<(keyof typeof postType)[]>([
+    "FIND_ROOM",
+    "FIND_ROOMMATE",
+    "PASS_ROOM",
+    "REVIEW",
+  ]);
+  const handleCheckType = (type: keyof typeof postType) => {
+    let nextFilter = [...filterPost];
+    if (filterPost.includes(type)) {
+      nextFilter = filterPost.filter((t) => t != type);
+    } else {
+      type && nextFilter.push(type);
+    }
+    setFilterPost(nextFilter);
+    console.log(nextFilter);
   };
 
   useEffect(() => {
@@ -51,7 +69,7 @@ const PostList = () => {
       !isFetching &&
       hasMore
     ) {
-      setOffset((prevPage) => prevPage + 10); // Tăng số trang khi cuộn gần đến cuối
+      setOffset((prevPage) => prevPage + 10);
     }
   };
 
@@ -70,6 +88,7 @@ const PostList = () => {
       [type]: value,
     };
     setPostCreateData(nextData);
+    console.log(nextData);
   };
 
   const handleChangeImage = (event: ChangeEvent<HTMLInputElement>) => {
@@ -101,18 +120,21 @@ const PostList = () => {
         <div>
           <Label>Loại bài đăng</Label>
           <div className="ml-3 mt-2 flex flex-col gap-2">
-            <div>
-              <Checkbox /> <Label>Tìm trọ</Label>
-            </div>
-            <div>
-              <Checkbox /> <Label>Pass trọ</Label>
-            </div>
-            <div>
-              <Checkbox /> <Label>Tìm người ở ghép</Label>
-            </div>
-            <div>
-              <Checkbox /> <Label>Review trọ</Label>
-            </div>
+            {Object.keys(postType).map((type) => (
+              <div>
+                <Checkbox
+                  checked={filterPost.includes(type as keyof typeof postType)}
+                  onCheckedChange={() =>
+                    handleCheckType(type as keyof typeof postType)
+                  }
+                  id={type}
+                  className="mr-2"
+                />
+                <Label htmlFor={type}>
+                  {postType[type as keyof typeof postType]}
+                </Label>
+              </div>
+            ))}
           </div>
           <Button size={"sm"} className="w-full mt-4" variant={"secondary"}>
             Lọc
@@ -132,12 +154,10 @@ const PostList = () => {
                 </Label>
                 <div className="flex-1">
                   <SelectBox
-                    options={[
-                      { value: "FIND_ROOM", label: "Tìm trọ" },
-                      { value: "PASS_ROOM", label: "Pass trọ" },
-                      { value: "REVIEW", label: "Review" },
-                      { value: "FIND_ROOMMATE", label: "Tìm người ở ghép" },
-                    ]}
+                    options={Object.keys(postType).map((type) => ({
+                      value: type,
+                      label: postType[type as keyof typeof postType],
+                    }))}
                     onSelectChange={(value) => handleChangePost("type", value)}
                   ></SelectBox>
                 </div>
@@ -149,14 +169,10 @@ const PostList = () => {
                   value={postCreateData.content}
                   onChange={(e) => handleChangePost("content", e.target.value)}
                 ></Textarea>
-                <Button
-                  size={"sm"}
-                  variant={"ghost"}
-                  className="absolute bottom-1 right-1 text-xs text-main-yellow"
-                >
-                  Tạo nội dung với AI
-                  <PenToolIcon size={16} className="ml-1"></PenToolIcon>
-                </Button>
+                <SuggestPostContent
+                  postType={postCreateData.type}
+                  onSubmit={(content) => handleChangePost("content", content)}
+                />
               </div>
               <Input
                 id="post-image-input"
@@ -199,9 +215,11 @@ const PostList = () => {
               </div>
             </div>
           </div>
-          {postList?.map((post) => (
-            <Post key={post.id} data={post} />
-          ))}
+          {postList
+            ?.filter((p) => filterPost.includes(p.type))
+            .map((post) => (
+              <Post key={post.id} data={post} />
+            ))}
         </div>
       </div>
       <div
@@ -228,14 +246,10 @@ const PostList = () => {
               value={postCreateData.content}
               onChange={(e) => handleChangePost("content", e.target.value)}
             ></Textarea>
-            <Button
-              size={"sm"}
-              variant={"ghost"}
-              className="absolute bottom-1 right-1 text-xs text-main-yellow"
-            >
-              Tạo nội dung với AI
-              <PenToolIcon size={16} className="ml-1"></PenToolIcon>
-            </Button>
+            <SuggestPostContent
+              postType={postCreateData.type}
+              onSubmit={(content) => handleChangePost("content", content)}
+            />
           </div>
           <Input
             id="post-image-input"

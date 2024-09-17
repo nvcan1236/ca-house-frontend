@@ -20,6 +20,10 @@ import ManageUsers from "./pages/admin/users/ManageUsers";
 import ManageMotel from "./pages/admin/motels/ManageMotel";
 import ManagePosts from "./pages/admin/posts/ManagePosts";
 import StatUser from "./pages/admin/users/StatUser";
+import StatMotel from "./pages/admin/motels/StatMotel";
+import StatPost from "./pages/admin/posts/StatPosts";
+import Home from "./pages/admin/Home";
+import {Approve} from "./pages/admin/Approve";
 
 function App() {
   const language = useAppSelector((state) => state.common.language);
@@ -50,13 +54,14 @@ function App() {
         </Route>
 
         <Route element={<AdminLayout />}>
-          <Route path="/admin" element={<>Body</>}></Route>
+          <Route path="/admin/home" element={<Home/>}></Route>
+          <Route path="/admin/approve" element={<Approve/>}></Route>
           <Route path="/admin/motels" element={<ManageMotel />}></Route>
           <Route path="/admin/users" element={<ManageUsers />}></Route>
           <Route path="/admin/posts" element={<ManagePosts />}></Route>
-          <Route path="/admin/stat/motels" element={<StatUser />}></Route>
+          <Route path="/admin/stat/motels" element={<StatMotel />}></Route>
           <Route path="/admin/stat/users" element={<StatUser />}></Route>
-          <Route path="/admin/stat/posts" element={<>Body</>}></Route>
+          <Route path="/admin/stat/posts" element={<StatPost />}></Route>
         </Route>
 
         <Route

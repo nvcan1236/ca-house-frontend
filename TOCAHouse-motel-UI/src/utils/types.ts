@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { postType } from "./predefinedData";
 
 export type language = "vi" | "en";
 export type role = "motel" | "post";
@@ -123,3 +124,13 @@ export type TokenData = {
 };
 
 export type CreatePasswordData = { password: string; rePassword: string };
+
+export type PostType = keyof typeof postType;
+
+export type SuggestContent = {
+  location: string
+  area: number
+  budget: number
+  amenity: string
+  post_type: PostType
+}

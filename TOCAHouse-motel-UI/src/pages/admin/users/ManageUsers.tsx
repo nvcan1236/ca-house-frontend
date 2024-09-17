@@ -206,6 +206,9 @@ const ManageUsers = () => {
       noPassword: false,
     },
   ];
+
+  // const {data} = useGetUser
+  
   return (
     <div className="py-8">
       <H3>Quản lý người dùng</H3>

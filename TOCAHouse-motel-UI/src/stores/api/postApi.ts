@@ -8,7 +8,7 @@ import {
   IPostCreate,
 } from "@/utils/interfaces";
 import { reactions } from "@/utils/predefinedData";
-import { ApiResponse } from "@/utils/types";
+import { ApiResponse, SuggestContent } from "@/utils/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const postApi = createApi({
@@ -107,6 +107,16 @@ export const postApi = createApi({
       },
       invalidatesTags: ["COMMENTS", "POSTS"],
     }),
+    getSuggestPostContent: builder.mutation<ApiResponse<string>, SuggestContent> ({
+      query: (data) => ({
+        url: '/post/suggest/',
+        method: "POST",
+        body: data,
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        }
+      })
+    })
   }),
 });
 
@@ -119,4 +129,5 @@ export const {
   usePostCommentMutation,
   useCreatePostMutation,
   useUploadImageMutation,
+  useGetSuggestPostContentMutation
 } = postApi;
