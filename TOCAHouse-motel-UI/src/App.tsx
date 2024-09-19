@@ -24,6 +24,8 @@ import StatMotel from "./pages/admin/motels/StatMotel";
 import StatPost from "./pages/admin/posts/StatPosts";
 import Home from "./pages/admin/Home";
 import {Approve} from "./pages/admin/Approve";
+import ManageMyPost from "./pages/ManageMyPost";
+import SavedMotels from "./pages/SavedMotels";
 
 function App() {
   const language = useAppSelector((state) => state.common.language);
@@ -47,6 +49,8 @@ function App() {
           <Route path="/profile/:userId" element={<Profile />}></Route>
           <Route path="/register-motel" element={<CreateMotel />}></Route>
           <Route path="/my-motel" element={<MotelManage />}></Route>
+          <Route path="/my-post" element={<ManageMyPost />}></Route>
+          <Route path="/saved-motel" element={<SavedMotels />}></Route>
           <Route
             path="/my-motel/:motelId"
             element={<DetailMotelManage />}

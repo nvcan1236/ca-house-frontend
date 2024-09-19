@@ -209,7 +209,7 @@ const LocationInfo = () => {
                 />
               </div>
               <Popover>
-                <PopoverTrigger>
+                <PopoverTrigger asChild>
                   <Button type="button" onClick={getCoordinate}>
                     Xem trên Map
                   </Button>

@@ -45,7 +45,7 @@ const Post = ({ data }: { data: IPost }) => {
             </Avatar>
             <div className="ml-2">
               <div className="flex gap-2 items-center">
-                <H3 className="!text-base cursor-pointer">{data.create_by}</H3>
+                <H3 className="!text-base cursor-pointer max-w-[120px] overflow-hidden text-ellipsis">{data.create_by}</H3>
                 <Button
                   size={"sm"}
                   variant={"secondary"}

@@ -1,14 +1,13 @@
 import H3 from "@/components/common/H3";
 import MapInCreate from "@/components/common/MapInCreate";
-// import MapInCreate from "@/components/common/MapInCreate";
 import { Button } from "@/components/ui/button";
 
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { nextStep } from "@/stores/slices/createMotelSlice";
+import { steps } from "@/utils/predefinedData";
 
 const CreateMotel = () => {
   const currentStep = useAppSelector((state) => state.createMotel.currentStep);
-  const steps = useAppSelector((state) => state.createMotel.steps);
   const dispatch = useAppDispatch();
 
   if (!currentStep)

@@ -28,7 +28,13 @@ import {
   HeartIcon,
 } from "lucide-react";
 import { Job, MotelStatus, MotelType, Price } from "./types";
-
+import AmenityInfo from "@/pages/createMotel/AmenityInfo";
+import LocationInfo from "@/pages/createMotel/LocationInfo";
+import PriceInfo from "@/pages/createMotel/PriceInfo";
+import RegularInfo from "@/pages/createMotel/RegularInfo";
+import RequirementInfo from "@/pages/createMotel/RequirementInfo";
+import UploadMotelImage from "@/pages/createMotel/UploadMotelImage";
+import { Step } from "@/utils/interfaces";
 export const motelTypes: MotelType[] = [
   {
     label: "Phòng đơn",
@@ -260,3 +266,42 @@ export const postType = {
   FIND_ROOM: "Tìm phòng",
   FIND_ROOMMATE: "Tìm người ở ghép",
 };
+
+export const steps: Step[] = [
+  {
+    component: "",
+    href: "/register-motel/regular",
+    nextStepHref: "/register-motel/location",
+  },
+
+  {
+    component: <RegularInfo />,
+    href: "/register-motel/regular",
+    nextStepHref: "/register-motel/location",
+  },
+  {
+    component: <LocationInfo />,
+    href: "/register-motel/regular",
+    nextStepHref: "/register-motel/amenity",
+  },
+  {
+    component: <AmenityInfo />,
+    href: "/register-motel/amenity",
+    nextStepHref: "/register-motel/images",
+  },
+  {
+    component: <UploadMotelImage />,
+    href: "/register-motel/images",
+    nextStepHref: "/register-motel/prices",
+  },
+  {
+    component: <PriceInfo />,
+    href: "/register-motel/prices",
+    nextStepHref: "/register-motel/requirements",
+  },
+  {
+    component: <RequirementInfo />,
+    href: "/register-motel/reuirements",
+    nextStepHref: null,
+  },
+];

@@ -8,12 +8,15 @@ import {
   PageResult,
   Price,
   Requirement,
+  Review,
+  ReviewRequest,
 } from "@/utils/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const motelApi = createApi({
   reducerPath: "motelApi",
   baseQuery: fetchBaseQuery({ baseUrl: caHouseBaseUrl }),
+  tagTypes: ["REVIEWS"],
   endpoints: (builder) => ({
     getMotels: builder.query<
       ApiResponse<PageResult<IMotel>>,
@@ -145,6 +148,38 @@ export const motelApi = createApi({
         };
       },
     }),
+    createReview: builder.mutation<
+      ApiResponse<Review>,
+      { data: ReviewRequest; motelId: string }
+    >({
+      query: ({ data, motelId }) => {
+        return {
+          url: `/motel/${motelId}/review`,
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+          body: data,
+          method: "POST",
+        };
+      },
+      invalidatesTags: ["REVIEWS"]
+    }),
+    getReview: builder.query<ApiResponse<Review[]>, string>({
+      query: (motelId) => ({
+        url: `/motel/${motelId}/review`,
+      }),
+      providesTags: ["REVIEWS"]
+    }),
+    bookAppointment: builder.mutation<ApiResponse<unknown[]>, {motelId:string, date:string}> ({
+      query: ({motelId, date}) => ({
+        url: `/motel/${motelId}/appointment`,
+        body: {date},
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      })
+    })
   }),
 });
 
@@ -156,7 +191,10 @@ export const {
   useCreateAmenityMotelMutation,
   useCreateLocationMotelMutation,
   useCreatePriceMotelMutation,
-  useCreateRequirementMotelMutation, 
+  useCreateRequirementMotelMutation,
   useUploadImageyMotelMutation,
-  useGetNearestMotelsQuery
+  useGetNearestMotelsQuery,
+  useCreateReviewMutation,
+  useGetReviewQuery,
+  useBookAppointmentMutation,
 } = motelApi;

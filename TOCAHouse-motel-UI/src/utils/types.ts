@@ -66,7 +66,7 @@ export type Amenity = { name: string; type: string };
 export type Price = {
   type: PredefinePrice;
   name: string;
-  value: number;
+  value: number|null;
   unit: string;
   units: string[];
 };
@@ -133,4 +133,15 @@ export type SuggestContent = {
   budget: number
   amenity: string
   post_type: PostType
+}
+
+export type ReviewRequest = {
+  content:string
+}
+
+export type Review = {
+  id: string
+  createdBy: string
+  createdAt: string
+  content: string
 }

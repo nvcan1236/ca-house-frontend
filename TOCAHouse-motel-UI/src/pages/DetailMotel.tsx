@@ -15,16 +15,29 @@ import { MessageCircle } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import Item from "@/components/common/Item";
 import { Separator } from "@/components/ui/separator";
-import { useGetMotelQuery } from "@/stores/api/motelApi";
+import {
+  useBookAppointmentMutation,
+  useGetMotelQuery,
+} from "@/stores/api/motelApi";
 import ImageSlider from "@/components/common/ImageSlider";
 import DetailMotelSkeleton from "@/components/list/DetailMotelSkeleton";
 import { Amenity } from "@/utils/types";
-import Pagination from "@/components/common/Pagination";
+import MotelReview from "@/components/common/MotelReview";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { useState } from "react";
+import { Calendar } from "@/components/ui/calendar";
 
 const DetailMotel = () => {
   const { motelId } = useParams();
   const { data, isLoading } = useGetMotelQuery(motelId || "");
   const detailMotel = data?.result;
+  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [bookAppointment] = useBookAppointmentMutation();
+
   if (isLoading) return <DetailMotelSkeleton />;
   const amenityByType = detailMotel?.amenities.reduce((acc, item: Amenity) => {
     if (!item.type) return acc;
@@ -48,8 +61,8 @@ const DetailMotel = () => {
       </div>
       <div className="hidden lg:block">
         <Dialog>
-          <DialogTrigger>
-            <div className="grid-cols-4 gap-4  mx-auto rounded-xl overflow-hidden grid">
+          <DialogTrigger asChild>
+            <div className="grid-cols-4 gap-4  mx-auto rounded-xl overflow-hidden grid w-full">
               {detailMotel?.images.slice(0, 5).map((image) => (
                 <div
                   className="last:opacity-40 first:row-span-2 first:col-span-2 h-[200px] first:h-[416px]"
@@ -125,9 +138,33 @@ const DetailMotel = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <Button className="p-4 ">
-              <CalendarIcon size={16} className="mr-2" /> Hẹn ngày xem phòng
-            </Button>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button className="p-4 ">
+                  <CalendarIcon size={16} className="mr-2" /> Hẹn ngày xem phòng
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-fit">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={setDate}
+                  className="rounded-md border"
+                />
+                <Button
+                  className="block mt-3 ml-auto"
+                  onClick={() =>
+                    bookAppointment({
+                      motelId: detailMotel?.id || "",
+                      date: date?.toISOString() || "",
+                    })
+                  }
+                >
+                  Đặt
+                </Button>
+              </PopoverContent>
+            </Popover>
+
             <Button variant={"secondary"} className="p-4">
               <HeartIcon size={16} className="mr-2" /> Thêm vào danh sách yêu
               thích
@@ -188,7 +225,7 @@ const DetailMotel = () => {
           <div className="">
             <DecorativeHeading>Yêu cầu từ chủ trọ</DecorativeHeading>
             <div className="mt-4 pl-3">
-              {detailMotel.requirement &&
+              {detailMotel?.requirement &&
                 Object.keys(detailMotel?.requirement).map((req) => (
                   <p key={req}>
                     <Label>{req}:</Label>{" "}
@@ -255,47 +292,7 @@ const DetailMotel = () => {
 
       <div className=" mt-8">
         <DecorativeHeading>Đánh giá</DecorativeHeading>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
-          <div className="border rounded-lg bg-background flex gap-4 px-6 py-4">
-            <Avatar>
-              <AvatarImage></AvatarImage>
-              <AvatarFallback>C</AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="font-medium text-xs">Nguyễn Văn Cảnh</p>
-              <p className="text-slate-600 text-sm mt-1">
-                Phòng trọ sạch sẽ thoáng mát, rất ok.
-              </p>
-            </div>
-          </div>
-          <div className="border rounded-lg bg-background flex gap-4 px-6 py-4">
-            <Avatar>
-              <AvatarImage></AvatarImage>
-              <AvatarFallback>C</AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="font-medium text-xs">Nguyễn Văn Cảnh</p>
-              <p className="text-slate-600 text-sm mt-1">
-                Phòng trọ sạch sẽ thoáng mát, rất ok.
-              </p>
-            </div>
-          </div>
-          <div className="border rounded-lg bg-background flex gap-4 px-6 py-4">
-            <Avatar>
-              <AvatarImage></AvatarImage>
-              <AvatarFallback>C</AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="font-medium text-xs">Nguyễn Văn Cảnh</p>
-              <p className="text-slate-600 text-sm mt-1">
-                Phòng trọ sạch sẽ thoáng mát, rất ok.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="mt-4">
-          <Pagination current={1} max={4}></Pagination>
-        </div>
+        <MotelReview motelId={motelId || ""} />
       </div>
     </div>
   );

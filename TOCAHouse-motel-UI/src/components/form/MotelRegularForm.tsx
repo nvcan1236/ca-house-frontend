@@ -19,7 +19,7 @@ import { Label } from "../ui/label";
 import DatePicker from "./DatePicker";
 import { Button } from "../ui/button";
 import { useAppDispatch } from "@/stores/hooks";
-import { nextStep, prevStep, setData } from "@/stores/slices/createMotelSlice";
+import { nextStep, prevStep } from "@/stores/slices/createMotelSlice";
 import { motelTypes } from "@/utils/predefinedData";
 import { useCreateRegularMotelMutation } from "@/stores/api/motelApi";
 import { RegularCreate } from "@/utils/interfaces";
@@ -38,7 +38,7 @@ const MotelRegularForm = () => {
       (arg) => {
         if (typeof arg === "string" || arg instanceof Date) {
           const date = new Date(arg);
-          return date.toISOString(); 
+          return date.toISOString();
         }
         return arg;
       },
@@ -63,11 +63,7 @@ const MotelRegularForm = () => {
 
   async function onSubmit(values: RegularCreate) {
     try {
-      const data = await createRegular(values as RegularCreate).unwrap();
-      const motelId = data?.result.id;
-      if (motelId) {
-        dispatch(setData({ type: "id", data: motelId }));
-      }
+      await createRegular(values as RegularCreate).unwrap();
       dispatch(nextStep());
     } catch (error) {
       toast.error("Đã xãy ra lỗi. Vui lòng thử lại");
@@ -121,7 +117,7 @@ const MotelRegularForm = () => {
               <FormItem>
                 <FormLabel>Bạn sẽ cho thuê với giá bao nhiêu 1 tháng</FormLabel>
                 <FormControl>
-                  <Input {...field} type="number" defaultValue={field.value} />
+                  <Input {...field} type="number" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -136,7 +132,6 @@ const MotelRegularForm = () => {
                 <FormLabel>Loại phòng</FormLabel>
                 <FormControl>
                   <RadioGroup
-                    // defaultValue="option-one"
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
@@ -180,7 +175,7 @@ const MotelRegularForm = () => {
               <FormItem>
                 <FormLabel>Diện tích</FormLabel>
                 <FormControl>
-                  <Input type="number" {...field} defaultValue={field.value} />
+                  <Input type="number" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -1,17 +1,11 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import AmenityInfo from "@/pages/createMotel/AmenityInfo";
-import LocationInfo from "@/pages/createMotel/LocationInfo";
-import PriceInfo from "@/pages/createMotel/PriceInfo";
-import RegularInfo from "@/pages/createMotel/RegularInfo";
-import RequirementInfo from "@/pages/createMotel/RequirementInfo";
-import UploadMotelImage from "@/pages/createMotel/UploadMotelImage";
-import { Step } from "@/utils/interfaces";
+
+import { steps } from "@/utils/predefinedData";
 import { Location, Price } from "@/utils/types";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: {
   id: string|null,
-  steps: Step[];
   currentStep: number;
   regular: object;
   location: Location | object;
@@ -21,44 +15,6 @@ const initialState: {
   prices: Price[] | [];
 } = {
   id: "ae2ef93c-a756-4ee9-a4d4-57996cf513cb",
-  steps: [
-    {
-      component: "",
-      href: "/register-motel/regular",
-      nextStepHref: "/register-motel/location",
-    },
-
-    {
-      component: <RegularInfo />,
-      href: "/register-motel/regular",
-      nextStepHref: "/register-motel/location",
-    },
-    {
-      component: <LocationInfo />,
-      href: "/register-motel/regular",
-      nextStepHref: "/register-motel/amenity",
-    },
-    {
-      component: <AmenityInfo />,
-      href: "/register-motel/amenity",
-      nextStepHref: "/register-motel/images",
-    },
-    {
-      component: <UploadMotelImage />,
-      href: "/register-motel/images",
-      nextStepHref: "/register-motel/prices",
-    },
-    {
-      component: <PriceInfo />,
-      href: "/register-motel/prices",
-      nextStepHref: "/register-motel/requirements",
-    },
-    {
-      component: <RequirementInfo />,
-      href: "/register-motel/reuirements",
-      nextStepHref: null,
-    },
-  ],
   currentStep: 4,
   regular: {},
   location: {},
@@ -73,24 +29,15 @@ export const createMotelSlice = createSlice({
   initialState,
   reducers: {
     nextStep: (state) => {
-      if (state.currentStep + 1 === state.steps.length) state.currentStep = 0;
+      if (state.currentStep + 1 === steps.length) state.currentStep = 0;
       else state.currentStep = state.currentStep + 1;
     },
     prevStep: (state) => {
       if (state.currentStep === 0) return;
       else state.currentStep = state.currentStep - 1;
     },
-    setData: (
-      state,
-      action: PayloadAction<{ type: keyof typeof state; data: any }>
-    ) => {
-      const { type, data } = action.payload;
-      if (type in state) {
-        state[type] = data;
-      }
-    },
   },
 });
 
-export const { nextStep, setData, prevStep } = createMotelSlice.actions;
+export const { nextStep, prevStep } = createMotelSlice.actions;
 export default createMotelSlice.reducer;

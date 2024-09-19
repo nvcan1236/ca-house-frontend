@@ -31,6 +31,24 @@ export const postApi = createApi({
       },
       providesTags: ["POSTS"],
     }),
+    getPostsByUser: builder.query<
+      ApiResponse<IPost[]>,
+      { offset: number; username: string }
+    >({
+      query: ({ offset, username }) => {
+        const param = new URLSearchParams();
+        offset && param.append("offset", offset.toString());
+        return {
+          url: `/post/user/${username}?${param.toString()}`,
+          headers: {
+            ...(getToken() !== null && {
+              Authorization: `Bearer ${getToken()}`,
+            }),
+          },
+        };
+      },
+      providesTags: ["POSTS"],
+    }),
     getPost: builder.query<ApiResponse<IMotelDetail>, string>({
       query: (id) => `/post/${id}`,
     }),
@@ -107,16 +125,19 @@ export const postApi = createApi({
       },
       invalidatesTags: ["COMMENTS", "POSTS"],
     }),
-    getSuggestPostContent: builder.mutation<ApiResponse<string>, SuggestContent> ({
+    getSuggestPostContent: builder.mutation<
+      ApiResponse<string>,
+      SuggestContent
+    >({
       query: (data) => ({
-        url: '/post/suggest/',
+        url: "/post/suggest/",
         method: "POST",
         body: data,
         headers: {
           Authorization: `Bearer ${getToken()}`,
-        }
-      })
-    })
+        },
+      }),
+    }),
   }),
 });
 
@@ -129,5 +150,6 @@ export const {
   usePostCommentMutation,
   useCreatePostMutation,
   useUploadImageMutation,
-  useGetSuggestPostContentMutation
+  useGetSuggestPostContentMutation,
+  useGetPostsByUserQuery
 } = postApi;

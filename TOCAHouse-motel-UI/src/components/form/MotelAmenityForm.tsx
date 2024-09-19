@@ -3,8 +3,7 @@ import H3 from "../common/H3";
 import { Button } from "../ui/button";
 import {
   nextStep,
-  prevStep,
-  setData as setMotelData,
+  prevStep
 } from "@/stores/slices/createMotelSlice";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { useState } from "react";
@@ -63,7 +62,6 @@ const MotelAmenityForm = () => {
         .catch((error) => {
           toast.error(error.response.data.message);
         });
-    dispatch(setMotelData({ type: "amenities", data: data }));
     dispatch(nextStep());
   };
 
