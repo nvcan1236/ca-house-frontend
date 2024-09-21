@@ -7,13 +7,16 @@ import Map from "../common/Map";
 import { useGetMotelsQuery } from "@/stores/api/motelApi";
 import { useSearchParams } from "react-router-dom";
 import Pagination from "../common/Pagination";
+import { useAppSelector } from "@/stores/hooks";
 
 const MotelList = () => {
   const [showMap, setShowMap] = useState<boolean>(false);
   const [pageParam] = useSearchParams();
+  const filter = useAppSelector((state) => state.filter);
 
   const { data, isFetching } = useGetMotelsQuery({
     page: Number(pageParam.get("page")),
+    filter,
   });
   const motelList = data?.result.data;
   return (
@@ -29,7 +32,16 @@ const MotelList = () => {
               ? Array(10)
                   .fill(0)
                   .map((_, index) => <MotelSkeleton key={index} />)
-              : motelList?.map((motel, i) => <Motel motel={motel} key={i} />)}
+              : motelList?.map((motel) => {
+                  motel = {
+                    ...motel,
+                    images:
+                      motel.images.length > 0
+                        ? [motel.images[0]]
+                        : motel.images,
+                  };
+                  return <Motel motel={motel} key={motel.id} />;
+                })}
           </div>
           <Pagination
             current={data?.result.currentPage || 1}

@@ -2,7 +2,7 @@ import { useAppDispatch } from "@/stores/hooks";
 import { openAuthModal, switchFormType } from "@/stores/slices/authSlice";
 import { Button } from "../ui/button";
 
-const LoginButton = ({className, ...props}: {className:string}) => {
+const LoginButton = ({className, ...props}: {className?:string}) => {
   const dispatch = useAppDispatch();
   return (
     <Button

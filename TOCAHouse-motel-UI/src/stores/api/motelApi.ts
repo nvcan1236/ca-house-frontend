@@ -1,9 +1,11 @@
 import { caHouseBaseUrl } from "@/configs/APIconfig";
 import { getToken } from "@/services/localStorageService";
 import { IMotel, IMotelDetail, RegularCreate } from "@/utils/interfaces";
+import { appointmentStatus } from "@/utils/predefinedData";
 import {
   Amenity,
   ApiResponse,
+  Appointment,
   Location,
   PageResult,
   Price,
@@ -12,27 +14,38 @@ import {
   ReviewRequest,
 } from "@/utils/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { Filter } from "../slices/filterSlice";
 
 export const motelApi = createApi({
   reducerPath: "motelApi",
   baseQuery: fetchBaseQuery({ baseUrl: caHouseBaseUrl }),
-  tagTypes: ["REVIEWS"],
+  tagTypes: ["REVIEWS", "APPOINTMENT_STATUS"],
   endpoints: (builder) => ({
     getMotels: builder.query<
       ApiResponse<PageResult<IMotel>>,
-      { page?: number; size?: number }
+      { page?: number; size?: number; filter: Filter }
     >({
-      query: ({ page, size }) => {
+      query: ({ page, size, filter }) => {
         const params = new URLSearchParams();
-        if (page) {
-          params.append("page", page.toString());
+        const filterParam = new URLSearchParams();
+
+        page && params.append("page", page.toString());
+        size && params.append("size", size.toString());
+
+        if (filter.applied) {
+          filter.minPrice &&
+            filterParam.append("minPrice", filter.minPrice.toString());
+          filter.maxPrice &&
+            filterParam.append("maxPrice", filter.maxPrice.toString());
+          filter.roomType && filterParam.append("roomType", filter.roomType);
+          filter.amenities.length &&
+            filterParam.append("amenities", filter.amenities.join(","));
         }
 
-        if (size) {
-          params.append("size", size.toString());
-        }
         return {
-          url: `/motel/?${params.toString()}`,
+          url: `/motel/?${params.toString()}&${
+            filterParam.size > 0 ? filterParam.toString() : ""
+          }`,
         };
       },
     }),
@@ -162,24 +175,59 @@ export const motelApi = createApi({
           method: "POST",
         };
       },
-      invalidatesTags: ["REVIEWS"]
+      invalidatesTags: ["REVIEWS"],
     }),
     getReview: builder.query<ApiResponse<Review[]>, string>({
       query: (motelId) => ({
         url: `/motel/${motelId}/review`,
       }),
-      providesTags: ["REVIEWS"]
+      providesTags: ["REVIEWS"],
     }),
-    bookAppointment: builder.mutation<ApiResponse<unknown[]>, {motelId:string, date:string}> ({
-      query: ({motelId, date}) => ({
+    bookAppointment: builder.mutation<
+      ApiResponse<unknown[]>,
+      { motelId: string; date: string }
+    >({
+      query: ({ motelId, date }) => ({
         url: `/motel/${motelId}/appointment`,
-        body: {date},
+        body: { date },
         method: "POST",
         headers: {
           Authorization: `Bearer ${getToken()}`,
         },
-      })
-    })
+      }),
+    }),
+    getAppointmentByUser: builder.query<ApiResponse<Appointment[]>, void>({
+      query: () => ({
+        url: `/motel/appointment/user`,
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      }),
+    }),
+    getAppointmentByMotelOwner: builder.query<ApiResponse<Appointment[]>, void>(
+      {
+        query: () => ({
+          url: `/motel/appointment/owner`,
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+        }),
+        providesTags: ["APPOINTMENT_STATUS"],
+      }
+    ),
+    changeStatus: builder.mutation<
+      ApiResponse<unknown>,
+      { appointmentId: string; status: keyof typeof appointmentStatus }
+    >({
+      query: ({ appointmentId, status }) => ({
+        url: `/motel/appointment/${appointmentId}/update-status?status=${status}`,
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+        method: "PUT",
+      }),
+      invalidatesTags: ["APPOINTMENT_STATUS"],
+    }),
   }),
 });
 
@@ -197,4 +245,7 @@ export const {
   useCreateReviewMutation,
   useGetReviewQuery,
   useBookAppointmentMutation,
+  useGetAppointmentByUserQuery,
+  useGetAppointmentByMotelOwnerQuery,
+  useChangeStatusMutation,
 } = motelApi;

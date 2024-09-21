@@ -14,11 +14,7 @@ import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { useEffect, useState } from "react";
 import { DrawerDialogFilter } from "../search/DrawerDialogFilter";
 import { useNavigate } from "react-router-dom";
-import {
-  HousePlusIcon,
-  LanguagesIcon,
-  SearchIcon,
-} from "lucide-react";
+import { HousePlusIcon, LanguagesIcon, SearchIcon } from "lucide-react";
 import UserMenuPopover from "../common/UserMenuPopover";
 import LoginButton from "../button/LoginButton";
 import { toast } from "sonner";
@@ -47,8 +43,8 @@ const Header = () => {
   }, []);
 
   const handleCreateMotel = () => {
-    if(!user || !user.id) {
-      toast.warning("Vui lòng đăng nhập trước!!")
+    if (!user || !user.id) {
+      toast.warning("Vui lòng đăng nhập trước!!");
       return;
     }
     navigate("/register-motel");
@@ -74,7 +70,7 @@ const Header = () => {
           <img src="/logo.png" alt="logo" className="object-cover w-20 h-20" />
         </div>
 
-        <div className="grow px-4 md:px-0 ">
+        <div className="grow md:px-4 px-2 ">
           <div
             className={`flex gap-3 justify-between w-full md:justify-center items-center transition-all ${
               scrollY > 0 ? "scale-0 -translate-y-[100%] h-0" : "mb-2"
@@ -84,7 +80,7 @@ const Header = () => {
               className={`flex gap-4 p-2 border border-gray-300 rounded-xl  bg-gray-50 `}
             >
               <Button
-                className={`w-[120px] ${role === "post" && "text-gray-500"}`}
+                className={`md:w-[120px] w-24 ${role === "post" && "text-gray-500"}`}
                 variant={role === "motel" ? "default" : "ghost"}
                 onClick={() => {
                   dispatch(switchRole("motel"));
@@ -93,7 +89,7 @@ const Header = () => {
                 Trọ
               </Button>
               <Button
-                className={`w-[120px] ${role === "motel" && "text-gray-500"}`}
+                className={`md:w-[120px] w-24 ${role === "motel" && "text-gray-500"}`}
                 variant={role === "post" ? "default" : "ghost"}
                 onClick={() => {
                   dispatch(switchRole("post"));
@@ -102,14 +98,22 @@ const Header = () => {
                 Bài đăng
               </Button>
             </div>
-            <LoginButton className="md:hidden" />
+
+            <div className="md:hidden">
+              {user && Object.keys(user).length > 0 ? (
+                <UserMenuPopover user={user} />
+              ) : (
+                <LoginButton />
+              )}
+            </div>
           </div>
 
-          <div className="flex w-full items-center gap-1 py-1 pl-4 pr-2 border rounded-full bg-background border-main-blue">
+          <div className="md:h-[54px] h-[46px] flex w-full items-center gap-1 pl-4 pr-2 border rounded-full bg-background border-main-blue-s3">
             <DrawerDialogFilter />
+
             <Input
               placeholder="Địa chỉ trọ muốn tìm kiếm ..."
-              className=" h-[46px] flex-1 border-none bg-transparent"
+              className="flex-1 border-none bg-transparent"
               accept="enter"
             />
 
@@ -144,11 +148,11 @@ const Header = () => {
               </Select>
             </div>
 
-            <div>
+            <div className="hidden md:block">
               {user && Object.keys(user).length > 0 ? (
-                <UserMenuPopover user={user}/>
+                <UserMenuPopover user={user} />
               ) : (
-                <LoginButton className="hidden md:block" />
+                <LoginButton />
               )}
             </div>
           </div>

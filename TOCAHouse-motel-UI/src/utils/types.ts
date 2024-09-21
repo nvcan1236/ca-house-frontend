@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { postType } from "./predefinedData";
+import { appointmentStatus, postType } from "./predefinedData";
 
 export type language = "vi" | "en";
 export type role = "motel" | "post";
@@ -66,7 +66,7 @@ export type Amenity = { name: string; type: string };
 export type Price = {
   type: PredefinePrice;
   name: string;
-  value: number|null;
+  value: number | null;
   unit: string;
   units: string[];
 };
@@ -128,20 +128,28 @@ export type CreatePasswordData = { password: string; rePassword: string };
 export type PostType = keyof typeof postType;
 
 export type SuggestContent = {
-  location: string
-  area: number
-  budget: number
-  amenity: string
-  post_type: PostType
-}
+  location: string;
+  area: number;
+  budget: number;
+  amenity: string;
+  post_type: PostType;
+};
 
 export type ReviewRequest = {
-  content:string
-}
+  content: string;
+};
 
 export type Review = {
-  id: string
-  createdBy: string
-  createdAt: string
-  content: string
-}
+  id: string;
+  createdBy: string;
+  createdAt: string;
+  content: string;
+};
+
+export type Appointment = {
+  id: string;
+  userId: string;
+  createdAt: string;
+  status: keyof typeof appointmentStatus;
+  date: string;
+};

@@ -15,17 +15,20 @@ import DetailMotelManage from "./pages/DetailMotelManage";
 import { useGetCurrentUserQuery } from "./stores/api/userApi";
 import { setUserInfor } from "./stores/slices/authSlice";
 import { setToken } from "./services/localStorageService";
-import AdminLayout from "./components/layout/AdminLayout";
-import ManageUsers from "./pages/admin/users/ManageUsers";
-import ManageMotel from "./pages/admin/motels/ManageMotel";
-import ManagePosts from "./pages/admin/posts/ManagePosts";
-import StatUser from "./pages/admin/users/StatUser";
-import StatMotel from "./pages/admin/motels/StatMotel";
-import StatPost from "./pages/admin/posts/StatPosts";
-import Home from "./pages/admin/Home";
-import {Approve} from "./pages/admin/Approve";
+import { lazy } from "react";
+
+const AdminLayout = lazy(() => import("./components/layout/AdminLayout"));
+const ManageUsers = lazy(() => import("./pages/admin/users/ManageUsers"));
+const ManageMotel = lazy(() => import("./pages/admin/motels/ManageMotel"));
+const ManagePosts = lazy(() => import("./pages/admin/posts/ManagePosts"));
+const StatUser = lazy(() => import("./pages/admin/users/StatUser"));
+const StatMotel = lazy(() => import("./pages/admin/motels/StatMotel"));
+const StatPost = lazy(() => import("./pages/admin/posts/StatPosts"));
+const Home = lazy(() => import("./pages/admin/Home"));
+const Approve = lazy(() => import("./pages/admin/Approve"));
 import ManageMyPost from "./pages/ManageMyPost";
 import SavedMotels from "./pages/SavedMotels";
+import UserAppointmentList from "./pages/UserAppointmentList";
 
 function App() {
   const language = useAppSelector((state) => state.common.language);
@@ -44,6 +47,7 @@ function App() {
         <Route element={<MainLayout />}>
           <Route index element={<HomePage />}></Route>
         </Route>
+
         <Route element={<NoSearchLayout />}>
           <Route path="/motels/:motelId" element={<DetailMotel />}></Route>
           <Route path="/profile/:userId" element={<Profile />}></Route>
@@ -55,18 +59,22 @@ function App() {
             path="/my-motel/:motelId"
             element={<DetailMotelManage />}
           ></Route>
+          <Route
+            path="/my-appointments"
+            element={<UserAppointmentList />}
+          ></Route>
         </Route>
 
-        <Route element={<AdminLayout />}>
-          <Route path="/admin/home" element={<Home/>}></Route>
-          <Route path="/admin/approve" element={<Approve/>}></Route>
-          <Route path="/admin/motels" element={<ManageMotel />}></Route>
-          <Route path="/admin/users" element={<ManageUsers />}></Route>
-          <Route path="/admin/posts" element={<ManagePosts />}></Route>
-          <Route path="/admin/stat/motels" element={<StatMotel />}></Route>
-          <Route path="/admin/stat/users" element={<StatUser />}></Route>
-          <Route path="/admin/stat/posts" element={<StatPost />}></Route>
-        </Route>
+          <Route element={<AdminLayout />}>
+            <Route path="/admin/home" element={<Home />}></Route>
+            <Route path="/admin/approve" element={<Approve />}></Route>
+            <Route path="/admin/motels" element={<ManageMotel />}></Route>
+            <Route path="/admin/users" element={<ManageUsers />}></Route>
+            <Route path="/admin/posts" element={<ManagePosts />}></Route>
+            <Route path="/admin/stat/motels" element={<StatMotel />}></Route>
+            <Route path="/admin/stat/users" element={<StatUser />}></Route>
+            <Route path="/admin/stat/posts" element={<StatPost />}></Route>
+          </Route>
 
         <Route
           path="*"

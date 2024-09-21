@@ -305,3 +305,9 @@ export const steps: Step[] = [
     nextStepHref: null,
   },
 ];
+
+export const appointmentStatus = {
+  PENDING: "Đang chờ",
+  ACCEPT: "Chấp nhận",
+  DENY: "Từ chối"
+}

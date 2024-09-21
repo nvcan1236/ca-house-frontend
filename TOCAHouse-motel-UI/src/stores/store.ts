@@ -5,11 +5,13 @@ import createMotelSlice from "./slices/createMotelSlice";
 import { motelApi } from "./api/motelApi";
 import { userApi } from "./api/userApi";
 import { postApi } from "./api/postApi";
+import filterSlice from "./slices/filterSlice";
 
 const reducer = combineReducers({
   common: commonSlice,
   auth: authSlice,
   createMotel: createMotelSlice,
+  filter: filterSlice,
   [motelApi.reducerPath]: motelApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
   [postApi.reducerPath]: postApi.reducer,

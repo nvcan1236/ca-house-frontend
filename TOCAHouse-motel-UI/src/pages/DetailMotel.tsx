@@ -52,7 +52,7 @@ const DetailMotel = () => {
   }, {});
 
   return (
-    <div className="container mt-10">
+    <div className="md:px-10 mt-10">
       <div className="lg:hidden">
         <ImageSlider
           images={data?.result.images || []}
@@ -94,7 +94,7 @@ const DetailMotel = () => {
                 {detailMotel?.description}
               </p>
 
-              <p className="text-xl font-medium mt-5 flex justify-between items-center gap-3">
+              <div className="text-xl font-medium mt-5 flex justify-between items-center gap-3">
                 <span>
                   <MapPinnedIcon className="inline-block mr-3" />{" "}
                   {`
@@ -109,7 +109,7 @@ const DetailMotel = () => {
                   <MapIcon size={20} />{" "}
                   <span className="hidden lg:inline">Xem trên bản đồ</span>
                 </Button>
-              </p>
+              </div>
             </div>
             <div className="py-6 px-2 rounded-xl border border-main-yellow-t6 flex bg-background mt-4">
               <div className="flex-1 flex flex-col gap-4 items-center">

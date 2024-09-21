@@ -2,15 +2,22 @@ import { AlertCircle, MenuIcon } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { User } from "@/utils/types";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
 import { Alert, AlertDescription } from "../ui/alert";
 import CreatePasswordForm from "../form/CreatePasswordForm";
 import { Separator } from "../ui/separator";
 import { Link, useNavigate } from "react-router-dom";
 import { LogoutDialog } from "./LogoutDialog";
 
-const UserMenuPopover = ({user}:{user:User}) => {
-  const navigate = useNavigate()
+const UserMenuPopover = ({ user }: { user: User }) => {
+  const navigate = useNavigate();
   return (
     <div className="flex gap-2 items-center">
       <Popover>
@@ -69,16 +76,18 @@ const UserMenuPopover = ({user}:{user:User}) => {
               Profile
             </li>
             <li className="py-1 px-2 hover:bg-slate-100 transition-all">
-              
               <Link to={"/saved-motel"}>Danh sách yêu thích</Link>
             </li>
             <li className="py-1 px-2 hover:bg-slate-100 transition-all">
-              {user.roles.includes("OWNER") && (
+              {user.roles.includes("ADMIN") && (
                 <Link to={"/my-motel"}>Quản lý trọ</Link>
               )}
             </li>
             <li className="py-1 px-2 hover:bg-slate-100 transition-all">
-            <Link to={"/my-post"}>Bài viết của tôi</Link>
+              <Link to={"/my-post"}>Bài viết của tôi</Link>
+            </li>
+            <li className="py-1 px-2 hover:bg-slate-100 transition-all">
+              <Link to={"/my-appointments"}>Lịch hẹn xem phòng đã đặt</Link>
             </li>
             <li className="py-1">
               <Separator />

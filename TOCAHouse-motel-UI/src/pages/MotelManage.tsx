@@ -1,13 +1,37 @@
 import H3 from "@/components/common/H3";
 import Motel from "@/components/list/Motel";
-import { useGetMotelByUserQuery } from "@/stores/api/motelApi";
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  useChangeStatusMutation,
+  useGetAppointmentByMotelOwnerQuery,
+  useGetMotelByUserQuery,
+} from "@/stores/api/motelApi";
 import { useGetCurrentUserQuery } from "@/stores/api/userApi";
+import { formatDate, formatDateTime } from "@/utils/helper";
+import { appointmentStatus } from "@/utils/predefinedData";
+import { EllipsisIcon } from "lucide-react";
 
 const MotelManage = () => {
   const { data } = useGetCurrentUserQuery();
+  const { data: ownerAppointment } = useGetAppointmentByMotelOwnerQuery();
+  const appointments = ownerAppointment?.result;
   const userId = data?.result.username;
   const { data: motelsData } = useGetMotelByUserQuery(userId || "");
   const motels = motelsData?.result;
+  const [changeStatus] = useChangeStatusMutation();
   return (
     <div>
       <section>
@@ -21,7 +45,80 @@ const MotelManage = () => {
 
       <section className="mt-10">
         <H3>Yêu cầu xem phòng</H3>
-        <div></div>
+        <div>
+          <Table className="mt-6 bg-background">
+            <TableHeader>
+              <TableRow>
+                <TableHead>Ngày tạo</TableHead>
+                <TableHead>Ngày hẹn</TableHead>
+                <TableHead>Tình trạng</TableHead>
+                <TableHead>Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {appointments?.length == 0 && (
+                <p className="py-10 text-center text-slate-600">
+                  {" "}
+                  ( Chưa có lịch đặt phòng nào )
+                </p>
+              )}
+              {appointments?.map((app) => (
+                <TableRow key={app.id}>
+                  <TableCell>{formatDateTime(app.createdAt)}</TableCell>
+                  <TableCell>{formatDate(app.date)}</TableCell>
+                  <TableCell
+                    className={`
+                ${app.status == "ACCEPT" && "text-green-700"}
+                ${app.status == "DENY" && "text-red-600"}
+                ${app.status == "PENDING" && "text-yellow-600"} font-medium
+              `}
+                  >
+                    {appointmentStatus[app.status]}
+                  </TableCell>
+                  <TableCell>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant={"ghost"} size={"icon"}>
+                          <EllipsisIcon />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent
+                        side="bottom"
+                        align="start"
+                        className="w-fit p-1"
+                      >
+                        <ul className="w-[120px]">
+                          <li
+                            className="p-2 cursor-pointer text-green-700 hover:bg-main-blue-t9"
+                            onClick={() =>
+                              changeStatus({
+                                appointmentId: app.id,
+                                status: "ACCEPT",
+                              })
+                            }
+                          >
+                            Chấp nhận
+                          </li>
+                          <li
+                            className="p-2 cursor-pointer text-destructive hover:bg-main-blue-t9"
+                            onClick={() =>
+                              changeStatus({
+                                appointmentId: app.id,
+                                status: "DENY",
+                              })
+                            }
+                          >
+                            Từ chối
+                          </li>
+                        </ul>
+                      </PopoverContent>
+                    </Popover>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </section>
       <section className="mt-10">
         <H3>Yêu cầu cọc phòng</H3>

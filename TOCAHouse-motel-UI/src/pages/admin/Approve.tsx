@@ -167,7 +167,7 @@ export const columns: ColumnDef<Payment>[] = [
   },
 ];
 
-export function Approve() {
+const  Approve = () => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -311,3 +311,4 @@ export function Approve() {
     </div>
   );
 }
+ export default Approve;
