@@ -93,7 +93,9 @@ const UserMenuPopover = ({ user }: { user: User }) => {
               <Separator />
             </li>
             <li className="py-1 px-2 hover:bg-slate-100 transition-all t-destructive">
-              <LogoutDialog />
+              <LogoutDialog>
+                <div className="w-full text-left">Đăng xuất</div>
+              </LogoutDialog>
             </li>
           </ul>
         </PopoverContent>

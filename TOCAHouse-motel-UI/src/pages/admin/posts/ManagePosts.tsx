@@ -253,7 +253,7 @@ const ManagePosts = () => {
   //   },
   // ];
 
-  const { data } = useGetPostsQuery(1);
+  const { data } = useGetPostsQuery(0);
 
   return (
     <div className="py-8">

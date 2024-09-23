@@ -3,7 +3,6 @@ import { getToken } from "@/services/localStorageService";
 import {
   IComment,
   ICommentCreate,
-  IMotelDetail,
   IPost,
   IPostCreate,
 } from "@/utils/interfaces";
@@ -49,7 +48,7 @@ export const postApi = createApi({
       },
       providesTags: ["POSTS"],
     }),
-    getPost: builder.query<ApiResponse<IMotelDetail>, string>({
+    getPost: builder.query<ApiResponse<IPost>, string>({
       query: (id) => `/post/${id}`,
     }),
     react: builder.mutation<

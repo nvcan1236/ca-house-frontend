@@ -16,10 +16,17 @@ export const userApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: caHouseBaseUrl }),
   tagTypes: ["UserDetail"],
   endpoints: (builder) => ({
+    getAllUser: builder.query<ApiResponse<User[]>, void>({
+      query: () => ({
+        url: `/identity/users`,
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      })
+    }),
     getCurrentUser: builder.query<ApiResponse<User>, void>({
       query: () => ({
         url: `/identity/users/my-infor`,
-        method: "GET",
         headers: {
           Authorization: `Bearer ${getToken()}`,
         },
@@ -29,7 +36,6 @@ export const userApi = createApi({
     getUserById: builder.query<ApiResponse<DetailUser>, string>({
       query: (userId) => ({
         url: `/identity/users/${userId}`,
-        method: "GET",
       }),
     }),
     login: builder.mutation<ApiResponse<TokenData>, LoginForm>({
@@ -81,6 +87,7 @@ export const userApi = createApi({
 });
 
 export const {
+  useGetAllUserQuery,
   useGetCurrentUserQuery,
   useGetUserByIdQuery,
   useLoginMutation,

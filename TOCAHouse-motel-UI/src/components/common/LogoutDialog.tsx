@@ -11,12 +11,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useAppDispatch } from "@/stores/hooks";
 import { logout } from "@/stores/slices/authSlice";
+import { ReactNode } from "react";
 
-export function LogoutDialog() {
+export function LogoutDialog({ children }: { children: ReactNode }) {
   const dispatch = useAppDispatch();
   return (
     <AlertDialog>
-      <AlertDialogTrigger className="w-full text-left">Đăng xuất</AlertDialogTrigger>
+      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Thông báo</AlertDialogTitle>

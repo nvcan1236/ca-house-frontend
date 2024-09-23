@@ -2,6 +2,7 @@ import H3 from "@/components/common/H3";
 import { DataTable } from "./TableData";
 import { columns } from "./MotelColumns";
 import { useGetMotelsQuery } from "@/stores/api/motelApi";
+import { useAppSelector } from "@/stores/hooks";
 
 const ManageMotel = () => {
   // const data: IMotel[] = [
@@ -353,13 +354,14 @@ const ManageMotel = () => {
   //     city: "Ho Chi Minh City",
   //   },
   // ];
-
-  const {data} = useGetMotelsQuery({page: 1, size: 100})
+  const filter = useAppSelector((state) => state.filter);
+  const { data } = useGetMotelsQuery({ page: 1, size: 100, filter });
 
   return (
     <div className="py-8">
       <H3>Quản lý nhà trọ</H3>
       <div className="mt-6">
+        
         <DataTable columns={columns} data={data?.result.data || []} />
       </div>
     </div>
