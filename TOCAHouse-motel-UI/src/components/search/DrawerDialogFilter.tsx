@@ -26,7 +26,7 @@ import {
   motelTypes,
   services,
 } from "@/utils/predefinedData";
-import StatUserChart from "@/pages/admin/users/StatUserChart";
+import StatUserPeriodChart from "@/pages/admin/users/StatUserPeriodChart";
 import { ScrollArea } from "../ui/scroll-area";
 import PriceRangeSlider from "./PriceRangeSlider";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
@@ -89,7 +89,7 @@ export function DrawerDialogFilter() {
                 <H3>Khoảng giá</H3>
                 <div>
                   <div className="h-[200px] mt-2">
-                    <StatUserChart />
+                    <StatUserPeriodChart />
                   </div>
                   <div className="max-w-full mx-auto mt-2 px-4">
                     <PriceRangeSlider
@@ -186,13 +186,13 @@ export function DrawerDialogFilter() {
           <SlidersHorizontalIcon className="size-6" />
         </Button>
       </DrawerTrigger>
-      <DrawerContent >
+      <DrawerContent>
         <DrawerHeader className="flex justify-between items-center">
           <DrawerTitle>Tìm kiếm nhanh hơn với bộ lọc</DrawerTitle>
           {filter.applied && (
             <Button
               variant={"secondary"}
-              size={'icon'}
+              size={"icon"}
               onClick={() => dispatch(refreshFilter())}
             >
               <RotateCcwIcon size={20} />
@@ -225,7 +225,7 @@ export function DrawerDialogFilter() {
               <H3>Khoảng giá</H3>
               <div>
                 <div className="h-[200px] mt-2">
-                  <StatUserChart />
+                  <StatUserPeriodChart />
                 </div>
                 <div className="max-w-full mx-auto mt-2 px-4">
                   <PriceRangeSlider

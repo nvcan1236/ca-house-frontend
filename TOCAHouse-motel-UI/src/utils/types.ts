@@ -153,3 +153,61 @@ export type Appointment = {
   status: keyof typeof appointmentStatus;
   date: string;
 };
+
+export type UserStat = {
+  byPeriod: ByPeriod[];
+  byRole: ByRole[];
+};
+
+export type ByPeriod = {
+  period: string;
+  userCount: number;
+  ownerCount: number;
+};
+
+export type ByRole = {
+  role: string;
+  count: number;
+};
+
+export type MotelStat = {
+  byType: ByType[];
+  byPrice: ByPrice[];
+  byArea: ByArea[];
+  byPeriod: MotelByPeriod[];
+};
+
+export type ByType = {
+  type: string;
+  count: number;
+};
+
+export type ByPrice = {
+  range: number;
+  count: number;
+};
+
+export type ByArea = {
+  range: number;
+  count: number;
+};
+
+export type MotelByPeriod = {
+  period: string;
+  count: number;
+}
+
+export interface PostStat {
+  byPeriod: ByPostPeriod[]
+  byType: ByPostType[]
+}
+
+export interface ByPostPeriod {
+  period:string
+  count: number
+}
+
+export interface ByPostType {
+  type: string
+  count: number
+}

@@ -8,6 +8,7 @@ import {
   LoginForm,
   TokenData,
   User,
+  UserStat,
 } from "@/utils/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
@@ -22,7 +23,7 @@ export const userApi = createApi({
         headers: {
           Authorization: `Bearer ${getToken()}`,
         },
-      })
+      }),
     }),
     getCurrentUser: builder.query<ApiResponse<User>, void>({
       query: () => ({
@@ -83,6 +84,17 @@ export const userApi = createApi({
         };
       },
     }),
+    getUserStat: builder.query<
+      ApiResponse<UserStat>,
+      { startDate: string; endDate: string; period?: "MONTH" | "YEAR"|"QUARTER" }
+    >({
+      query: ({ startDate, endDate, period = "MONTH" }) => ({
+        url: `/identity/users/stat?startDate=${startDate}&endDate=${endDate}&period=${period}`,
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      }),
+    }),
   }),
 });
 
@@ -92,5 +104,6 @@ export const {
   useGetUserByIdQuery,
   useLoginMutation,
   useUpdateUserMutation,
-  useCreatePasswordMutation
+  useCreatePasswordMutation,
+  useGetUserStatQuery,
 } = userApi;

@@ -7,6 +7,7 @@ import {
   ApiResponse,
   Appointment,
   Location,
+  MotelStat,
   PageResult,
   Price,
   Requirement,
@@ -228,6 +229,17 @@ export const motelApi = createApi({
       }),
       invalidatesTags: ["APPOINTMENT_STATUS"],
     }),
+    getMotelStat: builder.query<
+      ApiResponse<MotelStat>,
+      { startDate: string; endDate: string }
+    >({
+      query: ({ startDate, endDate }) => ({
+        url: `/motel/stat?startDate=${startDate}&endDate=${endDate}&period=MONTH`,
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      }),
+    }),
   }),
 });
 
@@ -248,4 +260,5 @@ export const {
   useGetAppointmentByUserQuery,
   useGetAppointmentByMotelOwnerQuery,
   useChangeStatusMutation,
+  useGetMotelStatQuery
 } = motelApi;

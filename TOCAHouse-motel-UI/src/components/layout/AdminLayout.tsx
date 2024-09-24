@@ -1,10 +1,12 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import AdminSidebar from "./AdminSidebar";
 import LazyLoadContainer from "../common/LazyLoadContainer";
 import { useAppSelector } from "@/stores/hooks";
 
 const AdminLayout = () => {
   const user = useAppSelector(state => state.auth.user)
+  const navigate = useNavigate()
+  !user && navigate("/admin/home")
   return (
     <LazyLoadContainer>
       <div className="flex flex-col md:flex-row bg-main-blue-t9 min-h-screen">

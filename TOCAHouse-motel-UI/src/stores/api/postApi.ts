@@ -7,7 +7,7 @@ import {
   IPostCreate,
 } from "@/utils/interfaces";
 import { reactions } from "@/utils/predefinedData";
-import { ApiResponse, SuggestContent } from "@/utils/types";
+import { ApiResponse, PostStat, SuggestContent } from "@/utils/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const postApi = createApi({
@@ -137,6 +137,14 @@ export const postApi = createApi({
         },
       }),
     }),
+    getPostStat: builder.query<ApiResponse<PostStat>, void>({
+      query: () => ({
+        url: `/post/stat/`,
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      }),
+    }),
   }),
 });
 
@@ -150,5 +158,6 @@ export const {
   useCreatePostMutation,
   useUploadImageMutation,
   useGetSuggestPostContentMutation,
-  useGetPostsByUserQuery
+  useGetPostsByUserQuery,
+  useGetPostStatQuery
 } = postApi;

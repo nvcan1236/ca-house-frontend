@@ -1,3 +1,4 @@
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -8,80 +9,154 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { MotelStat } from "@/utils/types";
+import { FC } from "react";
 
-const StatMotelTable = () => {
-  const invoices = [
-    {
-      invoice: "INV001",
-      paymentStatus: "Paid",
-      totalAmount: "$250.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV002",
-      paymentStatus: "Pending",
-      totalAmount: "$150.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV003",
-      paymentStatus: "Unpaid",
-      totalAmount: "$350.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV004",
-      paymentStatus: "Paid",
-      totalAmount: "$450.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV005",
-      paymentStatus: "Paid",
-      totalAmount: "$550.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV006",
-      paymentStatus: "Pending",
-      totalAmount: "$200.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV007",
-      paymentStatus: "Unpaid",
-      totalAmount: "$300.00",
-      paymentMethod: "Credit Card",
-    },
-  ];
+const StatMotelTable: FC<{ data: MotelStat }> = ({ data }) => {
   return (
-    <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">Invoice</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Method</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {invoices.map((invoice) => (
-          <TableRow key={invoice.invoice}>
-            <TableCell className="font-medium">{invoice.invoice}</TableCell>
-            <TableCell>{invoice.paymentStatus}</TableCell>
-            <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-      <TableFooter>
-        <TableRow>
-          <TableCell colSpan={3}>Total</TableCell>
-          <TableCell className="text-right">$2,500.00</TableCell>
-        </TableRow>
-      </TableFooter>
-    </Table>
+    <div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 flex-wrap">
+        <Card>
+          <CardContent>
+            <Table>
+              <TableCaption>
+                Bảng báo cáo số lượng trọ theo thời gian.
+              </TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Thời gian</TableHead>
+                  <TableHead className="text-right">Số lượng</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.byPeriod.map((d) => (
+                  <TableRow key={d.period}>
+                    <TableCell className="font-medium">{d.period}</TableCell>
+                    <TableCell className="text-right">{d.count}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={3}>Total</TableCell>
+                  <TableCell className="text-right">
+                    {data?.byPeriod
+                      .reduce((acc, role) => acc + role.count, 0)
+                      .toLocaleString()}
+                  </TableCell>
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent>
+            <Table>
+              <TableCaption>
+                Bảng báo cáo số lượng trọ theo loại phòng.
+              </TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Loại phòng</TableHead>
+                  <TableHead className="text-right">Số lượng</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.byType.map((d) => (
+                  <TableRow key={d.type}>
+                    <TableCell className="font-medium">{d.type}</TableCell>
+                    <TableCell className="text-right">{d.count}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={3}>Total</TableCell>
+                  <TableCell className="text-right">
+                    {data?.byType
+                      .reduce((acc, role) => acc + role.count, 0)
+                      .toLocaleString()}
+                  </TableCell>
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent>
+            <Table>
+              <TableCaption>
+                Bảng báo cáo số lượng trọ theo giá thuê.
+              </TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Khoảng giá</TableHead>
+                  <TableHead className="text-right">Số lượng</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.byPrice.map((d) => (
+                  <TableRow key={d.range}>
+                    <TableCell className="font-medium">
+                      {`${d.range * 2000000} - ${(d.range + 1) * 2000000}`}
+                    </TableCell>
+                    <TableCell className="text-right">{d.count}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={3}>Total</TableCell>
+                  <TableCell className="text-right">
+                    {data?.byPrice
+                      .reduce((acc, role) => acc + role.count, 0)
+                      .toLocaleString()}
+                  </TableCell>
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent>
+            <Table>
+              <TableCaption>
+                Bảng báo cáo số lượng trọ theo diện tích.
+              </TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Khoảng diện tích</TableHead>
+                  <TableHead className="text-right">Số lượng</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.byArea.map((d) => (
+                  <TableRow key={d.range}>
+                    <TableCell className="font-medium">
+                      {`${d.range * 5}m2 - ${(d.range + 1) * 5}m2`}
+                    </TableCell>
+                    <TableCell className="text-right">{d.count}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={3}>Total</TableCell>
+                  <TableCell>
+                    {data?.byArea
+                      .reduce((acc, role) => acc + role.count, 0)
+                      .toLocaleString()}
+                  </TableCell>
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 };
 

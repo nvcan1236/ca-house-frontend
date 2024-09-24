@@ -121,7 +121,6 @@ const Map = ({ children }: { children?: ReactNode }) => {
         mapboxAccessToken={MAP_TOKEN}
         onMove={(evt) => setViewState(evt.viewState)}
         onMoveEnd={({ viewState }) => updateFilter(viewState)}
-        onDblClick={console.log}
         {...viewState}
       >
         {/* <GeocoderControl mapboxAccessToken={MAP_TOKEN} position="top-left" /> */}
