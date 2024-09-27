@@ -8,9 +8,11 @@ import { format } from "date-fns";
 const DatePickerNoForm = ({
   value,
   onChange,
+  className,
 }: {
   value: Date;
-  onChange: () => void;
+  onChange: (value: string) => void;
+  className: string;
 }) => {
   return (
     <Popover>
@@ -19,7 +21,8 @@ const DatePickerNoForm = ({
           variant={"outline"}
           className={cn(
             "w-full justify-start text-left font-normal",
-            !value && "text-muted-foreground"
+            !value && "text-muted-foreground",
+            className
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
@@ -30,7 +33,7 @@ const DatePickerNoForm = ({
         <Calendar
           mode="single"
           selected={value}
-          onSelect={onChange}
+          onSelect={(value) => onChange(value?.toDateString() || "")}
           initialFocus
         />
       </PopoverContent>

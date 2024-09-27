@@ -15,10 +15,6 @@ import { MessageCircle } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import Item from "@/components/common/Item";
 import { Separator } from "@/components/ui/separator";
-import {
-  useBookAppointmentMutation,
-  useGetMotelQuery,
-} from "@/stores/api/motelApi";
 import ImageSlider from "@/components/common/ImageSlider";
 import DetailMotelSkeleton from "@/components/list/DetailMotelSkeleton";
 import { Amenity } from "@/utils/types";
@@ -30,6 +26,11 @@ import {
 } from "@/components/ui/popover";
 import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
+import { useGetMotelQuery } from "@/stores/api/motelApi";
+import {
+  useBookAppointmentMutation,
+  useLazyReservationQuery,
+} from "@/stores/api/motelUtilApi";
 
 const DetailMotel = () => {
   const { motelId } = useParams();
@@ -38,7 +39,20 @@ const DetailMotel = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [bookAppointment] = useBookAppointmentMutation();
 
-  if (isLoading) return <DetailMotelSkeleton />;
+  const [triggerReservationQuery] = useLazyReservationQuery();
+
+  const handleFetchReservation = () => {
+    if (detailMotel?.id) {
+      triggerReservationQuery({
+        motelId: detailMotel.id,
+        amount: Math.floor(detailMotel.price / 30),
+      }).then(({ data }) => {
+        if (data?.result.paymentUrl) location.href = data?.result.paymentUrl;
+      });
+    }
+  };
+
+  if (isLoading || !detailMotel) return <DetailMotelSkeleton />;
   const amenityByType = detailMotel?.amenities.reduce((acc, item: Amenity) => {
     if (!item.type) return acc;
 
@@ -202,23 +216,26 @@ const DetailMotel = () => {
               này. Sau khi đặt cọc phòng sẽ bị ẩn với các người khác. Tiền đặt
               cọc mỗi ngày sẽ bằng giá thuê chia 30.
             </p>
-            <Button className="mt-4 w-full">Đặt cọc</Button>
+            <Button className="mt-4 w-full" onClick={handleFetchReservation}>
+              Đặt cọc
+            </Button>
           </div>
 
           <div>
             <DecorativeHeading>Tiện nghi</DecorativeHeading>
             <div className="mt-4 pl-3">
               {/* {Object.keys(amenityByType).map()} */}
-              {Object.keys(amenityByType).map((type) => (
-                <p key={type}>
-                  <Label>{type}:</Label>{" "}
-                  <div className="inline-block">
-                    {amenityByType[type].map((amenity) => (
-                      <span key={amenity.name}>{amenity.name},</span>
-                    ))}
-                  </div>
-                </p>
-              ))}
+              {amenityByType &&
+                Object.keys(amenityByType).map((type) => (
+                  <p key={type}>
+                    <Label>{type}:</Label>{" "}
+                    <div className="inline-block">
+                      {amenityByType[type].map((amenity) => (
+                        <span key={amenity.name}>{amenity.name},</span>
+                      ))}
+                    </div>
+                  </p>
+                ))}
             </div>
           </div>
 
@@ -286,7 +303,9 @@ const DetailMotel = () => {
             này. Sau khi đặt cọc phòng sẽ bị ẩn với các người khác. Tiền đặt cọc
             mỗi ngày sẽ bằng giá thuê chia 30.
           </p>
-          <Button className="mt-4 w-full">Đặt cọc</Button>
+          <Button className="mt-4 w-full" onClick={handleFetchReservation}>
+            Đặt cọc
+          </Button>
         </div>
       </div>
 

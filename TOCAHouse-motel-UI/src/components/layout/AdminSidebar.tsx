@@ -93,7 +93,7 @@ const AdminSidebar = () => {
           </Label>
           <ul className="flex flex-col gap-0.5">
             {entityNavData.map((nav) => (
-              <SidebarItem to={nav.to}>
+              <SidebarItem to={nav.to} key={nav.label}>
                 {nav.icon} {show && nav.label}
               </SidebarItem>
             ))}
@@ -105,7 +105,7 @@ const AdminSidebar = () => {
           </Label>
           <ul className="flex flex-col gap-0.5">
             {statNavData.map((nav) => (
-              <SidebarItem to={nav.to}>
+              <SidebarItem to={nav.to} key={`lgstat${nav.label}`}>
                 {nav.icon} {show && nav.label}
               </SidebarItem>
             ))}
@@ -162,7 +162,7 @@ const AdminSidebar = () => {
             </Label>
             <ul className="flex flex-col gap-0.5 mt-2">
               {entityNavData.map((nav) => (
-                <SidebarItem to={nav.to}>
+                <SidebarItem to={nav.to} key={`man${nav.label}`}>
                   {nav.icon} {nav.label}
                 </SidebarItem>
               ))}
@@ -174,7 +174,7 @@ const AdminSidebar = () => {
             </Label>
             <ul className="flex flex-col gap-0.5 mt-2">
               {statNavData.map((nav) => (
-                <SidebarItem to={nav.to}>
+                <SidebarItem to={nav.to} key={`stat${nav.label}`}>
                   {nav.icon} {nav.label}
                 </SidebarItem>
               ))}

@@ -1,4 +1,4 @@
-import React, { ReactNode, Suspense } from "react";
+import { ReactNode, Suspense } from "react";
 
 const LazyLoadContainer = ({ children }: { children: ReactNode }) => {
   return (

@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
-import { useCreateRequirementMotelMutation } from "@/stores/api/motelApi";
+import { useCreateRequirementMotelMutation } from "@/stores/api/motelUtilApi";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { nextStep, prevStep } from "@/stores/slices/createMotelSlice";
 import { definedJobs } from "@/utils/predefinedData";

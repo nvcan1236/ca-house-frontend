@@ -36,7 +36,6 @@ const Pagination = ({ current, max }: { current: number; max: number }) => {
           </PaginationLink>
         </PaginationItem>
 
-        {/* ... */}
         {current > 3 && (
           <PaginationItem>
             <PaginationEllipsis />
@@ -67,7 +66,6 @@ const Pagination = ({ current, max }: { current: number; max: number }) => {
           </PaginationItem>
         )}
 
-        {/* ... */}
         {current < max - 2 && (
           <PaginationItem>
             <PaginationEllipsis />

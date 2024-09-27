@@ -15,7 +15,7 @@ const initialState: {
   prices: Price[] | [];
 } = {
   id: "ae2ef93c-a756-4ee9-a4d4-57996cf513cb",
-  currentStep: 4,
+  currentStep: 0,
   regular: {},
   location: {},
   images: {},

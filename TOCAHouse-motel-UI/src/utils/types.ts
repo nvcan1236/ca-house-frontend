@@ -25,8 +25,8 @@ export type Permission = {
 export type Profile = {
   dob: string;
   phone: string;
-  messgenger: string;
-  occupation: string;
+  messenger: string;
+  occupation: Job;
 };
 
 export type DetailUser = {
@@ -210,4 +210,18 @@ export interface ByPostPeriod {
 export interface ByPostType {
   type: string
   count: number
+}
+
+export type ReservationCreationResponse = {
+  paymentUrl:string,
+  reservationId:string
+}
+
+export type ReservationResponse = {
+  id: string
+  createdBy: string
+  createdAt: string
+  status: "PENDING" | "PAYMENT_SUCCESS" | "FAIL"
+  amount: number
+  motelId: string
 }

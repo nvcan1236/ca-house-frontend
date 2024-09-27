@@ -9,8 +9,8 @@ import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { useState } from "react";
 import { toast } from "sonner";
 import { facilities, furnitures, services } from "@/utils/predefinedData";
-import { useCreateAmenityMotelMutation } from "@/stores/api/motelApi";
 import { Amenity } from "@/utils/types";
+import { useCreateAmenityMotelMutation } from "@/stores/api/motelUtilApi";
 
 const MotelAmenityForm = () => {
   const dispatch = useAppDispatch();

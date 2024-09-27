@@ -44,6 +44,10 @@ export const columns: ColumnDef<IMotel>[] = [
     header: "District",
   },
   {
+    accessorKey: "name",
+    header: "Name",
+  },
+  {
     accessorKey: "price",
     header: "Price",
   },

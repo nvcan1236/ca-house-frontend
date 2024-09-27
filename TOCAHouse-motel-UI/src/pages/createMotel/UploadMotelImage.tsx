@@ -1,7 +1,7 @@
 import DecorativeHeading from "@/components/common/DecorativeHeading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useUploadImageyMotelMutation } from "@/stores/api/motelApi";
+import { useUploadImageyMotelMutation } from "@/stores/api/motelUtilApi";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { nextStep, prevStep } from "@/stores/slices/createMotelSlice";
 import { UploadIcon } from "lucide-react";

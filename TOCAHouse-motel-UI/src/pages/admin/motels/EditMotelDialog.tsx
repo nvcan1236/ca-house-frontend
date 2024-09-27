@@ -13,7 +13,10 @@ import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { useGetMotelQuery } from "@/stores/api/motelApi";
+import {
+  useApproveMotelMutation,
+  useGetMotelQuery,
+} from "@/stores/api/motelApi";
 import { IMotel } from "@/utils/interfaces";
 import { PlusIcon, XIcon } from "lucide-react";
 import { ReactNode, useState } from "react";
@@ -25,6 +28,7 @@ const EditMotelDialog: React.FC<{ children: ReactNode; motel: IMotel }> = ({
   const [open, setOpen] = useState(false);
   const { data } = useGetMotelQuery(motel.id, { skip: !open });
   const editedMotel = data?.result;
+  const [approveMotel] = useApproveMotelMutation();
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -40,13 +44,13 @@ const EditMotelDialog: React.FC<{ children: ReactNode; motel: IMotel }> = ({
         </DialogHeader>
 
         <Tabs defaultValue="general" className="w-full">
-            <TabsList className="w-full">
-              <TabsTrigger value="general">Chung</TabsTrigger>
-              <TabsTrigger value="location">Địa chỉ</TabsTrigger>
-              <TabsTrigger value="amenity">Tiện nghi</TabsTrigger>
-              <TabsTrigger value="prices">Giá cả</TabsTrigger>
-              <TabsTrigger value="requirement">Yêu cầu</TabsTrigger>
-            </TabsList>
+          <TabsList className="w-full">
+            <TabsTrigger value="general">Chung</TabsTrigger>
+            <TabsTrigger value="location">Địa chỉ</TabsTrigger>
+            <TabsTrigger value="amenity">Tiện nghi</TabsTrigger>
+            <TabsTrigger value="prices">Giá cả</TabsTrigger>
+            <TabsTrigger value="requirement">Yêu cầu</TabsTrigger>
+          </TabsList>
           <ScrollArea className="h-[460px] pr-4 ">
             <TabsContent value="general">
               <div className="grid gap-4 py-4">
@@ -121,6 +125,15 @@ const EditMotelDialog: React.FC<{ children: ReactNode; motel: IMotel }> = ({
                       images={editedMotel?.images || []}
                       height={300}
                     />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-4 items-start gap-4 ">
+                  <Label htmlFor="description" className="text-right">
+                    Duyệt
+                  </Label>
+                  <div className="col-span-3">
+                    <Checkbox checked={editedMotel?.approved}></Checkbox>
                   </div>
                 </div>
               </div>
@@ -321,7 +334,17 @@ const EditMotelDialog: React.FC<{ children: ReactNode; motel: IMotel }> = ({
           </ScrollArea>
         </Tabs>
 
-        <div className="flex justify-end mt-3">
+        <div className="flex justify-end mt-3 gap-4">
+          <Button
+            onClick={() => {
+              approveMotel(editedMotel?.id || "");
+              setOpen(false)
+            }}
+            className={`${!editedMotel?.approved && "bg-green-600 hover:bg-green-700"}`}
+            variant={"destructive"}
+          >
+            {`${editedMotel?.approved ? "Huỷ duyệt" : "Duyệt trọ"}`}
+          </Button>
           <Button>Save Changes</Button>
         </div>
       </DialogContent>

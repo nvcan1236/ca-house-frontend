@@ -78,16 +78,19 @@ const UserMenuPopover = ({ user }: { user: User }) => {
             <li className="py-1 px-2 hover:bg-slate-100 transition-all">
               <Link to={"/saved-motel"}>Danh sách yêu thích</Link>
             </li>
-            <li className="py-1 px-2 hover:bg-slate-100 transition-all">
-              {user.roles.includes("ADMIN") && (
+            {user.roles.includes("ADMIN") && (
+              <li className="py-1 px-2 hover:bg-slate-100 transition-all">
                 <Link to={"/my-motel"}>Quản lý trọ</Link>
-              )}
+              </li>
+            )}
+            <li className="py-1 px-2 hover:bg-slate-100 transition-all">
+              <Link to={"/my-post"}>Quản lý bài viết</Link>
             </li>
             <li className="py-1 px-2 hover:bg-slate-100 transition-all">
-              <Link to={"/my-post"}>Bài viết của tôi</Link>
+              <Link to={"/my-appointments"}>Danh sách đặt phòng</Link>
             </li>
             <li className="py-1 px-2 hover:bg-slate-100 transition-all">
-              <Link to={"/my-appointments"}>Lịch hẹn xem phòng đã đặt</Link>
+              <Link to={"/my-reservations"}>Danh sách cọc phòng</Link>
             </li>
             <li className="py-1">
               <Separator />

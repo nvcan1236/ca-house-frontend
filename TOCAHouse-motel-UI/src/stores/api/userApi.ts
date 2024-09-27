@@ -6,6 +6,7 @@ import {
   CreatePasswordData,
   DetailUser,
   LoginForm,
+  Profile,
   TokenData,
   User,
   UserStat,
@@ -86,7 +87,11 @@ export const userApi = createApi({
     }),
     getUserStat: builder.query<
       ApiResponse<UserStat>,
-      { startDate: string; endDate: string; period?: "MONTH" | "YEAR"|"QUARTER" }
+      {
+        startDate: string;
+        endDate: string;
+        period?: "MONTH" | "YEAR" | "QUARTER";
+      }
     >({
       query: ({ startDate, endDate, period = "MONTH" }) => ({
         url: `/identity/users/stat?startDate=${startDate}&endDate=${endDate}&period=${period}`,
@@ -94,6 +99,27 @@ export const userApi = createApi({
           Authorization: `Bearer ${getToken()}`,
         },
       }),
+    }),
+    updateProfile: builder.mutation<ApiResponse<DetailUser>, Profile>({
+      query: (profile) => ({
+        url: `/identity/profile`,
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+        body: profile,
+        method: "PUT",
+      }),
+      invalidatesTags: ['UserDetail']
+    }),
+    follow: builder.mutation<ApiResponse<null>, string>({
+      query: (userId) => ({
+        url: `/identity/users/${userId}/follow`,
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+        method: "POST",
+      }),
+      invalidatesTags: ['UserDetail']
     }),
   }),
 });
@@ -106,4 +132,6 @@ export const {
   useUpdateUserMutation,
   useCreatePasswordMutation,
   useGetUserStatQuery,
+  useUpdateProfileMutation,
+  useFollowMutation,
 } = userApi;

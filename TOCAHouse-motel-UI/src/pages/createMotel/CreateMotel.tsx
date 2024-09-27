@@ -5,12 +5,19 @@ import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { nextStep } from "@/stores/slices/createMotelSlice";
 import { steps } from "@/utils/predefinedData";
+import UpdateProfileDialog from "./UpdateProfileDialog";
+import { useNavigate } from "react-router-dom";
 
 const CreateMotel = () => {
   const currentStep = useAppSelector((state) => state.createMotel.currentStep);
+  const user = useAppSelector((state) => state.auth.user);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  if (!currentStep)
+  !user && navigate("/");
+
+  if (!currentStep) {
+    if (user?.roles.includes("OWNER")) dispatch(nextStep());
     return (
       <div className="flex  gap-10 lg:px-10">
         <div className=" w-1/2">
@@ -21,15 +28,17 @@ const CreateMotel = () => {
             Mọi người sẽ dễ dàng tìm thấy bạn hơn khi đăng ký với caHouse. Và
             sau đó trọ của bạn sẽ xuất hiện trên bản đò của chúng tôi
           </p>
-          <Button size={"lg"} onClick={() => dispatch(nextStep())}>
-            Đăng ký ngay
-          </Button>
+
+          <UpdateProfileDialog>
+            <Button size={"lg"}>Đăng ký ngay</Button>
+          </UpdateProfileDialog>
         </div>
         <div className="w-1/2 h-[500px]">
           <MapInCreate></MapInCreate>
         </div>
       </div>
     );
+  }
 
   return <div className="lg:px-10">{steps[currentStep].component}</div>;
 };

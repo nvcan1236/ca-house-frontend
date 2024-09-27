@@ -21,8 +21,8 @@ import { Button } from "../ui/button";
 import { useAppDispatch } from "@/stores/hooks";
 import { nextStep, prevStep } from "@/stores/slices/createMotelSlice";
 import { motelTypes } from "@/utils/predefinedData";
-import { useCreateRegularMotelMutation } from "@/stores/api/motelApi";
 import { RegularCreate } from "@/utils/interfaces";
+import { useCreateRegularMotelMutation } from "@/stores/api/motelUtilApi";
 
 const MotelRegularForm = () => {
   const dispatch = useAppDispatch();

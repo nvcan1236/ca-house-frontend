@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useGetAppointmentByUserQuery } from "@/stores/api/motelApi";
+import { useGetAppointmentByUserQuery } from "@/stores/api/motelUtilApi";
 import { formatDate, formatDateTime } from "@/utils/helper";
 import { appointmentStatus } from "@/utils/predefinedData";
 
@@ -15,7 +15,7 @@ const UserAppointmentList = () => {
   const { data } = useGetAppointmentByUserQuery();
   const appointments = data?.result;
   return (
-    <div className="max-w-[1000px] mx-auto">
+    <div className="max-w-[1000px] min-h-[500px] mx-auto">
       <H3>Danh sách lịch hẹn xem phòng</H3>
       <Table className="mt-6 bg-background">
         <TableHeader>

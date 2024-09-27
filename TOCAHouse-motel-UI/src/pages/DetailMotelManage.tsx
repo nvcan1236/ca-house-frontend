@@ -41,7 +41,7 @@ const DetailMotelManage = () => {
   const [wardList, setWardList] = useState<Ward[]>([]);
   // const [locationList, setLocationList] = useState([]);
   const [location, setLocation] = useState<Location>({
-    province: "",
+    city: "",
     district: "",
     ward: "",
     street: "",
@@ -119,7 +119,7 @@ const DetailMotelManage = () => {
                 <Select
                   defaultValue={""}
                   onValueChange={(value) => {
-                    setLocation({ ...location, province: value });
+                    setLocation({ ...location, city: value });
                     setDistrictList(getDistricts(value));
                   }}
                 >
@@ -142,7 +142,7 @@ const DetailMotelManage = () => {
                   defaultValue={""}
                   onValueChange={(value) => {
                     setLocation({ ...location, district: value });
-                    setWardList(getWards(location.province, value));
+                    setWardList(getWards(location.city, value));
                   }}
                 >
                   <SelectTrigger>
@@ -445,7 +445,7 @@ const ImageAction = ({ src }: { src?: string }) => {
   return (
     <div className="relative aspect-video">
       <img
-        src="https://images.unsplash.com/photo-1724141973274-f3a90b9aa7d8?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        src={src}
         alt=""
         className="object-cover size-full rounded-sm"
       />

@@ -6,6 +6,7 @@ import { motelApi } from "./api/motelApi";
 import { userApi } from "./api/userApi";
 import { postApi } from "./api/postApi";
 import filterSlice from "./slices/filterSlice";
+import { motelUtilApi } from "./api/motelUtilApi";
 
 const reducer = combineReducers({
   common: commonSlice,
@@ -13,6 +14,7 @@ const reducer = combineReducers({
   createMotel: createMotelSlice,
   filter: filterSlice,
   [motelApi.reducerPath]: motelApi.reducer,
+  [motelUtilApi.reducerPath]: motelUtilApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
   [postApi.reducerPath]: postApi.reducer,
 });
@@ -21,6 +23,7 @@ const store = configureStore({
   reducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat([
+      motelUtilApi.middleware,
       motelApi.middleware,
       userApi.middleware,
       postApi.middleware,

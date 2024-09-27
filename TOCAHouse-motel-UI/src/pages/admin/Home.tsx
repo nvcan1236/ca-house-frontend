@@ -1,4 +1,3 @@
-import LoginButton from "@/components/button/LoginButton";
 import H3 from "@/components/common/H3";
 import {
   Card,
@@ -6,28 +5,8 @@ import {
   CardDescription,
   CardHeader,
 } from "@/components/ui/card";
-import { useAppSelector } from "@/stores/hooks";
 
 const Home = () => {
-  const user = useAppSelector((state) => state.auth.user);
-
-  if (!user || !user.roles.includes("ADMIN")) {
-    return (
-      <div className="flex justify-center items-center h-full">
-        <div>
-          <h3 className="text-3xl font-semibold text-main-blue-s3 mb-4">
-            Trang quản lý dành cho Admin CaHouse
-          </h3>
-          <p>
-            Để sử dụng các chức năng của quản trị viên vui lòng đăng nhập tài
-            khoản Admin
-          </p>
-          <LoginButton className="mt-6 px-10"></LoginButton>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="px-10">
       <div className="lg:py-32 ">

@@ -4,11 +4,8 @@ import { Input } from "../ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { formatDate } from "@/utils/helper";
 import Pagination from "./Pagination";
-import {
-  useCreateReviewMutation,
-  useGetReviewQuery,
-} from "@/stores/api/motelApi";
 import { useState } from "react";
+import { useCreateReviewMutation, useGetReviewQuery } from "@/stores/api/motelUtilApi";
 
 const MotelReview = ({ motelId }: { motelId: string }) => {
   const { data: reviewData } = useGetReviewQuery(motelId || "");

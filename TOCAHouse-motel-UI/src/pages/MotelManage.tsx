@@ -14,15 +14,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  useChangeStatusMutation,
-  useGetAppointmentByMotelOwnerQuery,
-  useGetMotelByUserQuery,
-} from "@/stores/api/motelApi";
 import { useGetCurrentUserQuery } from "@/stores/api/userApi";
 import { formatDate, formatDateTime } from "@/utils/helper";
 import { appointmentStatus } from "@/utils/predefinedData";
 import { EllipsisIcon } from "lucide-react";
+import EditMotelDialog from "./admin/motels/EditMotelDialog";
+import { useChangeAppoimentStatusMutation, useGetAppointmentByMotelOwnerQuery } from "@/stores/api/motelUtilApi";
+import { useGetMotelByUserQuery } from "@/stores/api/motelApi";
 
 const MotelManage = () => {
   const { data } = useGetCurrentUserQuery();
@@ -31,15 +29,24 @@ const MotelManage = () => {
   const userId = data?.result.username;
   const { data: motelsData } = useGetMotelByUserQuery(userId || "");
   const motels = motelsData?.result;
-  const [changeStatus] = useChangeStatusMutation();
+  const [changeStatus] = useChangeAppoimentStatusMutation();
   return (
     <div>
       <section>
         <H3>Danh sách phòng của bạn</H3>
         <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2  grid-cols-1 mt-6 gap-4">
           {motels?.map((motel) => (
-            <Motel motel={motel} />
+            <EditMotelDialog motel={motel} key={motel.id}>
+              <div>
+                <Motel motel={motel} />
+              </div>
+            </EditMotelDialog>
           ))}
+          {motels?.length == 0 && (
+            <p className="py-6 ml-10 text-slate-600 ">
+              (Bạn chưa tạo phòng trọ nào)
+            </p>
+          )}
         </div>
       </section>
 
@@ -57,10 +64,14 @@ const MotelManage = () => {
             </TableHeader>
             <TableBody>
               {appointments?.length == 0 && (
-                <p className="py-10 text-center text-slate-600">
-                  {" "}
-                  ( Chưa có lịch đặt phòng nào )
-                </p>
+                <TableRow>
+                  <TableCell
+                    colSpan={4}
+                    className="py-10 text-center text-slate-600 "
+                  >
+                    ( Chưa có lịch đặt phòng nào )
+                  </TableCell>
+                </TableRow>
               )}
               {appointments?.map((app) => (
                 <TableRow key={app.id}>

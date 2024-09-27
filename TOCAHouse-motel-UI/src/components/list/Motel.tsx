@@ -13,14 +13,13 @@ const Motel = ({ motel, onClick }: { motel: IMotel; onClick?: () => void }) => {
         height={160}
         onClick={() => {
           onClick && onClick();
-          navigate(`./motels/${motel.id}`);
         }}
       ></ImageSlider>
       <div className="p-3 text-sm">
         <div className="flex gap-2 items-center">
           <p
             className="text-left font-medium flex-1 overflow-ellipsis line-clamp-1 text-slate-600"
-            onClick={() => navigate(`./motels/${motel.id}`)}
+            onClick={() => navigate(`/motels/${motel.id}`)}
           >
             {motel?.name}
           </p>

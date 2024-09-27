@@ -14,12 +14,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { geoMapEndpoint } from "@/configs/APIconfig";
+import { geoMapEndpoint } from "@/configs/mapBoxConfig";
 import { getDistricts, getProvinces, getWards } from "@/configs/provincesData";
 import axios from "@/services/axios";
-import { useCreateLocationMotelMutation } from "@/stores/api/motelApi";
+import { useCreateLocationMotelMutation } from "@/stores/api/motelUtilApi";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
-import { nextStep, prevStep} from "@/stores/slices/createMotelSlice";
+import { nextStep, prevStep } from "@/stores/slices/createMotelSlice";
 import { District, Ward } from "@/utils/interfaces";
 import { Location } from "@/utils/types";
 import { MapPinIcon } from "lucide-react";
@@ -59,7 +59,11 @@ const LocationInfo = () => {
           `${location?.street},${location?.ward},${location?.district},${location?.city}`
         )
       )
-      .then((data) => setLocationList(data.data.map((loc) => loc)));
+      .then((data) => {
+        console.log(data);
+        
+        setLocationList(data.data.map((loc) => loc));
+      });
   };
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {

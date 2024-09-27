@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 import { formatDate } from "@/utils/helper";
 import { useAppSelector } from "@/stores/hooks";
 import { toast } from "sonner";
+import { useFollowMutation } from "@/stores/api/userApi";
 
 const Post = ({ data }: { data: IPost }) => {
   const [currentReact, setCurrentReact] = useState<
@@ -24,6 +25,7 @@ const Post = ({ data }: { data: IPost }) => {
   >(data.liked);
   const [reactPost] = useReactMutation();
   const user = useAppSelector((state) => state.auth.user);
+  const [follow] = useFollowMutation();
 
   const react = (postId: string, type: keyof typeof reactions | null) => {
     if (!user) {
@@ -32,6 +34,14 @@ const Post = ({ data }: { data: IPost }) => {
     }
     reactPost({ postId, type });
     setCurrentReact(type);
+  };
+
+  const followUser = (userId: string) => {
+    if (!user) {
+      toast.warning("Vui lòng đăng nhập trước.");
+      return;
+    }
+    follow(userId);
   };
 
   return (
@@ -45,11 +55,14 @@ const Post = ({ data }: { data: IPost }) => {
             </Avatar>
             <div className="ml-2">
               <div className="flex gap-2 items-center">
-                <H3 className="!text-base cursor-pointer max-w-[120px] overflow-hidden text-ellipsis">{data.create_by}</H3>
+                <H3 className="!text-base cursor-pointer max-w-[120px] overflow-hidden text-ellipsis">
+                  {data.create_by}
+                </H3>
                 <Button
                   size={"sm"}
                   variant={"secondary"}
                   className="text-xs h-auto px-2 py-1"
+                  onClick={() => followUser(data.create_by)}
                 >
                   Theo dõi
                 </Button>

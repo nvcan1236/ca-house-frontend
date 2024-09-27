@@ -15,6 +15,7 @@ export interface IMotel {
   latitude: number;
   district: string;
   city: string;
+  approved:boolean;
 }
 
 export interface IMotelDetail extends IMotel {
