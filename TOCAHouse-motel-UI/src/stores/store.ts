@@ -7,11 +7,13 @@ import { userApi } from "./api/userApi";
 import { postApi } from "./api/postApi";
 import filterSlice from "./slices/filterSlice";
 import { motelUtilApi } from "./api/motelUtilApi";
+import chatSlice from "./slices/chatSlice";
 
 const reducer = combineReducers({
   common: commonSlice,
   auth: authSlice,
   createMotel: createMotelSlice,
+  chat: chatSlice,
   filter: filterSlice,
   [motelApi.reducerPath]: motelApi.reducer,
   [motelUtilApi.reducerPath]: motelUtilApi.reducer,

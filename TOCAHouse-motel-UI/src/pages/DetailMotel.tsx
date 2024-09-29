@@ -31,14 +31,19 @@ import {
   useBookAppointmentMutation,
   useLazyReservationQuery,
 } from "@/stores/api/motelUtilApi";
+import { useAppDispatch, useAppSelector } from "@/stores/hooks";
+import { openChat, setCurrentRoom } from "@/stores/slices/chatSlice";
+import { openAuthModal } from "@/stores/slices/authSlice";
+import { getRoomByWithUser } from "@/services/chartService";
 
 const DetailMotel = () => {
   const { motelId } = useParams();
   const { data, isLoading } = useGetMotelQuery(motelId || "");
   const detailMotel = data?.result;
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const user = useAppSelector((state) => state.auth.user);
   const [bookAppointment] = useBookAppointmentMutation();
-
+  const dispatch = useAppDispatch();
   const [triggerReservationQuery] = useLazyReservationQuery();
 
   const handleFetchReservation = () => {
@@ -49,6 +54,18 @@ const DetailMotel = () => {
       }).then(({ data }) => {
         if (data?.result.paymentUrl) location.href = data?.result.paymentUrl;
       });
+    }
+  };
+
+  const updateCurrentRoom = async () => {
+    if (!user) {
+      dispatch(openAuthModal());
+    } else if (detailMotel) {
+      const room = await getRoomByWithUser(detailMotel.ownerId, user.username);
+      console.log(room);
+
+      dispatch(openChat());
+      dispatch(setCurrentRoom(room));
     }
   };
 
@@ -264,9 +281,9 @@ const DetailMotel = () => {
                   {detailMotel?.ownerId}
                 </Link>
 
-                <Button className="mt-4 flex">
-                  <MessageCircle size={20} className="mr-2"></MessageCircle>{" "}
-                  Nhắn tin cho chủ nhà{" "}
+                <Button className="mt-4 flex" onClick={updateCurrentRoom}>
+                  <MessageCircle size={20} className="mr-2"></MessageCircle>
+                  Nhắn tin cho chủ nhà
                 </Button>
               </div>
             </div>

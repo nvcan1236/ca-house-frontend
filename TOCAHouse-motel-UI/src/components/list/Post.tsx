@@ -24,8 +24,10 @@ const Post = ({ data }: { data: IPost }) => {
     keyof typeof reactions | null
   >(data.liked);
   const [reactPost] = useReactMutation();
+  const [liked, setLiked] = useState(!!data.liked);
   const user = useAppSelector((state) => state.auth.user);
   const [follow] = useFollowMutation();
+  const [post, setPost] = useState(data);
 
   const react = (postId: string, type: keyof typeof reactions | null) => {
     if (!user) {
@@ -33,6 +35,13 @@ const Post = ({ data }: { data: IPost }) => {
       return;
     }
     reactPost({ postId, type });
+    setLiked(!liked);
+    setPost((prev) => {
+      return {
+        ...prev,
+        react_count: liked ? prev.react_count - 1 : prev.react_count + 1,
+      };
+    });
     setCurrentReact(type);
   };
 
@@ -56,13 +65,13 @@ const Post = ({ data }: { data: IPost }) => {
             <div className="ml-2">
               <div className="flex gap-2 items-center">
                 <H3 className="!text-base cursor-pointer max-w-[120px] overflow-hidden text-ellipsis">
-                  {data.create_by}
+                  {post.create_by}
                 </H3>
                 <Button
                   size={"sm"}
                   variant={"secondary"}
                   className="text-xs h-auto px-2 py-1"
-                  onClick={() => followUser(data.create_by)}
+                  onClick={() => followUser(post.create_by)}
                 >
                   Theo dõi
                 </Button>
@@ -74,18 +83,18 @@ const Post = ({ data }: { data: IPost }) => {
           </div>
           <div className="justify-self-end text-end">
             <p className="text-slate-600 text-sm ">
-              Đăng vào {formatDate(data.create_at)}
+              Đăng vào {formatDate(post.create_at)}
             </p>
             <span className="font-semibold inline-block mt-px">
-              {postType[data.type]}
+              {postType[post.type]}
             </span>
           </div>
         </div>
         <div>
-          <p className="">{data.content}</p>
-          {data.images.length > 0 && (
+          <p className="">{post.content}</p>
+          {post.images.length > 0 && (
             <div className="mt-2 h-[300px]">
-              <ImageSlider height={300} images={data.images}></ImageSlider>
+              <ImageSlider height={300} images={post.images}></ImageSlider>
             </div>
           )}
         </div>
@@ -94,7 +103,7 @@ const Post = ({ data }: { data: IPost }) => {
             <HoverCard>
               <HoverCardTrigger
                 className="pl-3 flex gap-2"
-                onClick={() => react(data.id, currentReact ? null : "LIKE")}
+                onClick={() => react(post.id, currentReact ? null : "LIKE")}
               >
                 {currentReact ? (
                   <span className="text-main-yellow">
@@ -104,7 +113,7 @@ const Post = ({ data }: { data: IPost }) => {
                   <span className="text-slate-600">{reactions.LIKE.icon}</span>
                 )}
               </HoverCardTrigger>
-              {data.react_count} cảm xúc
+              {post.react_count} cảm xúc
               <HoverCardContent
                 side="top"
                 align="start"
@@ -117,7 +126,7 @@ const Post = ({ data }: { data: IPost }) => {
                     variant={"ghost"}
                     key={type}
                     onClick={() =>
-                      react(data.id, type as keyof typeof reactions)
+                      react(post.id, type as keyof typeof reactions)
                     }
                   >
                     {reactions[type as keyof typeof reactions].icon}
@@ -127,9 +136,9 @@ const Post = ({ data }: { data: IPost }) => {
             </HoverCard>
           </div>
           <div className="flex items-center flex-1">
-            <CommentDialog postId={data.id}>
+            <CommentDialog postId={post.id}>
               <MessageSquareTextIcon></MessageSquareTextIcon>
-              {data.comment_count} Bình luận
+              {post.comment_count} Bình luận
             </CommentDialog>
           </div>
           <Button variant={"outline"} size={"sm"} className="">

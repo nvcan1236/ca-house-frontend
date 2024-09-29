@@ -159,5 +159,5 @@ export const {
   useUploadImageMutation,
   useGetSuggestPostContentMutation,
   useGetPostsByUserQuery,
-  useGetPostStatQuery
+  useGetPostStatQuery,
 } = postApi;

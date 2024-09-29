@@ -7,6 +7,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import { Toaster } from "sonner";
 import { CircleCheckIcon, CircleXIcon, InfoIcon, TriangleAlertIcon } from "lucide-react";
+import Chat from "../common/Chat";
 
 const MainLayout = () => {
   const role = useAppSelector((state) => state.common.role);
@@ -34,6 +35,7 @@ const MainLayout = () => {
           error: <CircleXIcon size={20} />,
         }}
       />
+      <Chat/>
       <Footer></Footer>
     </div>
   );

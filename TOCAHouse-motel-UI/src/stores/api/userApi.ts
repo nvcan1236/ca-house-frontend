@@ -1,6 +1,6 @@
 import { caHouseBaseUrl } from "@/configs/APIconfig";
 import { getToken } from "@/services/localStorageService";
-import {} from "@/utils/interfaces";
+import { CreateMessage } from "@/utils/interfaces";
 import {
   ApiResponse,
   CreatePasswordData,
@@ -109,7 +109,7 @@ export const userApi = createApi({
         body: profile,
         method: "PUT",
       }),
-      invalidatesTags: ['UserDetail']
+      invalidatesTags: ["UserDetail"],
     }),
     follow: builder.mutation<ApiResponse<null>, string>({
       query: (userId) => ({
@@ -119,7 +119,25 @@ export const userApi = createApi({
         },
         method: "POST",
       }),
-      invalidatesTags: ['UserDetail']
+      invalidatesTags: ["UserDetail"],
+    }),
+    sendMessage: builder.mutation<ApiResponse<unknown>, CreateMessage>({
+      query: (message) => {
+        const formdata = new FormData();
+        Array.from(message.images).forEach((image) => {
+          formdata.append("images", image);
+        });
+
+        return {
+          url: `/identity/chat?content=${message.content}&type=${message.type}&recipient=${message.recipient}`,
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+          method: "POST",
+          body: formdata
+        };
+      },
+      invalidatesTags: ["UserDetail"],
     }),
   }),
 });
@@ -134,4 +152,5 @@ export const {
   useGetUserStatQuery,
   useUpdateProfileMutation,
   useFollowMutation,
+  useSendMessageMutation
 } = userApi;

@@ -1,5 +1,12 @@
 import { postType, reactions } from "./predefinedData";
-import { Amenity, Image, Location, Price, Requirement } from "./types";
+import {
+  Amenity,
+  Image,
+  Location,
+  Price,
+  Requirement,
+  UserRole,
+} from "./types";
 
 export interface IMotel {
   id: string;
@@ -15,17 +22,17 @@ export interface IMotel {
   latitude: number;
   district: string;
   city: string;
-  approved:boolean;
+  approved: boolean;
 }
 
 export interface IMotelDetail extends IMotel {
   description: string;
   ownerId: string;
-  amenities: Amenity[]
-  requirement: Requirement
-  prices: Omit<Price, "units">[]
-  images: Image[]
-  location: Location
+  amenities: Amenity[];
+  requirement: Requirement;
+  prices: Omit<Price, "units">[];
+  images: Image[];
+  location: Location;
 }
 
 export interface Step {
@@ -44,12 +51,12 @@ export interface Steps {
 }
 
 export interface RegularCreate {
-  name: string
-  description: string
-  price: number
-  type: string
-  area: number
-  availableDate: string
+  name: string;
+  description: string;
+  price: number;
+  type: string;
+  area: number;
+  availableDate: string;
 }
 
 // Kiểu dữ liệu cho Ward (Phường/Xã)
@@ -82,19 +89,54 @@ export interface IPost {
 }
 
 export interface IComment {
-  id: string
-  create_at: string
-  post_id: string
-  user_id: string
-  content: string
-  reply_to: unknown
+  id: string;
+  create_at: string;
+  post_id: string;
+  user_id: string;
+  content: string;
+  reply_to: unknown;
 }
 
 export interface ICommentCreate {
-  content: string
+  content: string;
 }
 
 export interface IPostCreate {
-  content: string
-  type: keyof typeof postType
+  content: string;
+  type: keyof typeof postType;
+}
+
+// Chat Interface
+export interface ChatUser {
+  id: string;
+  avatar: string;
+  displayName: string;
+  role: UserRole[];
+}
+
+export interface ChatRoom {
+  id: string;
+  member: string[];
+  createdAt: CreatedAt;
+}
+
+export interface ChatMessage {
+  id: string;
+  roomId: string;
+  createdBy: string;
+  type: "text" | "image";
+  createdAt: CreatedAt;
+  content: string[];
+}
+
+export interface CreatedAt {
+  seconds: number;
+  nanoseconds: number;
+}
+
+export interface CreateMessage {
+  content?: string;
+  type: "TEXT" | "IMAGE";
+  recipient: string;
+  images?: FileList|[];
 }

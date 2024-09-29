@@ -11,6 +11,7 @@ import {
   InfoIcon,
   TriangleAlertIcon,
 } from "lucide-react";
+import Chat from "../common/Chat";
 
 const NoSearchLayout = () => {
 
@@ -33,6 +34,7 @@ const NoSearchLayout = () => {
           error: <CircleXIcon size={20} />,
         }}
       />
+      <Chat/>
       <Footer></Footer>
     </div>
   );
